@@ -1,4 +1,4 @@
-package github.tyonakaisan.horsechecker.horse.share;
+package github.tyonakaisan.horsechecker.horse;
 
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
