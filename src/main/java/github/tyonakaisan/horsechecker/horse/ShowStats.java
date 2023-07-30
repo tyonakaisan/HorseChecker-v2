@@ -77,7 +77,7 @@ public class ShowStats {
                                 //作成
                                 createHologram(player, location, horse, uuid);
                                 //更新開始
-                                updateTargetMob(player, uuid, horse);
+                                updateTargetMob(player, horse);
                             }
                         }
                     }
@@ -118,7 +118,7 @@ public class ShowStats {
         hologramManager.initPlayer(uuid, player);
     }
 
-    private void updateTargetMob(Player player, String uuid, AbstractHorse horse) {
+    private void updateTargetMob(Player player, AbstractHorse horse) {
         int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
         new BukkitRunnable() {
             @Override
@@ -148,7 +148,7 @@ public class ShowStats {
                             //作成
                             createHologram(player, focusedHorse.getLocation(), focusedHorse, focusedHorseUUID);
                             //更新開始
-                            updateTargetMob(player, focusedHorseUUID, focusedHorse);
+                            updateTargetMob(player, focusedHorse);
                             this.cancel();
                         }
                     } else {
@@ -167,10 +167,6 @@ public class ShowStats {
     private void deleteHologram(Player player, String name) {
         hologramManager.deleteHologram(name, player);
         horseMap.remove(player);
-    }
-
-    private void deleteAllHologram(Player player, HashMap<Player, String> map) {
-        hologramManager.deleteHologram(map.get(player), player);
     }
 
     private void teleportHologram(String hologramName, Location target) {

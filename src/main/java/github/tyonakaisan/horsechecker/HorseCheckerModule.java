@@ -10,7 +10,6 @@ import github.tyonakaisan.horsechecker.packet.ProtocolLibHologramFactory;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -46,12 +45,6 @@ public class HorseCheckerModule extends AbstractModule {
         }
         commandManager.registerAsynchronousCompletions();
         return commandManager;
-    }
-
-    @Provides
-    @Singleton
-    public NamespacedKey horseCheckerKey() {
-        return new NamespacedKey(horseChecker, "HorseChecker");
     }
 
     @Override
