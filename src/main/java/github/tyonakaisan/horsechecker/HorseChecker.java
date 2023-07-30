@@ -10,7 +10,7 @@ import github.tyonakaisan.horsechecker.command.commands.ShareCommand;
 import github.tyonakaisan.horsechecker.command.commands.ToggleCommand;
 import github.tyonakaisan.horsechecker.event.HorseCheckerEventHandler;
 import github.tyonakaisan.horsechecker.horse.listener.HorseCancelBreedListener;
-import github.tyonakaisan.horsechecker.horse.listener.HorseStatsListener;
+import github.tyonakaisan.horsechecker.horse.listener.PlayerQuitListener;
 import github.tyonakaisan.horsechecker.packet.ProtocolLibHologramFactory;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramFactory;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramManager;
@@ -31,7 +31,7 @@ import java.util.Set;
 public final class HorseChecker extends JavaPlugin {
 
     private static final Set<Class<? extends Listener>> LISTENER_CLASSES = Set.of(
-            HorseStatsListener.class,
+            PlayerQuitListener.class,
             HorseCancelBreedListener.class
     );
     private static final Set<Class<? extends HorseCheckerCommand>> COMMAND_CLASSES = Set.of(

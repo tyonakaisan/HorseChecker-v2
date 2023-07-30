@@ -70,14 +70,6 @@ public class ShowStats {
                             Location location = horse.getLocation();
                             String uuid = player.getUniqueId() + "+" + horse.getUniqueId();
 
-                            //馬に乗っていたらホログラム削除
-                            /*
-                            if (horse.getPassengers().contains(player)) {
-                                deleteHologram(player, uuid);
-                                return;
-                            }
-                             */
-
                             //mapに含まれているか
                             if (!horseMap.containsKey(player)) {
                                 //削除
@@ -108,14 +100,6 @@ public class ShowStats {
             hologramManager.createHologram(location, uuid, horseStats.rank());
         }
         //ホログラム作成
-        /*
-        """
-                                            Score: <rankcolor><rank></rankcolor>
-                                            Speed: <#ffa500><speed></#ffa500>blocks/s
-                                            Jump: <#ffa500><jump></#ffa500>blocks
-                                            MaxHP: <#ffa500><health></#ffa500><red>♥</red>
-                                            <owner>"""
-         */
         Component component = MiniMessage.miniMessage().deserialize("""
                                             Score: <rankcolor><rank></rankcolor>
                                             Speed: <#ffa500><speed></#ffa500>blocks/s

@@ -18,7 +18,7 @@ import java.nio.file.Path;
 import java.util.function.Function;
 
 public class HorseCheckerModule extends AbstractModule {
-    private final Logger logger = LogManager.getLogger("HorseChecker");
+    private final Logger logger = LogManager.getLogger("HorseChecker-v2");
     private final HorseChecker horseChecker;
     private final Path dataDirectory;
 
