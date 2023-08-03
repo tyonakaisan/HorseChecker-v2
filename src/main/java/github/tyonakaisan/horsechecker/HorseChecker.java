@@ -8,7 +8,6 @@ import github.tyonakaisan.horsechecker.command.commands.DebugCommand;
 import github.tyonakaisan.horsechecker.command.commands.ReloadCommand;
 import github.tyonakaisan.horsechecker.command.commands.ShareCommand;
 import github.tyonakaisan.horsechecker.command.commands.ToggleCommand;
-import github.tyonakaisan.horsechecker.event.HorseCheckerEventHandler;
 import github.tyonakaisan.horsechecker.horse.listener.HorseCancelBreedListener;
 import github.tyonakaisan.horsechecker.horse.listener.PlayerQuitListener;
 import github.tyonakaisan.horsechecker.packet.ProtocolLibHologramFactory;
@@ -40,7 +39,6 @@ public final class HorseChecker extends JavaPlugin {
             ShareCommand.class,
             ToggleCommand.class
     );
-    private final HorseCheckerEventHandler eventHandler = new HorseCheckerEventHandler();
     private @MonotonicNonNull Injector injector;
     private @MonotonicNonNull Logger logger;
 
@@ -82,9 +80,5 @@ public final class HorseChecker extends JavaPlugin {
 
     public Path dataDirectory() {
         return this.getDataFolder().toPath();
-    }
-
-    public @NonNull HorseCheckerEventHandler eventHandler() {
-        return this.eventHandler;
     }
 }

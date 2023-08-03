@@ -1,11 +1,11 @@
 package github.tyonakaisan.horsechecker.packet.holograms;
 
+import com.google.inject.Inject;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
-import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

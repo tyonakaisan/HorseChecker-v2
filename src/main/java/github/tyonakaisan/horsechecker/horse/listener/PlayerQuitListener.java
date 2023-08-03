@@ -1,5 +1,6 @@
 package github.tyonakaisan.horsechecker.horse.listener;
 
+import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -9,7 +10,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
-import javax.inject.Inject;
 import java.util.Objects;
 
 @DefaultQualifier(NonNull.class)

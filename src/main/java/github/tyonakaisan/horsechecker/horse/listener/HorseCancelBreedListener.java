@@ -1,5 +1,6 @@
 package github.tyonakaisan.horsechecker.horse.listener;
 
+import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
@@ -18,7 +19,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import javax.inject.Inject;
 import java.util.Objects;
 
 public class HorseCancelBreedListener implements Listener {

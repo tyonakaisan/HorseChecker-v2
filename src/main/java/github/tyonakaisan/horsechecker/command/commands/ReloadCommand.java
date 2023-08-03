@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
-import github.tyonakaisan.horsechecker.event.events.HorseCheckerReloadEvent;
 import github.tyonakaisan.horsechecker.utils.Messages;
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -36,7 +35,7 @@ public class ReloadCommand implements HorseCheckerCommand {
                 .permission("horsechecker.command.reload")
                 .senderType(CommandSender.class)
                 .handler(context -> {
-                    this.horseChecker.eventHandler().emit(new HorseCheckerReloadEvent());
+                    this.configFactory.reloadPrimaryConfig();
                     context.getSender().sendRichMessage(Messages.CONFIG_RELOAD.getMessageWithPrefix());
                 })
                 .build();

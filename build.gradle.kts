@@ -22,8 +22,6 @@ repositories {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-
     // Paper
     compileOnly("io.papermc.paper", "paper-api", "1.20.1-R0.1-SNAPSHOT")
 
@@ -37,14 +35,8 @@ dependencies {
     // Messages
     implementation("net.kyori.moonshine", "moonshine-standard", "2.0.4")
 
-    // Event
-    implementation("net.kyori", "event-api","5.0.0-SNAPSHOT")
-
     // ProtocolLib
     compileOnly("com.comphenix.protocol", "ProtocolLib", "5.0.0")
-
-    // Inventory
-    implementation("org.incendo.interfaces", "interfaces-paper", "1.0.0-SNAPSHOT")
 
     // Utils
     implementation("com.google.inject", "guice", "7.0.0")
@@ -59,11 +51,15 @@ val mainClass = "$mainPackage.HorseChecker"
 paper {
     name = rootProject.name
     version = project.version as String
-    main = "github.tyonakaisan.horsechecker.HorseChecker"
-    apiVersion = "1.19"
+    main = mainClass
+    apiVersion = "1.20"
     author = "tyonakaisan"
     website = "https://github.com/tyonakaisan"
-    // depend = listOf("ProtocolLib")
+    serverDependencies {
+        register("ProtocolLib") {
+            required = true
+        }
+    }
 }
 
 tasks {
