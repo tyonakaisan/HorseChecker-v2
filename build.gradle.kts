@@ -25,33 +25,34 @@ dependencies {
     // Paper
     compileOnly("io.papermc.paper", "paper-api", "1.20.1-R0.1-SNAPSHOT")
 
-    // Command
-    implementation("cloud.commandframework", "cloud-paper", "1.8.3")
-
-    // Config
-    implementation("org.spongepowered", "configurate-hocon", "4.1.2")
-    implementation("net.kyori", "adventure-serializer-configurate4", "4.12.0")
-
-    // Messages
-    implementation("net.kyori.moonshine", "moonshine-standard", "2.0.4")
-
     // ProtocolLib
     compileOnly("com.comphenix.protocol", "ProtocolLib", "5.0.0")
 
+    // Command
+    paperLibrary("cloud.commandframework", "cloud-paper", "1.8.3")
+
+    // Config
+    paperLibrary("org.spongepowered", "configurate-hocon", "4.1.2")
+    paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.12.0")
+
+    // Messages
+    paperLibrary("net.kyori.moonshine", "moonshine-standard", "2.0.4")
+
     // Utils
-    implementation("com.google.inject", "guice", "7.0.0")
-    implementation("co.aikar", "taskchain-bukkit", "3.7.2")
+    paperLibrary("com.google.inject", "guice", "7.0.0")
+    paperLibrary("co.aikar", "taskchain-bukkit", "3.7.2")
 }
 
 version = "1.0-SNAPSHOT"
-val pluginName = project.name
-val mainPackage = "github.tyonakaisan.horsechecker"
-val mainClass = "$mainPackage.HorseChecker"
 
 paper {
+    val mainPackage = "github.tyonakaisan.horsechecker"
+    generateLibrariesJson = true
     name = rootProject.name
     version = project.version as String
-    main = mainClass
+    main = "$mainPackage.HorseChecker"
+    loader = "$mainPackage.HorseCheckerLoader"
+    bootstrapper = "$mainPackage.HorseCheckerBootstrap"
     apiVersion = "1.20"
     author = "tyonakaisan"
     website = "https://github.com/tyonakaisan"

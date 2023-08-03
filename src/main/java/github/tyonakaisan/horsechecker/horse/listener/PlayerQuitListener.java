@@ -20,7 +20,7 @@ public class PlayerQuitListener implements Listener {
     @Inject
     public PlayerQuitListener(
             final HorseChecker horseChecker
-            ) {
+    ) {
         this.horseChecker = horseChecker;
     }
 

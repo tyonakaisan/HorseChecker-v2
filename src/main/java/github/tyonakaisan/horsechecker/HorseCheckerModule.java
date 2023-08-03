@@ -8,25 +8,26 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.packet.ProtocolLibHologramFactory;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramFactory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
 import java.nio.file.Path;
 import java.util.function.Function;
 
-public class HorseCheckerModule extends AbstractModule {
-    private final Logger logger = LogManager.getLogger("HorseChecker-v2");
+public final class HorseCheckerModule extends AbstractModule {
+    private final ComponentLogger logger;
     private final HorseChecker horseChecker;
     private final Path dataDirectory;
 
     HorseCheckerModule(
             final HorseChecker horseChecker,
-            final Path dataDirectory
+            final Path dataDirectory,
+            final ComponentLogger logger
     ) {
         this.horseChecker = horseChecker;
         this.dataDirectory = dataDirectory;
+        this.logger = logger;
     }
 
     @Provides
@@ -49,7 +50,7 @@ public class HorseCheckerModule extends AbstractModule {
 
     @Override
     public void configure() {
-        this.bind(Logger.class).toInstance(this.logger);
+        this.bind(ComponentLogger.class).toInstance(this.logger);
         this.bind(HorseChecker.class).toInstance(this.horseChecker);
         this.bind(Server.class).toInstance(this.horseChecker.getServer());
         this.bind(HologramFactory.class).to(ProtocolLibHologramFactory.class);

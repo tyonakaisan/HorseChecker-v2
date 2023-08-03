@@ -13,17 +13,14 @@ import github.tyonakaisan.horsechecker.horse.listener.PlayerQuitListener;
 import github.tyonakaisan.horsechecker.packet.ProtocolLibHologramFactory;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramFactory;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.nio.file.Path;
 import java.util.Set;
-
 
 @Singleton
 @DefaultQualifier(NonNull.class)
@@ -39,21 +36,18 @@ public final class HorseChecker extends JavaPlugin {
             ShareCommand.class,
             ToggleCommand.class
     );
-    private @MonotonicNonNull Injector injector;
-    private @MonotonicNonNull Logger logger;
+    private final Injector injector;
 
-    @Override
-    public void onLoad() {
-        this.injector = Guice.createInjector(new HorseCheckerModule(this, this.dataDirectory()));
-        this.logger = LogManager.getLogger("HorseChecker-v2");
+    public HorseChecker(
+            final Path dataDirectory,
+            final ComponentLogger logger
+    ) {
+        this.injector = Guice.createInjector(new HorseCheckerModule(this, dataDirectory, logger));
     }
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-
-        HologramFactory protocolLibFactory = new ProtocolLibHologramFactory();
-        HologramManager hologramManager = new HologramManager(protocolLibFactory);
 
         // Listeners
         for (final Class<? extends Listener> listenerClass : LISTENER_CLASSES) {
@@ -72,13 +66,5 @@ public final class HorseChecker extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-    }
-
-    public Logger logger() {
-        return this.logger;
-    }
-
-    public Path dataDirectory() {
-        return this.getDataFolder().toPath();
     }
 }

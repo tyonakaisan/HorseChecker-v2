@@ -1,8 +1,8 @@
 package github.tyonakaisan.horsechecker.serialisation;
 
 import com.google.inject.Inject;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.translation.Translator;
-import org.apache.logging.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -18,10 +18,10 @@ import static java.util.Objects.requireNonNull;
 @DefaultQualifier(NonNull.class)
 public class LocaleSerializerConfigurate implements TypeSerializer<Locale> {
 
-    private final Logger logger;
+    private final ComponentLogger logger;
 
     @Inject
-    public LocaleSerializerConfigurate(final Logger logger) {
+    public LocaleSerializerConfigurate(final ComponentLogger logger) {
         this.logger = logger;
     }
 
