@@ -9,6 +9,10 @@ import java.awt.Color;
 @DefaultQualifier(NonNull.class)
 public final class HorseRank {
 
+    private HorseRank() {
+        throw new AssertionError();
+    }
+
     public static double calcEvaluateValue(double paramSpeed, double jumpHeight) {
         double jumpRating = Math.floor(Math.pow(jumpHeight, 1.7) * 5.293 * 2.0D) / (2.0D * 5.0D);
 

@@ -2,7 +2,6 @@ package github.tyonakaisan.horsechecker.command.commands;
 
 import cloud.commandframework.CommandManager;
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.utils.Messages;

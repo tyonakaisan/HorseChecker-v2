@@ -3,9 +3,7 @@ package github.tyonakaisan.horsechecker.command.commands;
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
-import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.ShowStats;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.utils.Messages;
@@ -31,6 +29,7 @@ public final class ToggleCommand implements HorseCheckerCommand {
         this.stateManager = stateManager;
         this.showStats = showStats;
     }
+
     @Override
     public void init() {
         final var toggle = this.commandManager.commandBuilder("horsechecker", "hc")
