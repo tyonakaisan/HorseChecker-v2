@@ -2,7 +2,6 @@ package github.tyonakaisan.horsechecker;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.command.commands.DebugCommand;
 import github.tyonakaisan.horsechecker.command.commands.ReloadCommand;
@@ -10,9 +9,6 @@ import github.tyonakaisan.horsechecker.command.commands.ShareCommand;
 import github.tyonakaisan.horsechecker.command.commands.ToggleCommand;
 import github.tyonakaisan.horsechecker.horse.listener.HorseCancelBreedListener;
 import github.tyonakaisan.horsechecker.horse.listener.PlayerQuitListener;
-import github.tyonakaisan.horsechecker.packet.ProtocolLibHologramFactory;
-import github.tyonakaisan.horsechecker.packet.holograms.HologramFactory;
-import github.tyonakaisan.horsechecker.packet.holograms.HologramManager;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,7 +18,6 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import java.nio.file.Path;
 import java.util.Set;
 
-@Singleton
 @DefaultQualifier(NonNull.class)
 public final class HorseChecker extends JavaPlugin {
 

@@ -26,7 +26,7 @@ import java.util.Random;
 import java.util.UUID;
 
 @DefaultQualifier(NonNull.class)
-public class Share {
+public final class Share {
     private final Server server;
     private final ConfigFactory configFactory;
     private final HorseManager horseManager;

@@ -13,7 +13,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import java.util.Objects;
 
 @DefaultQualifier(NonNull.class)
-public class PlayerQuitListener implements Listener {
+public final class PlayerQuitListener implements Listener {
 
     private final HorseChecker horseChecker;
 

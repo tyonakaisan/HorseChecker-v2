@@ -5,12 +5,14 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@DefaultQualifier(NonNull.class)
 public abstract class AbstractHologram implements Hologram {
 
     private static final double LINE_SPACE = 0.25;
@@ -19,9 +21,9 @@ public abstract class AbstractHologram implements Hologram {
     private final String name;
     private Location location;
 
-    private String rank;
+    private final String rank;
 
-    public AbstractHologram(Location location, String name, String rank) {
+    protected AbstractHologram(Location location, String name, String rank) {
         this.name = name;
         this.location = location;
         this.rank = rank;

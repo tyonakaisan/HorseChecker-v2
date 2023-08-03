@@ -16,7 +16,7 @@ import java.util.Locale;
 import static java.util.Objects.requireNonNull;
 
 @DefaultQualifier(NonNull.class)
-public class LocaleSerializerConfigurate implements TypeSerializer<Locale> {
+public final class LocaleSerializerConfigurate implements TypeSerializer<Locale> {
 
     private final ComponentLogger logger;
 

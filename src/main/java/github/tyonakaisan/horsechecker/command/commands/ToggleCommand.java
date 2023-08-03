@@ -15,23 +15,18 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 @DefaultQualifier(NonNull.class)
-public class ToggleCommand implements HorseCheckerCommand {
-    final HorseChecker horseChecker;
-    final ConfigFactory configFactory;
-    final CommandManager<CommandSender> commandManager;
-    final StateManager stateManager;
-    final ShowStats showStats;
+public final class ToggleCommand implements HorseCheckerCommand {
+
+    private final CommandManager<CommandSender> commandManager;
+    private final StateManager stateManager;
+    private final ShowStats showStats;
 
     @Inject
     public ToggleCommand(
-            HorseChecker horseChecker,
-            ConfigFactory configFactory,
             CommandManager<CommandSender> commandManager,
             StateManager stateManager,
             ShowStats showStats
     ) {
-        this.horseChecker = horseChecker;
-        this.configFactory = configFactory;
         this.commandManager = commandManager;
         this.stateManager = stateManager;
         this.showStats = showStats;

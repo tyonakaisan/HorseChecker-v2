@@ -8,10 +8,10 @@ import org.bukkit.persistence.PersistentDataType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
-import java.util.*;
+import java.util.Objects;
 
 @DefaultQualifier(NonNull.class)
-public class StateManager {
+public final class StateManager {
 
     private final HorseChecker horseChecker;
 

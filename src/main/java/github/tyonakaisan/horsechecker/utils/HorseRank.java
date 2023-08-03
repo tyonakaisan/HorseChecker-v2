@@ -1,10 +1,13 @@
 package github.tyonakaisan.horsechecker.utils;
 
 import net.kyori.adventure.text.format.TextColor;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 
-import java.awt.*;
+import java.awt.Color;
 
-public class HorseRank {
+@DefaultQualifier(NonNull.class)
+public final class HorseRank {
 
     public static double calcEvaluateValue(double paramSpeed, double jumpHeight) {
         double jumpRating = Math.floor(Math.pow(jumpHeight, 1.7) * 5.293 * 2.0D) / (2.0D * 5.0D);

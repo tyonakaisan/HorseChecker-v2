@@ -5,20 +5,25 @@ import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.utils.Converter;
 import github.tyonakaisan.horsechecker.utils.Messages;
+import io.papermc.paper.event.entity.EntityMoveEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.Objects;
 
-public class HorseCancelBreedListener implements Listener {
+@DefaultQualifier(NonNull.class)
+public final class HorseCancelBreedListener implements Listener {
 
     private final HorseManager horseManager;
     private final StateManager stateManager;

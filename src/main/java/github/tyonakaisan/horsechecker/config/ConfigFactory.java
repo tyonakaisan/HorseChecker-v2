@@ -17,7 +17,7 @@ import java.nio.file.Path;
 import java.util.Locale;
 
 @DefaultQualifier(NonNull.class)
-public class ConfigFactory {
+public final class ConfigFactory {
 
     private final Path dataDirectory;
     private final LocaleSerializerConfigurate locale;

@@ -12,21 +12,15 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 @DefaultQualifier(NonNull.class)
-public class ShareCommand implements HorseCheckerCommand {
-    final HorseChecker horseChecker;
-    final ConfigFactory configFactory;
-    final CommandManager<CommandSender> commandManager;
-    final Share share;
+public final class ShareCommand implements HorseCheckerCommand {
+    private final CommandManager<CommandSender> commandManager;
+    private final Share share;
 
     @Inject
     public ShareCommand(
-            HorseChecker horseChecker,
-            ConfigFactory configFactory,
             CommandManager<CommandSender> commandManager,
             Share share
     ) {
-        this.horseChecker = horseChecker;
-        this.configFactory = configFactory;
         this.commandManager = commandManager;
         this.share = share;
     }

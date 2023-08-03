@@ -11,10 +11,13 @@ import github.tyonakaisan.horsechecker.packet.holograms.HologramFactory;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.nio.file.Path;
 import java.util.function.Function;
 
+@DefaultQualifier(NonNull.class)
 public final class HorseCheckerModule extends AbstractModule {
     private final ComponentLogger logger;
     private final HorseChecker horseChecker;

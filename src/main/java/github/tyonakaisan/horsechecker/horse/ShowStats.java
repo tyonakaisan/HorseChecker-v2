@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 @DefaultQualifier(NonNull.class)
-public class ShowStats {
+public final class ShowStats {
     private final HorseChecker horseChecker;
     private final HologramManager hologramManager;
     private final HorseManager horseManager;
@@ -85,7 +85,7 @@ public class ShowStats {
                     deleteHologram(player, horseMap.get(player));
                 }
             }
-        }.runTaskTimer(horseChecker, 0, 2);
+        }.runTaskTimer(horseChecker, 0, 1);
     }
 
     private void createHologram(Player player, Location location, AbstractHorse horse, String uuid) {
@@ -157,7 +157,7 @@ public class ShowStats {
                     }
                 }
             }
-        }.runTaskTimer(horseChecker, 0, 2);
+        }.runTaskTimer(horseChecker, 0, 1);
     }
 
     private void addHologram(String hologramName, Component line) {
