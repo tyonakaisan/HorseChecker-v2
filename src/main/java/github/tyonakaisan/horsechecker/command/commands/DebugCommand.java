@@ -25,10 +25,10 @@ import java.util.Objects;
 import java.util.Random;
 
 @DefaultQualifier(NonNull.class)
-public class DebugCommand implements HorseCheckerCommand {
-    final HorseChecker horseChecker;
-    final ConfigFactory configFactory;
-    final CommandManager<CommandSender> commandManager;
+public final class DebugCommand implements HorseCheckerCommand {
+    private final HorseChecker horseChecker;
+    private final ConfigFactory configFactory;
+    private final CommandManager<CommandSender> commandManager;
 
     @Inject
     public DebugCommand(

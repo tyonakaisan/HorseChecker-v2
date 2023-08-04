@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @ConfigSerializable
 @DefaultQualifier(NonNull.class)
-public class PrimaryConfig {
+public final class PrimaryConfig {
 
     private HorseSettings horse = new HorseSettings();
 

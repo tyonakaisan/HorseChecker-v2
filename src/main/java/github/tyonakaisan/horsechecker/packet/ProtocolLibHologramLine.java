@@ -8,7 +8,6 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramLine;
 import github.tyonakaisan.horsechecker.utils.HorseRank;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -17,21 +16,22 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ProtocolLibHologramLine implements HologramLine {
-
-    private ConfigFactory configFactory;
+@DefaultQualifier(NonNull.class)
+public final class ProtocolLibHologramLine implements HologramLine {
 
     private final UUID entityUid;
     private final int entityId;
     private Location location;
-    private Component text;
-    private String rank;
+    private Component text = Component.empty();
+    private final String rank;
 
     public ProtocolLibHologramLine(Location location, String rank) {
         this.location = location;

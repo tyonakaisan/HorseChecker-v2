@@ -11,7 +11,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import java.util.Objects;
 
 @DefaultQualifier(NonNull.class)
-public class HorseManager {
+public final class HorseManager {
 
     private final ConfigFactory configFactory;
 

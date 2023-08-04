@@ -1,8 +1,7 @@
 package github.tyonakaisan.horsechecker.config;
 
-import github.tyonakaisan.horsechecker.HorseChecker;
+import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.config.primary.PrimaryConfig;
-import github.tyonakaisan.horsechecker.event.events.HorseCheckerReloadEvent;
 import github.tyonakaisan.horsechecker.serialisation.LocaleSerializerConfigurate;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -12,14 +11,13 @@ import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 
 @DefaultQualifier(NonNull.class)
-public class ConfigFactory {
+public final class ConfigFactory {
 
     private final Path dataDirectory;
     private final LocaleSerializerConfigurate locale;
@@ -28,14 +26,11 @@ public class ConfigFactory {
 
     @Inject
     public ConfigFactory(
-            final HorseChecker horseChecker,
             final Path dataDirectory,
             final LocaleSerializerConfigurate locale
     ) {
         this.dataDirectory = dataDirectory;
         this.locale = locale;
-
-        horseChecker.eventHandler().subscribe(HorseCheckerReloadEvent.class, event -> this.reloadPrimaryConfig());
     }
 
     public @Nullable PrimaryConfig reloadPrimaryConfig() {

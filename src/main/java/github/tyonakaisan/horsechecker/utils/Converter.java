@@ -3,10 +3,13 @@ package github.tyonakaisan.horsechecker.utils;
 import github.tyonakaisan.horsechecker.horse.HorseStatsRecord;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.Objects;
 
-public class Converter {
+@DefaultQualifier(NonNull.class)
+public final class Converter {
 
     public HorseStatsRecord convertHorseStats(AbstractHorse horse) {
         var rank = HorseRank.calcEvaluateRankString(

@@ -8,6 +8,7 @@ import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramManager;
 import github.tyonakaisan.horsechecker.utils.Converter;
 import github.tyonakaisan.horsechecker.utils.HorseRank;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -22,10 +23,12 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 @DefaultQualifier(NonNull.class)
-public class ShowStats {
+public final class ShowStats {
     private final HorseChecker horseChecker;
     private final HologramManager hologramManager;
     private final HorseManager horseManager;
@@ -33,7 +36,7 @@ public class ShowStats {
     private final Converter converter;
     private final ConfigFactory configFactory;
 
-    public HashMap<Player, String> horseMap = new HashMap<>();
+    private final Map<Player, String> horseMap = new HashMap<>();
 
     @Inject
     public ShowStats(
@@ -63,29 +66,26 @@ public class ShowStats {
                     return;
                 }
 
-                if (player.getTargetEntity(targetRange, false) != null) {
-                    if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse) {
-                        if (horseManager.isAllowedHorse(Objects.requireNonNull(player.getTargetEntity(targetRange, false)).getType())) {
-                            AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(targetRange, false));
-                            Location location = horse.getLocation();
-                            String uuid = player.getUniqueId() + "+" + horse.getUniqueId();
+                if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse &&
+                        horseManager.isAllowedHorse(Objects.requireNonNull(player.getTargetEntity(targetRange, false)).getType())
+                ) {
+                    Location location = horse.getLocation();
+                    String uuid = player.getUniqueId() + "+" + horse.getUniqueId();
 
-                            //mapに含まれているか
-                            if (!horseMap.containsKey(player)) {
-                                //削除
-                                deleteHologram(player, uuid);
-                                //作成
-                                createHologram(player, location, horse, uuid);
-                                //更新開始
-                                updateTargetMob(player, horse);
-                            }
-                        }
+                    //mapに含まれているか
+                    if (!horseMap.containsKey(player)) {
+                        //削除
+                        deleteHologram(player, uuid);
+                        //作成
+                        createHologram(player, location, horse, uuid);
+                        //更新開始
+                        updateTargetMob(player, horse);
                     }
                 } else {
                     deleteHologram(player, horseMap.get(player));
                 }
             }
-        }.runTaskTimer(horseChecker, 0, 2);
+        }.runTaskTimer(horseChecker, 0, 1);
     }
 
     private void createHologram(Player player, Location location, AbstractHorse horse, String uuid) {
@@ -103,7 +103,7 @@ public class ShowStats {
         Component component = MiniMessage.miniMessage().deserialize("""
                                             Score: <rankcolor><rank></rankcolor>
                                             Speed: <#ffa500><speed></#ffa500>blocks/s
-                                            Jump: <#ffa500><jump></#ffa500>blocks
+                                            Jump : <#ffa500><jump></#ffa500>blocks
                                             MaxHP: <#ffa500><health></#ffa500><red>♥</red>
                                             <owner>""",
                 Formatter.number("speed", horseStats.speed()),
@@ -157,7 +157,7 @@ public class ShowStats {
                     }
                 }
             }
-        }.runTaskTimer(horseChecker, 0, 2);
+        }.runTaskTimer(horseChecker, 0, 1);
     }
 
     private void addHologram(String hologramName, Component line) {
