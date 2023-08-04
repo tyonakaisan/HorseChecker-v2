@@ -8,7 +8,6 @@ import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramManager;
 import github.tyonakaisan.horsechecker.utils.Converter;
 import github.tyonakaisan.horsechecker.utils.HorseRank;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -25,10 +24,9 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 @DefaultQualifier(NonNull.class)
-public final class ShowStats {
+public final class StatsHologram {
     private final HorseChecker horseChecker;
     private final HologramManager hologramManager;
     private final HorseManager horseManager;
@@ -39,7 +37,7 @@ public final class ShowStats {
     private final Map<Player, String> horseMap = new HashMap<>();
 
     @Inject
-    public ShowStats(
+    public StatsHologram(
             final HorseChecker horseChecker,
             final HologramManager hologramManager,
             final HorseManager horseManager,
@@ -55,13 +53,14 @@ public final class ShowStats {
         this.configFactory = configFactory;
     }
 
-    public void showStatsStart(Player player) {
+    public void show(Player player) {
         int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!player.isOnline() || !stateManager.isState(player, "stats")) {
+                if (!player.isOnline() || !stateManager.state(player, "stats")) {
+                    deleteHologram(player, horseMap.get(player));
                     this.cancel();
                     return;
                 }
@@ -123,6 +122,13 @@ public final class ShowStats {
         new BukkitRunnable() {
             @Override
             public void run() {
+
+                if (!player.isOnline() || !stateManager.state(player, "stats")) {
+                    deleteHologram(player, horseMap.get(player));
+                    this.cancel();
+                    return;
+                }
+
                 if (player.getTargetEntity(targetRange, false) == null) {
                     deleteHologram(player, horseMap.get(player));
                     this.cancel();

@@ -44,7 +44,7 @@ public final class HorseCancelBreedListener implements Listener {
         ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
 
         //toggleチェック
-        if (!stateManager.isState(player, "breed")) return;
+        if (!stateManager.state(player, "breed")) return;
 
         //繫殖させるためのアイテムか
         if (!horseManager.isBreedItem(itemStack)) {

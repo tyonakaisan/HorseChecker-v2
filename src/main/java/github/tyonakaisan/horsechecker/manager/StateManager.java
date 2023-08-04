@@ -42,7 +42,7 @@ public final class StateManager {
         }
     }
 
-    public boolean isState(Player player, String stateKey) {
+    public boolean state(Player player, String stateKey) {
         var pdc = player.getPersistentDataContainer();
         NamespacedKey namespacedKey = new NamespacedKey(horseChecker, stateKey);
 
