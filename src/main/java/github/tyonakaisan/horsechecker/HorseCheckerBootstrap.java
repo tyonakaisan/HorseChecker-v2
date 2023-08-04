@@ -6,6 +6,7 @@ import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({"UnstableApiUsage", "unused"})
 @DefaultQualifier(NonNull.class)
@@ -16,7 +17,7 @@ public final class HorseCheckerBootstrap implements PluginBootstrap {
     }
 
     @Override
-    public JavaPlugin createPlugin(PluginProviderContext context) {
+    public @NotNull JavaPlugin createPlugin(PluginProviderContext context) {
         return new HorseChecker(context.getDataDirectory(), context.getLogger());
     }
 }

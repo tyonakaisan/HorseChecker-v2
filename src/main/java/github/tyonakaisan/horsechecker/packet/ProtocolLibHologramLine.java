@@ -30,7 +30,7 @@ public final class ProtocolLibHologramLine implements HologramLine {
     private final UUID entityUid;
     private final int entityId;
     private Location location;
-    private Component text;
+    private Component text = Component.empty();
     private final String rank;
 
     public ProtocolLibHologramLine(Location location, String rank) {

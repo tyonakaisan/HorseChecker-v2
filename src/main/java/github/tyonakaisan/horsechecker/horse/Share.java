@@ -1,7 +1,6 @@
 package github.tyonakaisan.horsechecker.horse;
 
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.utils.Converter;
@@ -24,6 +23,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @DefaultQualifier(NonNull.class)
 public final class Share {
@@ -31,10 +31,10 @@ public final class Share {
     private final ConfigFactory configFactory;
     private final HorseManager horseManager;
     private final Converter converter;
+    private final Random random = new Random();
 
     @Inject
     public Share(
-            final HorseChecker horseChecker,
             final ConfigFactory configFactory,
             final HorseManager horseManager,
             final Converter converter,
@@ -91,48 +91,52 @@ public final class Share {
             commandInterval.put(uuid, System.currentTimeMillis());
             return true;
         }
-        System.out.println(commandInterval);
         return false;
     }
 
     public void broadcastShareMessage(Player player) {
-        if (isShareable(player)) {
-            if (checkInterval(player)) {
-                int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
-                AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(targetRange, false));
-                var horseStats = converter.convertHorseStats(horse);
-
-                String shareString = "<myhover>" +
-                        Messages.PREFIX.getMessage() +
-                        "<color:#5cb8ff><player></color><white>が" +
-                        randomMessage[new Random().nextInt(randomMessage.length)] +
-                        "<rankcolor>馬</rankcolor>を共有しました！</white><newline>" +
-                        "<b><gray>[カーソルを合わせて表示]</gray></b></myhover>";
-
-                Component hoverMiniMessage = MiniMessage.miniMessage().deserialize("""
-                                Score: <rankcolor><rank></rankcolor>
-                                Speed: <#ffa500><speed></#ffa500>blocks/s
-                                Jump: <#ffa500><jump></#ffa500>blocks
-                                MaxHP: <#ffa500><health></#ffa500><red>♥</red>
-                                <owner>""",
-                        Formatter.number("speed", horseStats.speed()),
-                        Formatter.number("jump", horseStats.jump()),
-                        Formatter.number("health", horseStats.health()),
-                        Placeholder.parsed("owner", horseStats.ownerName()),
-                        Placeholder.parsed("rank", horseStats.rank()),
-                        TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
-                );
-
-                server.forEachAudience(receiver -> {
-                    if (receiver instanceof Player) {
-                        receiver.sendMessage(MiniMessage.miniMessage().deserialize(shareString,
-                                TagResolver.resolver("myhover", Tag.styling(HoverEvent.showText(hoverMiniMessage))),
-                                TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank()))),
-                                Placeholder.parsed("player", player.getName()))
-                        );
-                    }
-                });
-            }
+        if (!isShareable(player)) {
+            return;
         }
+
+        if (!checkInterval(player)) {
+            return;
+        }
+
+        int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
+        AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(targetRange, false));
+        var horseStats = converter.convertHorseStats(horse);
+
+        String shareString = "<myhover>" +
+                Messages.PREFIX.getMessage() +
+                "<color:#5cb8ff><player></color><white>が" +
+                randomMessage[this.random.nextInt(randomMessage.length)] +
+                "<rankcolor>馬</rankcolor>を共有しました！</white><newline>" +
+                "<b><gray>[カーソルを合わせて表示]</gray></b></myhover>";
+
+        Component hoverMiniMessage = MiniMessage.miniMessage().deserialize("""
+                        Score: <rankcolor><rank></rankcolor>
+                        Speed: <#ffa500><speed></#ffa500>blocks/s
+                        Jump: <#ffa500><jump></#ffa500>blocks
+                        MaxHP: <#ffa500><health></#ffa500><red>♥</red>
+                        <owner>""",
+                Formatter.number("speed", horseStats.speed()),
+                Formatter.number("jump", horseStats.jump()),
+                Formatter.number("health", horseStats.health()),
+                Placeholder.parsed("owner", horseStats.ownerName()),
+                Placeholder.parsed("rank", horseStats.rank()),
+                TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
+        );
+
+        server.forEachAudience(receiver -> {
+            if (receiver instanceof Player) {
+                receiver.sendMessage(MiniMessage.miniMessage().deserialize(shareString,
+                        TagResolver.resolver("myhover", Tag.styling(HoverEvent.showText(hoverMiniMessage))),
+                        TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank()))),
+                        Placeholder.parsed("player", player.getName()))
+                );
+            }
+        });
+
     }
 }
