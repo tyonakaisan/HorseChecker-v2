@@ -9,7 +9,7 @@ import java.util.List;
 
 @ConfigSerializable
 @DefaultQualifier(NonNull.class)
-public class HorseSettings {
+public final class HorseSettings {
 
     @Comment("""
             検知可能距離

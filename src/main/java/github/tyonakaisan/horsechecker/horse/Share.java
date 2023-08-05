@@ -152,7 +152,6 @@ public final class Share {
     }
 
     private boolean ownerCheck(AbstractHorse horse, Player player) {
-        System.out.println(Objects.requireNonNull(configFactory.primaryConfig()).share().ownerOnly());
 
         if (horse.getOwner() == null) return true;
 

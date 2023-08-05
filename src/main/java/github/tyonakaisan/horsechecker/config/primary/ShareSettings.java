@@ -7,7 +7,7 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
 @DefaultQualifier(NonNull.class)
-public class ShareSettings {
+public final class ShareSettings {
 
     @Comment("""
             馬のステータスを共有するかどうか
