@@ -33,7 +33,7 @@ public enum Messages {
     NOT_ALLOWED_SHARE("<color:#ff4775>馬の共有は許可されていません!</color>"),
     UNSHAREABLE_ENTITY("<color:#ff4775>そのmobは共有できません!</color>"),
     DIFFERENT_OWNER("<color:#ff4775>所有者が違うため共有できません!</color>"),
-    BROADCAST_SHARE("<myhover><prefix><color:#5cb8ff><player></color><white>が<random_message><rankcolor>馬</rankcolor>を共有しました！</white><newline><b><gray>[カーソルを合わせて表示]</gray></b></myhover>"),
+    BROADCAST_SHARE("<myhover><prefix><color:#5cb8ff><player></color><white>が<random_message><rankcolor><horse_name></rankcolor>を共有しました！</white><newline><b><gray>[カーソルを合わせて表示]</gray></b></myhover>"),
     BROADCAST_SHARE_SUCSESS("<color:#59ffa4>共有メッセージを送りました!"),
 
     //DEBUG

@@ -136,6 +136,7 @@ public final class Share {
                 Placeholder.parsed("prefix", Messages.PREFIX.get()),
                 TagResolver.resolver("myhover", Tag.styling(HoverEvent.showText(myHoverMessage))),
                 Placeholder.parsed("random_message", randomMessage[this.random.nextInt(randomMessage.length)]),
+                Placeholder.parsed("horse_name", horseStats.horseName()),
                 TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank()))),
                 Placeholder.parsed("player", player.getName()));
 

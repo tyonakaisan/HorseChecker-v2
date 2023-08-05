@@ -15,7 +15,7 @@ public final class Converter {
                 Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
                 Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue()
         );
-        return new HorseStatsRecord(getSpeed(horse), getHorseJump(horse), getMaxHealth(horse), getOwnerName(horse), rank);
+        return new HorseStatsRecord(getSpeed(horse), getHorseJump(horse), getMaxHealth(horse), getOwnerName(horse), getHorseName(horse), rank);
     }
 
     private double jumpStrengthToJumpHeight(double strength) {
@@ -55,6 +55,14 @@ public final class Converter {
             return "no owner";
         } else {
             return "owned by <#ffa500>" + horse.getOwner().getName() + "</#ffa500>";
+        }
+    }
+
+    public String getHorseName(AbstractHorse horse) {
+        if (horse.getName().equals("Horse")) {
+            return "<lang:entity.minecraft.horse>";
+        } else {
+            return horse.getName();
         }
     }
 

@@ -5,5 +5,6 @@ public record HorseStatsRecord(
         double jump,
         int health,
         String ownerName,
+        String horseName,
         String rank
 ) {}
