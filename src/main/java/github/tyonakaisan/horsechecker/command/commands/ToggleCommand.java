@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.horse.StatsHologram;
 import github.tyonakaisan.horsechecker.manager.StateManager;
-import github.tyonakaisan.horsechecker.utils.Messages;
+import github.tyonakaisan.horsechecker.message.Messages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;

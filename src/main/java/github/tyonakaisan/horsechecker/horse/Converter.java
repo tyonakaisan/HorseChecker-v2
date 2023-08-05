@@ -1,6 +1,5 @@
-package github.tyonakaisan.horsechecker.utils;
+package github.tyonakaisan.horsechecker.horse;
 
-import github.tyonakaisan.horsechecker.horse.HorseStatsRecord;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
 import org.checkerframework.checker.nullness.qual.NonNull;

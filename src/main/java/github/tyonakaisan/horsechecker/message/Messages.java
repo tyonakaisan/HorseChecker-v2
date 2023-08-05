@@ -1,4 +1,4 @@
-package github.tyonakaisan.horsechecker.utils;
+package github.tyonakaisan.horsechecker.message;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;

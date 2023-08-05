@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
-import github.tyonakaisan.horsechecker.utils.Messages;
+import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.attribute.Attribute;

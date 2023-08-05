@@ -1,4 +1,4 @@
-package github.tyonakaisan.horsechecker.horse.listener;
+package github.tyonakaisan.horsechecker.listener;
 
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.horse.StatsHologram;

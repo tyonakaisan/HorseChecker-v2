@@ -1,10 +1,10 @@
-package github.tyonakaisan.horsechecker.horse.listener;
+package github.tyonakaisan.horsechecker.listener;
 
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.StateManager;
-import github.tyonakaisan.horsechecker.utils.Converter;
-import github.tyonakaisan.horsechecker.utils.Messages;
+import github.tyonakaisan.horsechecker.horse.Converter;
+import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;

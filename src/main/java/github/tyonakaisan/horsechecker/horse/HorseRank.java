@@ -1,4 +1,4 @@
-package github.tyonakaisan.horsechecker.utils;
+package github.tyonakaisan.horsechecker.horse;
 
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;

@@ -4,7 +4,7 @@ import cloud.commandframework.CommandManager;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
-import github.tyonakaisan.horsechecker.utils.Messages;
+import github.tyonakaisan.horsechecker.message.Messages;
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;

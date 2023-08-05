@@ -3,9 +3,7 @@ package github.tyonakaisan.horsechecker.horse;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
-import github.tyonakaisan.horsechecker.utils.Converter;
-import github.tyonakaisan.horsechecker.utils.HorseRank;
-import github.tyonakaisan.horsechecker.utils.Messages;
+import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -130,7 +128,9 @@ public final class Share {
                         Speed: <#ffa500><speed></#ffa500>blocks/s
                         Jump: <#ffa500><jump></#ffa500>blocks
                         MaxHP: <#ffa500><health></#ffa500><red>♥</red>
-                        <owner>""",
+                        <owner>
+                        <color:#5cb8ff>---Shared by <sender>---</color>""",
+                Placeholder.parsed("sender", player.getName()),
                 Formatter.number("speed", horseStats.speed()),
                 Formatter.number("jump", horseStats.jump()),
                 Formatter.number("health", horseStats.health()),

@@ -9,7 +9,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramLine;
-import github.tyonakaisan.horsechecker.utils.HorseRank;
+import github.tyonakaisan.horsechecker.horse.HorseRank;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;

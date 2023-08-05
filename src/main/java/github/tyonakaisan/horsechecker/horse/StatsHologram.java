@@ -6,8 +6,6 @@ import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramManager;
-import github.tyonakaisan.horsechecker.utils.Converter;
-import github.tyonakaisan.horsechecker.utils.HorseRank;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
