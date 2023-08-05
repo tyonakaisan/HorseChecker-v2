@@ -65,12 +65,14 @@ public final class Share {
 
         //ターゲットしてる馬チェック
         if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse && horseManager.isAllowedHorse(horse.getType())) {
-            if (horseManager.ownerCheck(horse, player)) {
+            //オーナーチェック
+            if (ownerCheck(horse, player)) {
                 return true;
             } else {
                 player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.DIFFERENT_OWNER.getMessageWithPrefix()));
                 return false;
             }
+
         } else {
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.UNSHAREABLE_ENTITY.getMessageWithPrefix()));
             return false;
@@ -147,5 +149,17 @@ public final class Share {
             }
         });
 
+    }
+
+    private boolean ownerCheck(AbstractHorse horse, Player player) {
+        System.out.println(Objects.requireNonNull(configFactory.primaryConfig()).share().ownerOnly());
+
+        if (horse.getOwner() == null) return true;
+
+        if (Objects.requireNonNull(configFactory.primaryConfig()).share().ownerOnly()) {
+            return Objects.requireNonNull(horse.getOwnerUniqueId()).equals(player.getUniqueId());
+        } else {
+            return true;
+        }
     }
 }

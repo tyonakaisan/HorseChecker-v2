@@ -3,9 +3,7 @@ package github.tyonakaisan.horsechecker.manager;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import org.bukkit.Material;
-import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -33,16 +31,5 @@ public final class HorseManager {
 
     public boolean isAllowedHorse(EntityType entityType) {
         return Objects.requireNonNull(this.configFactory.primaryConfig()).allowedMOBs().contains(entityType);
-    }
-
-    public boolean ownerCheck(AbstractHorse horse, Player player) {
-
-        if (horse.getOwner() == null) return true;
-
-        if (Objects.requireNonNull(configFactory.primaryConfig()).share().ownerOnly()) {
-            return Objects.requireNonNull(horse.getOwnerUniqueId()).equals(player.getUniqueId());
-        } else {
-            return true;
-        }
     }
 }

@@ -13,7 +13,7 @@ public enum Messages {
     SHOW_STATS_DISABLED("<color:#ff4775>ステータス非表示中!</color>"),
     CANCEL_BREEDING_ENABLED("<color:#59ffa4>連続餌やり無効中!</color>"),
     CANCEL_BREEDING_DISABLED("<color:#ff4775>連続餌やり有効中!</color>"),
-    CONFIG_RELOAD("<color:#ff4775>configリロード完了!</color>"),
+    CONFIG_RELOAD("<color:#59ffa4>configリロード完了!</color>"),
     COMMAND_INTERVAL("<color:#ff4775>このコマンドは<color:#ffc414><interval></color>秒後に使用できます!</color>"),
 
     //BREEDING
