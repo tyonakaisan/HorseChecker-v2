@@ -58,7 +58,7 @@ public final class StatsHologram {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!player.isOnline() || !stateManager.state(player, "stats")) {
+                if (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle()) {
                     deleteHologram(player, horseMap.get(player));
                     this.cancel();
                     return;
@@ -69,6 +69,11 @@ public final class StatsHologram {
                 ) {
                     Location location = horse.getLocation();
                     String uuid = player.getUniqueId() + "+" + horse.getUniqueId();
+
+                    if (horse.getPassengers().contains(player)) {
+                        deleteHologram(player, uuid);
+                        return;
+                    }
 
                     //mapに含まれているか
                     if (!horseMap.containsKey(player)) {
@@ -124,21 +129,52 @@ public final class StatsHologram {
             @Override
             public void run() {
 
-                if (!player.isOnline() || !stateManager.state(player, "stats")) {
+                if (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle()) {
                     deleteHologram(player, horseMap.get(player));
                     this.cancel();
                     return;
                 }
 
-                if (player.getTargetEntity(targetRange, false) == null) {
+                if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse focusedHorse &&
+                        horseManager.isAllowedHorse(Objects.requireNonNull(player.getTargetEntity(targetRange, false)).getType())) {
+                    String focusedHorseUUID = player.getUniqueId() + "+" + focusedHorse.getUniqueId();
+
+                    if (horseMap.getOrDefault(player, "null").equalsIgnoreCase(focusedHorseUUID)) {
+                        if (!horse.isAdult()) {
+                            Location babyLocation = horse.getLocation().add(0, -1, 0);
+                            //ホログラムのtp
+                            teleportHologram(focusedHorseUUID, babyLocation);
+                        } else {
+                            //ホログラムのtp
+                            teleportHologram(focusedHorseUUID, horse.getLocation());
+                        }
+                    } else {
+                        //削除
+                        deleteHologram(player, horseMap.get(player));
+                        //作成
+                        createHologram(player, focusedHorse.getLocation(), focusedHorse, focusedHorseUUID);
+                        //更新開始
+                        updateTargetMob(player, focusedHorse);
+                        this.cancel();
+                    }
+                } else {
                     deleteHologram(player, horseMap.get(player));
                     this.cancel();
+                }
+                /*
+                if (player.getTargetEntity(targetRange, false) == null) {
+                    deleteHologram(player, horseMap.get(player));
                 } else {
                     //ここで極まれにnullが発生するけど今のところ発生頻度は低めなのでもし高ければ直すポイント
                     if (horseManager.isAllowedHorse(Objects.requireNonNull(player.getTargetEntity(targetRange, false)).getType())) {
 
                         AbstractHorse focusedHorse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(targetRange, false));
                         String focusedHorseUUID = player.getUniqueId() + "+" + focusedHorse.getUniqueId();
+
+                        if (focusedHorse.getPassengers().contains(player)) {
+                            deleteHologram(player, focusedHorseUUID);
+                            return;
+                        }
 
                         if (horseMap.getOrDefault(player, "null").equalsIgnoreCase(focusedHorseUUID)) {
                             if (!horse.isAdult()) {
@@ -163,6 +199,8 @@ public final class StatsHologram {
                         this.cancel();
                     }
                 }
+
+                 */
             }
         }.runTaskTimer(horseChecker, 0, 1);
     }

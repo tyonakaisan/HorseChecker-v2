@@ -8,6 +8,7 @@ import github.tyonakaisan.horsechecker.command.commands.ReloadCommand;
 import github.tyonakaisan.horsechecker.command.commands.ShareCommand;
 import github.tyonakaisan.horsechecker.command.commands.ToggleCommand;
 import github.tyonakaisan.horsechecker.listener.HorseCancelBreedListener;
+import github.tyonakaisan.horsechecker.listener.PlayerDismountListener;
 import github.tyonakaisan.horsechecker.listener.PlayerJoinListener;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.event.Listener;
@@ -23,6 +24,7 @@ public final class HorseChecker extends JavaPlugin {
 
     private static final Set<Class<? extends Listener>> LISTENER_CLASSES = Set.of(
             PlayerJoinListener.class,
+            PlayerDismountListener.class,
             HorseCancelBreedListener.class
     );
     private static final Set<Class<? extends HorseCheckerCommand>> COMMAND_CLASSES = Set.of(
