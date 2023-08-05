@@ -1,6 +1,7 @@
 package github.tyonakaisan.horsechecker.config;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.config.primary.PrimaryConfig;
 import github.tyonakaisan.horsechecker.serialisation.LocaleSerializerConfigurate;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 
+@Singleton
 @DefaultQualifier(NonNull.class)
 public final class ConfigFactory {
 
