@@ -64,7 +64,7 @@ public final class HorseCancelBreedListener implements Listener {
             //繫殖クールタイム中&体力がMAXであればイベントキャンセル
             if (age > 0 && health == maxHealth) {
                 component = MiniMessage.miniMessage().deserialize(
-                        Messages.BREEDING_COOL_TIME.getMessage(),
+                        Messages.BREEDING_COOL_TIME.get(),
                         Formatter.number("cooltime", converter.getBreedingCoolTime(horse)));
                 player.sendActionBar(component);
                 event.setCancelled(true);
@@ -72,7 +72,7 @@ public final class HorseCancelBreedListener implements Listener {
                 //繫殖モード中(ハートが出てる時)&体力がMAXであればイベントキャンセル
             } else if (loveMode > 0 && health == maxHealth) {
                 component = MiniMessage.miniMessage().deserialize(
-                        Messages.LOVE_MODE_TIME.getMessage(),
+                        Messages.LOVE_MODE_TIME.get(),
                         Formatter.number("cooltime", converter.getLoveModeTime(horse)));
                 player.sendActionBar(component);
                 event.setCancelled(true);

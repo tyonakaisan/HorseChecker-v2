@@ -5,6 +5,7 @@ import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.StateManager;
+import github.tyonakaisan.horsechecker.message.Messages;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -96,13 +97,15 @@ public final class StatsHologram {
         } else {
             hologramManager.createHologram(location, uuid, horseStats.rank());
         }
+
+        String stats = Messages.STATS_RESULT_SCORE.get()
+                + Messages.STATS_RESULT_SPEED.get()
+                + Messages.STATS_RESULT_JUMP.get()
+                + Messages.STATS_RESULT_HP.get()
+                + Messages.STATS_RESULT_OWNER.get();
+
         //ホログラム作成
-        Component component = MiniMessage.miniMessage().deserialize("""
-                                            Score: <rankcolor><rank></rankcolor>
-                                            Speed: <#ffa500><speed></#ffa500>blocks/s
-                                            Jump : <#ffa500><jump></#ffa500>blocks
-                                            MaxHP: <#ffa500><health></#ffa500><red>♥</red>
-                                            <owner>""",
+        Component component = MiniMessage.miniMessage().deserialize(stats,
                 Formatter.number("speed", horseStats.speed()),
                 Formatter.number("jump", horseStats.jump()),
                 Formatter.number("health", horseStats.health()),

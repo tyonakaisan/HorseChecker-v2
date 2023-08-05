@@ -116,20 +116,13 @@ public final class Share {
         AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(targetRange, false));
         var horseStats = converter.convertHorseStats(horse);
 
-        String shareString = "<myhover>" +
-                Messages.PREFIX.getMessage() +
-                "<color:#5cb8ff><player></color><white>が" +
-                randomMessage[this.random.nextInt(randomMessage.length)] +
-                "<rankcolor>馬</rankcolor>を共有しました！</white><newline>" +
-                "<b><gray>[カーソルを合わせて表示]</gray></b></myhover>";
+        String stats = Messages.STATS_RESULT_SCORE.get()
+                + Messages.STATS_RESULT_SPEED.get()
+                + Messages.STATS_RESULT_JUMP.get()
+                + Messages.STATS_RESULT_HP.get()
+                + Messages.STATS_RESULT_OWNER.get();
 
-        Component hoverMiniMessage = MiniMessage.miniMessage().deserialize("""
-                        Score: <rankcolor><rank></rankcolor>
-                        Speed: <#ffa500><speed></#ffa500>blocks/s
-                        Jump: <#ffa500><jump></#ffa500>blocks
-                        MaxHP: <#ffa500><health></#ffa500><red>♥</red>
-                        <owner>
-                        <color:#5cb8ff>---Shared by <sender>---</color>""",
+        Component hoverMiniMessage = MiniMessage.miniMessage().deserialize(stats,
                 Placeholder.parsed("sender", player.getName()),
                 Formatter.number("speed", horseStats.speed()),
                 Formatter.number("jump", horseStats.jump()),
@@ -141,8 +134,10 @@ public final class Share {
 
         server.forEachAudience(receiver -> {
             if (receiver instanceof Player) {
-                receiver.sendMessage(MiniMessage.miniMessage().deserialize(shareString,
+                receiver.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),
+                        Placeholder.parsed("prefix", Messages.PREFIX.get()),
                         TagResolver.resolver("myhover", Tag.styling(HoverEvent.showText(hoverMiniMessage))),
+                        Placeholder.parsed("random_message", randomMessage[this.random.nextInt(randomMessage.length)]),
                         TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank()))),
                         Placeholder.parsed("player", player.getName()))
                 );
