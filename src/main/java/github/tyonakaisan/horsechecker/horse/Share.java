@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 @DefaultQualifier(NonNull.class)
 public final class Share {
@@ -52,16 +51,26 @@ public final class Share {
     private boolean isShareable(Player player) {
         int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
 
+        //ターゲットしてるエンティティがnullの場合
         if (player.getTargetEntity(targetRange, false) == null) {
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.TARGETED_ENTITY_IS_NULL.getMessageWithPrefix()));
             return false;
         }
-        if (!Objects.requireNonNull(configFactory.primaryConfig()).horse().allowedHorseShare()) {
+
+        //shareが使用可能か
+        if (!Objects.requireNonNull(configFactory.primaryConfig()).share().allowedHorseShare()) {
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.NOT_ALLOWED_SHARE.getMessageWithPrefix()));
             return false;
         }
-        if (horseManager.isAllowedHorse(Objects.requireNonNull(player.getTargetEntity(targetRange, false)).getType())) {
-            return true;
+
+        //ターゲットしてる馬チェック
+        if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse && horseManager.isAllowedHorse(horse.getType())) {
+            if (horseManager.ownerCheck(horse, player)) {
+                return true;
+            } else {
+                player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.DIFFERENT_OWNER.getMessageWithPrefix()));
+                return false;
+            }
         } else {
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.UNSHAREABLE_ENTITY.getMessageWithPrefix()));
             return false;
@@ -69,7 +78,7 @@ public final class Share {
     }
 
     private boolean checkInterval(Player player) {
-        int intervalTime = Objects.requireNonNull(configFactory.primaryConfig()).horse().horseShareInterval() * 1000;
+        int intervalTime = Objects.requireNonNull(configFactory.primaryConfig()).share().horseShareInterval() * 1000;
         var uuid = player.getUniqueId();
 
         if (commandInterval.containsKey(uuid)) {

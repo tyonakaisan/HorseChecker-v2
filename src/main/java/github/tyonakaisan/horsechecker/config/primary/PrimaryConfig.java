@@ -15,10 +15,16 @@ public final class PrimaryConfig {
 
     private HorseSettings horse = new HorseSettings();
 
+    private ShareSettings share = new ShareSettings();
+
     private Map<String, String> customPlaceholders = Map.of();
 
     public HorseSettings horse() {
         return this.horse;
+    }
+
+    public ShareSettings share() {
+        return this.share;
     }
 
     public Set<EntityType> allowedMOBs() {

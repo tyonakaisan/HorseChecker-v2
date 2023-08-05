@@ -16,18 +16,6 @@ public final class HorseSettings {
             """)
     private int targetRange = 20;
 
-    @Comment("""
-            馬のステータスを共有するかどうか
-            共有メッセージは全体メッセージとして送信されます
-            """)
-    private boolean allowedHorseShare = true;
-
-    @Comment("""
-            shareコマンドのクールダウン(秒)
-            連投防止
-            """)
-    private int horseShareInterval = 60;
-
     private List<String> allowedMobs = List.of(
             "horse",
             "donkey",
@@ -43,13 +31,4 @@ public final class HorseSettings {
     public int targetRange() {
         return this.targetRange;
     }
-
-    public boolean allowedHorseShare() {
-        return this.allowedHorseShare;
-    }
-
-    public int horseShareInterval() {
-        return this.horseShareInterval;
-    }
-
 }

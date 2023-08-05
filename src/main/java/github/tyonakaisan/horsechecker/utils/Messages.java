@@ -17,13 +17,14 @@ public enum Messages {
     COMMAND_INTERVAL("<color:#ff4775>このコマンドは<color:#ffc414><interval></color>秒後に使用できます!</color>"),
 
     //BREEDING
-    BREEDING_COOL_TIME("繫殖クールタイム中(<color:#ffc414><cooltime>s</color>)は出来ません！</color>"),
-    LOVE_MODE_TIME("<color:#ff4775>繫殖モード中(<color:#ffc414><cooltime>s</color>)は出来ません！</color>"),
+    BREEDING_COOL_TIME("繫殖クールタイム中(<color:#ffc414><cooltime>s</color>)は出来ません!</color>"),
+    LOVE_MODE_TIME("<color:#ff4775>繫殖モード中(<color:#ffc414><cooltime>s</color>)は出来ません!</color>"),
 
     //SHARE
     TARGETED_ENTITY_IS_NULL("<color:#ff4775>mobを見て使用してください!</color>"),
     NOT_ALLOWED_SHARE("<color:#ff4775>馬の共有は許可されていません!</color>"),
-    UNSHAREABLE_ENTITY("<color:#ff4775>そのmobは共有できません！</color>"),
+    UNSHAREABLE_ENTITY("<color:#ff4775>そのmobは共有できません!</color>"),
+    DIFFERENT_OWNER("<color:#ff4775>所有者が違うため共有できません!</color>"),
 
     //DEBUG
     SPAWN_HORSE("<color:#59ffa4>馬を召喚しました!</color> (sp:<color:#ffc414><speed></color>/jp:<color:#ffc414><jump></color>)"),
