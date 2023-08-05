@@ -2,6 +2,7 @@ package github.tyonakaisan.horsechecker.command.commands;
 
 import cloud.commandframework.CommandManager;
 import cloud.commandframework.arguments.standard.DoubleArgument;
+import cloud.commandframework.arguments.standard.EnumArgument;
 import cloud.commandframework.arguments.standard.IntegerArgument;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
@@ -45,10 +46,12 @@ public final class DebugCommand implements HorseCheckerCommand {
         final var debug = this.commandManager.commandBuilder("horsechecker", "hc")
                 .literal("debug");
 
-        this.commandManager.command(debug.literal("spawnrandomhorse")
+
+        this.commandManager.command(debug.literal("spawnRandomHorse")
                 .argument(IntegerArgument.optional("time"))
-                .argument(DoubleArgument.optional("addspeed"))
-                .argument(DoubleArgument.optional("addjump"))
+                .argument(EnumArgument.optional(HorseType.class, "horseType"))
+                .argument(DoubleArgument.optional("addSpeed"))
+                .argument(DoubleArgument.optional("addJump"))
                 .permission("horsechecker.command.spawnrandomhorse")
                 .senderType(CommandSender.class)
                 .handler(this::spawnRandomHorse)
@@ -58,18 +61,19 @@ public final class DebugCommand implements HorseCheckerCommand {
     private void spawnRandomHorse(final @NonNull CommandContext<CommandSender> context) {
         final var sender = (Player) context.getSender();
         final int[] time = {(int) context.getOptional("time").orElse(1)};
-        double addSpeed = (double) context.getOptional("addspeed").orElse(0.0);
-        double addJump = (double) context.getOptional("addjump").orElse(0.0);
-        final var random = new Random();
+        final var horseType = (HorseType) context.getOptional("horseType").orElse(HorseType.HORSE);
+        final double addSpeed = (double) context.getOptional("addSpeed").orElse(0.0);
+        final double addJump = (double) context.getOptional("addJump").orElse(0.0);
 
         new BukkitRunnable() {
+            private final Random random = new Random();
             @Override
             public void run() {
                 time[0]--;
                 if (time[0] <= 0) {
                         this.cancel();
                 }
-                AbstractHorse horse = (AbstractHorse) sender.getWorld().spawnEntity(sender.getLocation(), EntityType.HORSE);
+                AbstractHorse horse = (AbstractHorse) sender.getWorld().spawnEntity(sender.getLocation(), horseType.getType());
                 DecimalFormat df = new DecimalFormat("###.##");
                 double speed = random.nextDouble(0.225) + 0.1125 + addSpeed;
                 double jump = random.nextDouble(0.6) + 0.4 + addJump;
@@ -83,5 +87,25 @@ public final class DebugCommand implements HorseCheckerCommand {
                 ));
             }
         }.runTaskTimer(horseChecker, 0, 1);
+    }
+
+    enum HorseType {
+        HORSE(EntityType.HORSE),
+        SKELETON_HORSE(EntityType.SKELETON_HORSE),
+        ZOMBIE_HORSE(EntityType.ZOMBIE_HORSE),
+        DONKEY(EntityType.DONKEY),
+        MULE(EntityType.MULE),
+        ;
+        private final EntityType type;
+
+        HorseType(
+                EntityType type
+        ) {
+            this.type = type;
+        }
+
+        private EntityType getType() {
+            return this.type;
+        }
     }
 }

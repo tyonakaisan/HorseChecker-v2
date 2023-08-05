@@ -22,7 +22,11 @@ public final class ShareCommand implements HorseCheckerCommand {
 
     @Override
     public void init() {
-        final var command = this.commandManager.commandBuilder("horsechecker", "hc").literal("share").permission("horsechecker.command.share").senderType(CommandSender.class).handler(handler -> {
+        final var command = this.commandManager.commandBuilder("horsechecker", "hc")
+                .literal("share")
+                .permission("horsechecker.command.share")
+                .senderType(CommandSender.class)
+                .handler(handler -> {
             final var sender = (Player) handler.getSender();
             share.broadcastShareMessage(sender);
         }).build();
