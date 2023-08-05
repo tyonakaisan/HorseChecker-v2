@@ -18,14 +18,6 @@ public enum Messages {
     COMMAND_INTERVAL("<color:#ff4775>このコマンドは<color:#ffc414><interval></color>秒後に使用できます!</color>"),
 
     //STATS
-    /*
-    Score: <rankcolor><rank></rankcolor>
-    Speed: <#ffa500><speed></#ffa500>blocks/s
-    Jump: <#ffa500><jump></#ffa500>blocks
-    MaxHP: <#ffa500><health></#ffa500><red>♥</red>
-    <owner>
-    <color:#5cb8ff>---Shared by <sender>---</color>
-     */
     STATS_RESULT_SCORE("Score: <rankcolor><rank></rankcolor><newline>"),
     STATS_RESULT_SPEED("Speed: <#ffa500><speed></#ffa500>blocks/s<newline>"),
     STATS_RESULT_JUMP("Jump : <#ffa500><jump></#ffa500>blocks<newline>"),
