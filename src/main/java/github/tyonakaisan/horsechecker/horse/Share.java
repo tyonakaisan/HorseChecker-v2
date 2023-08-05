@@ -1,5 +1,6 @@
 package github.tyonakaisan.horsechecker.horse;
 
+import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
@@ -103,7 +104,7 @@ public final class Share {
         return false;
     }
 
-    public void broadcastShareMessage(Player player) {
+    public void broadcastShareMessage(Player player, MultiplePlayerSelector targets) {
         if (!isShareable(player)) {
             return;
         }
@@ -122,7 +123,7 @@ public final class Share {
                 + Messages.STATS_RESULT_HP.get()
                 + Messages.STATS_RESULT_OWNER.get();
 
-        Component hoverMiniMessage = MiniMessage.miniMessage().deserialize(stats,
+        Component myHoverMessage = MiniMessage.miniMessage().deserialize(stats,
                 Formatter.number("speed", horseStats.speed()),
                 Formatter.number("jump", horseStats.jump()),
                 Formatter.number("health", horseStats.health()),
@@ -131,18 +132,25 @@ public final class Share {
                 TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
         );
 
-        server.forEachAudience(receiver -> {
-            if (receiver instanceof Player) {
-                receiver.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),
-                        Placeholder.parsed("prefix", Messages.PREFIX.get()),
-                        TagResolver.resolver("myhover", Tag.styling(HoverEvent.showText(hoverMiniMessage))),
-                        Placeholder.parsed("random_message", randomMessage[this.random.nextInt(randomMessage.length)]),
-                        TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank()))),
-                        Placeholder.parsed("player", player.getName()))
-                );
-            }
-        });
+        Component broadcastMessage = MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),
+                Placeholder.parsed("prefix", Messages.PREFIX.get()),
+                TagResolver.resolver("myhover", Tag.styling(HoverEvent.showText(myHoverMessage))),
+                Placeholder.parsed("random_message", randomMessage[this.random.nextInt(randomMessage.length)]),
+                TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank()))),
+                Placeholder.parsed("player", player.getName()));
 
+        //もしものため
+        if (targets.getPlayers().isEmpty()) {
+            server.forEachAudience(receiver -> {
+                if (receiver instanceof Player) {
+                    receiver.sendMessage(broadcastMessage);
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCSESS.getMessageWithPrefix()));
+                }
+            });
+        } else {
+            targets.getPlayers().forEach(target -> target.sendMessage(broadcastMessage));
+            player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCSESS.getMessageWithPrefix()));
+        }
     }
 
     private boolean ownerCheck(AbstractHorse horse, Player player) {

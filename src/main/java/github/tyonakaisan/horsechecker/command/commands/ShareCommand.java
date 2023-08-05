@@ -1,6 +1,8 @@
 package github.tyonakaisan.horsechecker.command.commands;
 
 import cloud.commandframework.CommandManager;
+import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
+import cloud.commandframework.bukkit.parsers.selector.MultiplePlayerSelectorArgument;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.horse.Share;
@@ -24,11 +26,13 @@ public final class ShareCommand implements HorseCheckerCommand {
     public void init() {
         final var command = this.commandManager.commandBuilder("horsechecker", "hc")
                 .literal("share")
+                .argument(MultiplePlayerSelectorArgument.of("player"))
                 .permission("horsechecker.command.share")
                 .senderType(CommandSender.class)
                 .handler(handler -> {
             final var sender = (Player) handler.getSender();
-            share.broadcastShareMessage(sender);
+            final MultiplePlayerSelector target = handler.get("player");
+            share.broadcastShareMessage(sender, target);
         }).build();
 
         this.commandManager.command(command);
