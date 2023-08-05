@@ -161,46 +161,6 @@ public final class StatsHologram {
                     deleteHologram(player, horseMap.get(player));
                     this.cancel();
                 }
-                /*
-                if (player.getTargetEntity(targetRange, false) == null) {
-                    deleteHologram(player, horseMap.get(player));
-                } else {
-                    //ここで極まれにnullが発生するけど今のところ発生頻度は低めなのでもし高ければ直すポイント
-                    if (horseManager.isAllowedHorse(Objects.requireNonNull(player.getTargetEntity(targetRange, false)).getType())) {
-
-                        AbstractHorse focusedHorse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(targetRange, false));
-                        String focusedHorseUUID = player.getUniqueId() + "+" + focusedHorse.getUniqueId();
-
-                        if (focusedHorse.getPassengers().contains(player)) {
-                            deleteHologram(player, focusedHorseUUID);
-                            return;
-                        }
-
-                        if (horseMap.getOrDefault(player, "null").equalsIgnoreCase(focusedHorseUUID)) {
-                            if (!horse.isAdult()) {
-                                Location babyLocation = horse.getLocation().add(0, -1, 0);
-                                //ホログラムのtp
-                                teleportHologram(focusedHorseUUID, babyLocation);
-                            } else {
-                                //ホログラムのtp
-                                teleportHologram(focusedHorseUUID, horse.getLocation());
-                            }
-                        } else {
-                            //削除
-                            deleteHologram(player, horseMap.get(player));
-                            //作成
-                            createHologram(player, focusedHorse.getLocation(), focusedHorse, focusedHorseUUID);
-                            //更新開始
-                            updateTargetMob(player, focusedHorse);
-                            this.cancel();
-                        }
-                    } else {
-                        deleteHologram(player, horseMap.get(player));
-                        this.cancel();
-                    }
-                }
-
-                 */
             }
         }.runTaskTimer(horseChecker, 0, 1);
     }
