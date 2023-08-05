@@ -123,7 +123,6 @@ public final class Share {
                 + Messages.STATS_RESULT_OWNER.get();
 
         Component hoverMiniMessage = MiniMessage.miniMessage().deserialize(stats,
-                Placeholder.parsed("sender", player.getName()),
                 Formatter.number("speed", horseStats.speed()),
                 Formatter.number("jump", horseStats.jump()),
                 Formatter.number("health", horseStats.health()),
