@@ -7,9 +7,12 @@ import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
-public class PlayerDismountListener implements Listener {
+@DefaultQualifier(NonNull.class)
+public final class PlayerDismountListener implements Listener {
 
     private final StateManager stateManager;
     private final StatsHologram statsHologram;

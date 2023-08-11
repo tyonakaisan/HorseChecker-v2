@@ -1,5 +1,6 @@
 package github.tyonakaisan.horsechecker.horse;
 
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -15,7 +16,11 @@ public final class Converter {
                 Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
                 Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue()
         );
-        return new HorseStatsRecord(getSpeed(horse), getHorseJump(horse), getMaxHealth(horse), getOwnerName(horse), getHorseName(horse), rank);
+
+        Location horseLocation = horse.getLocation();
+        if (!horse.isAdult()) horseLocation = horseLocation.add(0, -1, 0);
+
+        return new HorseStatsRecord(getSpeed(horse), getHorseJump(horse), getMaxHealth(horse), getOwnerName(horse), getHorseName(horse), horse.getUniqueId(), horseLocation, rank);
     }
 
     private double jumpStrengthToJumpHeight(double strength) {

@@ -21,6 +21,10 @@ public final class HologramManager {
         this.hologramFactory = hologramFactory;
     }
 
+    public List<String> getHologramNames() {
+        return List.copyOf(hologramMap.keySet());
+    }
+
     public Hologram getHologram(String hologramID) {
         return hologramMap.get(hologramID);
     }
@@ -42,14 +46,15 @@ public final class HologramManager {
         //Bukkit.getOnlinePlayers().forEach(hologram::hideFrom);
     }
 
+    public void hideHologram(String hologramID, Player player) {
+        Hologram hologram = hologramMap.get(hologramID);
+        hologram.hideFrom(player);
+    }
+
     public void initPlayer(String hologramID, Player player) {
         // This could be optimized by mapping holograms to Worlds or even Chunks
         // But for simplicity's sake we will just show a player all holograms
         //hologramMap.values().forEach(hologram -> hologram.showTo(player));
         hologramMap.get(hologramID).showTo(player);
-    }
-
-    public List<String> getHologramNames() {
-        return List.copyOf(hologramMap.keySet());
     }
 }

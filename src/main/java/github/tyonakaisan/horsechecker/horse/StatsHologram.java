@@ -91,7 +91,7 @@ public final class StatsHologram {
         }.runTaskTimer(horseChecker, 0, 1);
     }
 
-    private void createHologram(Player player, Location location, AbstractHorse horse, String uuid) {
+    public void createHologram(Player player, Location location, AbstractHorse horse, String uuid) {
         horseMap.put(player, uuid);
 
         var horseStats = converter.convertHorseStats(horse);
@@ -123,7 +123,7 @@ public final class StatsHologram {
         hologramManager.initPlayer(uuid, player);
     }
 
-    private void updateTargetMob(Player player, AbstractHorse horse) {
+    public void updateTargetMob(Player player, AbstractHorse horse) {
         int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
         new BukkitRunnable() {
             @Override
@@ -165,16 +165,16 @@ public final class StatsHologram {
         }.runTaskTimer(horseChecker, 0, 1);
     }
 
-    private void addHologram(String hologramName, Component line) {
+    public void addHologram(String hologramName, Component line) {
         hologramManager.getHologram(hologramName).addLine(line);
     }
 
-    private void deleteHologram(Player player, String name) {
+    public void deleteHologram(Player player, String name) {
         hologramManager.deleteHologram(name, player);
         horseMap.remove(player);
     }
 
-    private void teleportHologram(String hologramName, Location target) {
+    public void teleportHologram(String hologramName, Location target) {
         hologramManager.getHologram(hologramName).teleport(target);
     }
 }
