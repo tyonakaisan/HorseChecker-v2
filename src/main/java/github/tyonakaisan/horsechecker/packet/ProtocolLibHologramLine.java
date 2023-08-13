@@ -67,7 +67,7 @@ public final class ProtocolLibHologramLine implements HologramLine {
     @Override
     public void setText(Component text) {
         this.text = text;
-        ProtocolLibrary.getProtocolManager().broadcastServerPacket(createDataPacket());
+        //ProtocolLibrary.getProtocolManager().broadcastServerPacket(createDataPacket());
     }
 
     private PacketContainer createAddPacket() {
@@ -110,6 +110,7 @@ public final class ProtocolLibHologramLine implements HologramLine {
         dataValues.add(new WrappedDataValue(14, byteSerializer, (byte) 3));
         dataValues.add(new WrappedDataValue(15, intSerializer, (15 << 4 | 15 << 20)));
         dataValues.add(new WrappedDataValue(16, floatSerializer, 2f));
+        dataValues.add(new WrappedDataValue(17, floatSerializer, 0f));
         dataValues.add(new WrappedDataValue(18, floatSerializer, 0f));
 
         //Text

@@ -1,6 +1,7 @@
 package github.tyonakaisan.horsechecker.horse;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
@@ -21,11 +22,12 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
+@Singleton
 @DefaultQualifier(NonNull.class)
 public final class StatsHologram {
+
     private final HorseChecker horseChecker;
     private final HologramManager hologramManager;
     private final HorseManager horseManager;
@@ -33,7 +35,13 @@ public final class StatsHologram {
     private final Converter converter;
     private final ConfigFactory configFactory;
 
-    private final Map<Player, String> horseMap = new HashMap<>();
+    private final String stats = Messages.STATS_RESULT_SCORE.get()
+            + Messages.STATS_RESULT_SPEED.get()
+            + Messages.STATS_RESULT_JUMP.get()
+            + Messages.STATS_RESULT_HP.get()
+            + Messages.STATS_RESULT_OWNER.get();
+
+    private final HashMap<Player, AbstractHorse> horseMap = new HashMap<>();
 
     @Inject
     public StatsHologram(
@@ -59,122 +67,72 @@ public final class StatsHologram {
             @Override
             public void run() {
                 if (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle()) {
-                    deleteHologram(player, horseMap.get(player));
                     this.cancel();
+                    if (horseMap.get(player) == null) return;
+                    hideHologram(player, horseMap.get(player));
+                    horseMap.remove(player);
                     return;
                 }
 
-                if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse &&
-                        horseManager.isAllowedHorse(Objects.requireNonNull(player.getTargetEntity(targetRange, false)).getType())
-                ) {
-                    Location location = horse.getLocation();
-                    String uuid = player.getUniqueId() + "+" + horse.getUniqueId();
-
-                    if (horse.getPassengers().contains(player)) {
-                        deleteHologram(player, uuid);
-                        return;
-                    }
-
-                    //mapに含まれているか
+                if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse) {
                     if (!horseMap.containsKey(player)) {
-                        //削除
-                        deleteHologram(player, uuid);
-                        //作成
-                        createHologram(player, location, horse, uuid);
-                        //更新開始
-                        updateTargetMob(player, horse);
+                        createHologram(player, horse);
+                        horseMap.put(player, horse);
                     }
-                } else {
-                    deleteHologram(player, horseMap.get(player));
-                }
-            }
-        }.runTaskTimer(horseChecker, 0, 1);
-    }
-
-    public void createHologram(Player player, Location location, AbstractHorse horse, String uuid) {
-        horseMap.put(player, uuid);
-
-        var horseStats = converter.convertHorseStats(horse);
-        //大人チェック
-        if (!horse.isAdult()) {
-            Location babyLocation = location.clone().add(0, -1, 0);
-            hologramManager.createHologram(babyLocation, uuid, horseStats.rank());
-        } else {
-            hologramManager.createHologram(location, uuid, horseStats.rank());
-        }
-
-        String stats = Messages.STATS_RESULT_SCORE.get()
-                + Messages.STATS_RESULT_SPEED.get()
-                + Messages.STATS_RESULT_JUMP.get()
-                + Messages.STATS_RESULT_HP.get()
-                + Messages.STATS_RESULT_OWNER.get();
-
-        //ホログラム作成
-        Component component = MiniMessage.miniMessage().deserialize(stats,
-                Formatter.number("speed", horseStats.speed()),
-                Formatter.number("jump", horseStats.jump()),
-                Formatter.number("health", horseStats.health()),
-                Placeholder.parsed("owner", horseStats.ownerName()),
-                Placeholder.parsed("rank", horseStats.rank()),
-                TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
-        );
-        addHologram(uuid, component);
-        //表示するプレイヤー
-        hologramManager.initPlayer(uuid, player);
-    }
-
-    public void updateTargetMob(Player player, AbstractHorse horse) {
-        int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-
-                if (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle()) {
-                    deleteHologram(player, horseMap.get(player));
-                    this.cancel();
-                    return;
-                }
-
-                if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse focusedHorse &&
-                        horseManager.isAllowedHorse(Objects.requireNonNull(player.getTargetEntity(targetRange, false)).getType())) {
-                    String focusedHorseUUID = player.getUniqueId() + "+" + focusedHorse.getUniqueId();
-
-                    if (horseMap.getOrDefault(player, "null").equalsIgnoreCase(focusedHorseUUID)) {
-                        if (!horse.isAdult()) {
-                            Location babyLocation = horse.getLocation().add(0, -1, 0);
-                            //ホログラムのtp
-                            teleportHologram(focusedHorseUUID, babyLocation);
-                        } else {
-                            //ホログラムのtp
-                            teleportHologram(focusedHorseUUID, horse.getLocation());
-                        }
+                    //違うウマみた時
+                    if (!horseMap.get(player).equals(horse)) {
+                        hideHologram(player, horseMap.get(player));
+                        horseMap.remove(player);
                     } else {
-                        //削除
-                        deleteHologram(player, horseMap.get(player));
-                        //作成
-                        createHologram(player, focusedHorse.getLocation(), focusedHorse, focusedHorseUUID);
-                        //更新開始
-                        updateTargetMob(player, focusedHorse);
-                        this.cancel();
+                        //同じ馬
+                        teleportHologram(horse);
                     }
                 } else {
-                    deleteHologram(player, horseMap.get(player));
-                    this.cancel();
+                    if (horseMap.get(player) == null) return;
+                    hideHologram(player, horseMap.get(player));
+                    horseMap.remove(player);
                 }
             }
         }.runTaskTimer(horseChecker, 0, 1);
     }
 
-    public void addHologram(String hologramName, Component line) {
-        hologramManager.getHologram(hologramName).addLine(line);
+    public void createHologram(Player player, AbstractHorse horse) {
+        var horseUUID = horse.getUniqueId().toString();
+
+        if (hologramManager.getHologramNames().contains(horse.getUniqueId().toString())) {
+            //表示するプレイヤー
+            hologramManager.initPlayer(horseUUID, player);
+        } else {
+            var horseStats = converter.convertHorseStats(horse);
+            hologramManager.createHologram(horseStats.location(), horseStats.uuid().toString(), horseStats.rank());
+
+            //ホログラム作成
+            Component component = MiniMessage.miniMessage().deserialize(this.stats,
+                    Formatter.number("speed", horseStats.speed()),
+                    Formatter.number("jump", horseStats.jump()),
+                    Formatter.number("health", horseStats.health()),
+                    Placeholder.parsed("owner", horseStats.ownerName()),
+                    Placeholder.parsed("rank", horseStats.rank()),
+                    TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
+            );
+            hologramManager.getHologram(horseStats.uuid().toString()).addLine(component);
+            //表示するプレイヤー
+            hologramManager.initPlayer(horseUUID, player);
+        }
     }
 
-    public void deleteHologram(Player player, String name) {
-        hologramManager.deleteHologram(name, player);
-        horseMap.remove(player);
+    public void hideHologram(Player player, AbstractHorse horse) {
+        var horseUUID = horse.getUniqueId().toString();
+        hologramManager.hideHologram(horseUUID, player);
     }
 
-    public void teleportHologram(String hologramName, Location target) {
-        hologramManager.getHologram(hologramName).teleport(target);
+    public void teleportHologram(AbstractHorse horse) {
+        var horseUUID = horse.getUniqueId().toString();
+
+        if (hologramManager.getHologramNames().contains(horseUUID)) {
+            Location horseLocation = horse.getLocation();
+            if (!horse.isAdult()) horseLocation = horseLocation.add(0, -1, 0);
+            hologramManager.getHologram(horseUUID).teleport(horseLocation);
+        }
     }
 }

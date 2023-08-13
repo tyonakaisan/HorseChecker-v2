@@ -1,7 +1,7 @@
 package github.tyonakaisan.horsechecker.listener;
 
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.horse.NewStatsHologram;
+import github.tyonakaisan.horsechecker.horse.StatsHologram;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import io.papermc.paper.event.player.PlayerTrackEntityEvent;
@@ -16,23 +16,22 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 public final class PlayerTrackHorseListener implements Listener {
 
     private final HorseManager horseManager;
-    private final NewStatsHologram newStatsHologram;
+    private final StatsHologram statsHologram;
 
 
     @Inject
     public PlayerTrackHorseListener(
             final HorseManager horseManager,
-            final NewStatsHologram newStatsHologram
+            final StatsHologram statsHologram
     ) {
         this.horseManager = horseManager;
-        this.newStatsHologram = newStatsHologram;
+        this.statsHologram = statsHologram;
     }
 
     @EventHandler
     public void onTrackHorse(PlayerTrackEntityEvent event) {
-        if (event.getEntity() instanceof AbstractHorse horse
-                && horseManager.isAllowedHorse(horse.getType())) {
-            newStatsHologram.createHologram(event.getPlayer(), horse);
+        if (event.getEntity() instanceof AbstractHorse horse) {
+            statsHologram.createHologram(event.getPlayer(), horse);
         }
     }
 
@@ -40,15 +39,14 @@ public final class PlayerTrackHorseListener implements Listener {
     public void onUnTrackHorse(PlayerUntrackEntityEvent event) {
         if (event.getEntity() instanceof AbstractHorse horse
                 && horseManager.isAllowedHorse(horse.getType())) {
-            newStatsHologram.hideHologram(event.getPlayer(), horse);
+            statsHologram.hideHologram(event.getPlayer(), horse);
         }
     }
 
     @EventHandler
     public void onMoveEntity(EntityMoveEvent event) {
-        if (event.getEntity() instanceof AbstractHorse horse
-                && horseManager.isAllowedHorse(horse.getType())) {
-            newStatsHologram.teleportHologram(horse);
+        if (event.getEntity() instanceof AbstractHorse horse) {
+            statsHologram.teleportHologram(horse);
         }
     }
 }
