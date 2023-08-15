@@ -5,21 +5,20 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import github.tyonakaisan.horsechecker.horse.HorseRank;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramLine;
+import github.tyonakaisan.horsechecker.packet.util.TextDisplayDataBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Location;
+import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -106,41 +105,17 @@ public final class ProtocolLibHologramLine implements HologramLine {
         PacketType type = PacketType.Play.Server.ENTITY_METADATA;
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
-        WrappedDataWatcher.Serializer byteSerializer = WrappedDataWatcher.Registry.get(Byte.class);
-        WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer();
-        WrappedDataWatcher.Serializer intSerializer = WrappedDataWatcher.Registry.get(Integer.class);
-        WrappedDataWatcher.Serializer floatSerializer = WrappedDataWatcher.Registry.get(Float.class);
-
-        List<WrappedDataValue> dataValues = new ArrayList<>();
-
-        dataValues.add(new WrappedDataValue(14, byteSerializer, (byte) 3));
-        dataValues.add(new WrappedDataValue(15, intSerializer, (15 << 4 | 15 << 20)));
-        dataValues.add(new WrappedDataValue(16, floatSerializer, 2f));
-        dataValues.add(new WrappedDataValue(17, floatSerializer, 0f));
-        dataValues.add(new WrappedDataValue(18, floatSerializer, 0f));
-
-        //Text
-        WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(this.text));
-        dataValues.add(new WrappedDataValue(22, chatSerializer, wrappedChatComponent.getHandle()));
-        //Background color
-        dataValues.add(new WrappedDataValue(24, intSerializer, HorseRank.calcEvaluateRankBackgroundColor(rank)));
-        //Text opacity
-        dataValues.add(new WrappedDataValue(25, byteSerializer, (byte) -1));
-
-        byte bitmask = 0x00;
-        //Shadow
-        //bitmask |= 0x01;
-        //See Through
-        bitmask |= 0x02;
-        //Alignment
-        bitmask |= 0x18;
-        dataValues.add(new WrappedDataValue(26, byteSerializer, bitmask));
-
-        //Billboard
-        //dataValues.add(new WrappedDataValue(14, intSerializer, 3));
-
-        //Glow text
-        dataValues.add(new WrappedDataValue(15, intSerializer, 15));
+        List<WrappedDataValue> dataValues = TextDisplayDataBuilder.data()
+                .billboard(Display.Billboard.CENTER)
+                .brightness(15)
+                .viewRange(2f)
+                .shadowRadius(0f)
+                .shadowStrength(0f)
+                .text(this.text)
+                .backgroundColor(HorseRank.calcEvaluateRankBackgroundColor(rank))
+                .seeThrough()
+                .alignment(TextDisplay.TextAlignment.LEFT)
+                .build();
 
         packet.getIntegers().write(0, this.entityId);
         packet.getDataValueCollectionModifier().write(0, dataValues);
