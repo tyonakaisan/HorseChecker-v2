@@ -60,6 +60,12 @@ public abstract class AbstractHologram implements Hologram {
     }
 
     @Override
+    public void setRank(int index, String rank) {
+        HologramLine hologramLine = hologramLines.get(index);
+        hologramLine.setRank(rank);
+    }
+
+    @Override
     public @NotNull Component getLine(int index) {
         Preconditions.checkArgument(index < size());
         return hologramLines.get(index).getText();

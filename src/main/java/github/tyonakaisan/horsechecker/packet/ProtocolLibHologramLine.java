@@ -31,7 +31,7 @@ public final class ProtocolLibHologramLine implements HologramLine {
     private final int entityId;
     private Location location;
     private Component text = Component.empty();
-    private final String rank;
+    private String rank;
 
     public ProtocolLibHologramLine(Location location, String rank) {
         this.location = location;
@@ -67,7 +67,13 @@ public final class ProtocolLibHologramLine implements HologramLine {
     @Override
     public void setText(Component text) {
         this.text = text;
-        //ProtocolLibrary.getProtocolManager().broadcastServerPacket(createDataPacket());
+        ProtocolLibrary.getProtocolManager().broadcastServerPacket(createDataPacket());
+    }
+
+    @Override
+    public void setRank(String rank) {
+        this.rank = rank;
+        ProtocolLibrary.getProtocolManager().broadcastServerPacket(createDataPacket());
     }
 
     private PacketContainer createAddPacket() {

@@ -19,7 +19,7 @@ public final class PlayerJoinListener implements Listener {
     public PlayerJoinListener(
             final StateManager stateManager,
             final StatsHologram statsHologram
-            ) {
+    ) {
         this.stateManager = stateManager;
         this.statsHologram = statsHologram;
     }

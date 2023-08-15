@@ -17,6 +17,8 @@ public interface Hologram {
 
     void setLine(int index, Component line);
 
+    void setRank(int index, String rank);
+
     Component getLine(int index);
 
     Location getLocation();

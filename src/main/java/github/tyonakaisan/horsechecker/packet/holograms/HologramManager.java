@@ -1,6 +1,7 @@
 package github.tyonakaisan.horsechecker.packet.holograms;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Singleton
 @DefaultQualifier(NonNull.class)
 public final class HologramManager {
 
@@ -43,7 +45,6 @@ public final class HologramManager {
             return;
         }
         hologram.hideFrom(player);
-        //Bukkit.getOnlinePlayers().forEach(hologram::hideFrom);
     }
 
     public void hideHologram(String hologramID, Player player) {
@@ -52,9 +53,6 @@ public final class HologramManager {
     }
 
     public void initPlayer(String hologramID, Player player) {
-        // This could be optimized by mapping holograms to Worlds or even Chunks
-        // But for simplicity's sake we will just show a player all holograms
-        //hologramMap.values().forEach(hologram -> hologram.showTo(player));
         hologramMap.get(hologramID).showTo(player);
     }
 }

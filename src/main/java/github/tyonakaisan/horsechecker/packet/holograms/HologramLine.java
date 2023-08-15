@@ -16,4 +16,6 @@ public interface HologramLine {
 
     void setText(Component text);
 
+    void setRank(String rank);
+
 }

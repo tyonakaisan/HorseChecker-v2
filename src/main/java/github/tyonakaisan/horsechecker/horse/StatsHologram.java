@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
-import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.message.Messages;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramManager;
@@ -17,6 +16,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Location;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -30,73 +30,70 @@ public final class StatsHologram {
 
     private final HorseChecker horseChecker;
     private final HologramManager hologramManager;
-    private final HorseManager horseManager;
     private final StateManager stateManager;
     private final Converter converter;
-    private final ConfigFactory configFactory;
 
     private final String stats = Messages.STATS_RESULT_SCORE.get()
             + Messages.STATS_RESULT_SPEED.get()
             + Messages.STATS_RESULT_JUMP.get()
             + Messages.STATS_RESULT_HP.get()
             + Messages.STATS_RESULT_OWNER.get();
-
-    private final HashMap<Player, AbstractHorse> horseMap = new HashMap<>();
+    private final HashMap<Player, AbstractHorse> targetedHorseMap = new HashMap<>();
+    private final int targetRange;
 
     @Inject
     public StatsHologram(
             final HorseChecker horseChecker,
             final HologramManager hologramManager,
-            final HorseManager horseManager,
             final StateManager stateManager,
             final Converter converter,
             final ConfigFactory configFactory
     ) {
         this.horseChecker = horseChecker;
         this.hologramManager = hologramManager;
-        this.horseManager = horseManager;
         this.stateManager = stateManager;
         this.converter = converter;
-        this.configFactory = configFactory;
+
+        this.targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
     }
 
     public void show(Player player) {
-        int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle()) {
                     this.cancel();
-                    if (horseMap.get(player) == null) return;
-                    hideHologram(player, horseMap.get(player));
-                    horseMap.remove(player);
+                    if (targetedHorseMap.get(player) == null) return;
+                    hideHologram(player, targetedHorseMap.get(player));
+                    targetedHorseMap.remove(player);
                     return;
                 }
 
                 if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse) {
-                    if (!horseMap.containsKey(player)) {
-                        createHologram(player, horse);
-                        horseMap.put(player, horse);
+                    if (!targetedHorseMap.containsKey(player)) {
+                        createOrShowHologram(player, horse);
+                        targetedHorseMap.put(player, horse);
                     }
-                    //違うウマみた時
-                    if (!horseMap.get(player).equals(horse)) {
-                        hideHologram(player, horseMap.get(player));
-                        horseMap.remove(player);
-                    } else {
-                        //同じ馬
+                    //同じウマみた時
+                    if (targetedHorseMap.get(player).equals(horse)) {
+                        //1.20.2でteleport_durationというのが来るらしいからそれでワンチャン滑らかにできる？
                         teleportHologram(horse);
+                    } else {
+                        //違うウマ
+                        hideHologram(player, targetedHorseMap.get(player));
+                        targetedHorseMap.remove(player);
                     }
                 } else {
-                    if (horseMap.get(player) == null) return;
-                    hideHologram(player, horseMap.get(player));
-                    horseMap.remove(player);
+                    if (targetedHorseMap.get(player) == null) return;
+                    hideHologram(player, targetedHorseMap.get(player));
+                    targetedHorseMap.remove(player);
                 }
             }
         }.runTaskTimer(horseChecker, 0, 1);
     }
 
-    public void createHologram(Player player, AbstractHorse horse) {
+    public void createOrShowHologram(Player player, AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
 
         if (hologramManager.getHologramNames().contains(horse.getUniqueId().toString())) {
@@ -107,7 +104,7 @@ public final class StatsHologram {
             hologramManager.createHologram(horseStats.location(), horseStats.uuid().toString(), horseStats.rank());
 
             //ホログラム作成
-            Component component = MiniMessage.miniMessage().deserialize(this.stats,
+            Component statsComponent = MiniMessage.miniMessage().deserialize(this.stats,
                     Formatter.number("speed", horseStats.speed()),
                     Formatter.number("jump", horseStats.jump()),
                     Formatter.number("health", horseStats.health()),
@@ -115,9 +112,43 @@ public final class StatsHologram {
                     Placeholder.parsed("rank", horseStats.rank()),
                     TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
             );
-            hologramManager.getHologram(horseStats.uuid().toString()).addLine(component);
+            hologramManager.getHologram(horseStats.uuid().toString()).addLine(statsComponent);
             //表示するプレイヤー
             hologramManager.initPlayer(horseUUID, player);
+        }
+    }
+
+    public void changeHologramText(AbstractHorse horse, PotionEffect effect) {
+        var horseUUID = horse.getUniqueId().toString();
+        if (hologramManager.getHologramNames().contains(horseUUID)) {
+            var horseStats = converter.convertHorseStats(horse);
+            Component component;
+
+            //effect.getType() == PotionEffectType.JUMP
+            //これできないのなぜ
+            if (effect.getType().toString().contains("JUMP")) {
+                var x = effect.getAmplifier() + 1;
+                //jump力の計算大体だから合ってなくてわろちー^^
+                component = MiniMessage.miniMessage().deserialize(this.stats,
+                        Formatter.number("speed", horseStats.speed()),
+                        Formatter.number("jump", (Math.pow(0.0308354 * x, 2) + 0.744631 * x) + horseStats.jump()),
+                        Formatter.number("health", horseStats.health()),
+                        Placeholder.parsed("owner", horseStats.ownerName()),
+                        Placeholder.parsed("rank", horseStats.rank()),
+                        TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
+                );
+            } else {
+                component = MiniMessage.miniMessage().deserialize(this.stats,
+                        Formatter.number("speed", horseStats.speed()),
+                        Formatter.number("jump", horseStats.jump()),
+                        Formatter.number("health", horseStats.health()),
+                        Placeholder.parsed("owner", horseStats.ownerName()),
+                        Placeholder.parsed("rank", horseStats.rank()),
+                        TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
+                );
+            }
+            hologramManager.getHologram(horseUUID).setLine(0, component);
+            hologramManager.getHologram(horseUUID).setRank(0, horseStats.rank());
         }
     }
 
