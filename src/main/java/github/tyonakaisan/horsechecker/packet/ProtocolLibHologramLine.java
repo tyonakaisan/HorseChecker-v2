@@ -5,7 +5,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
-import com.comphenix.protocol.wrappers.WrappedDataValue;
 import github.tyonakaisan.horsechecker.horse.HorseRank;
 import github.tyonakaisan.horsechecker.packet.holograms.HologramLine;
 import github.tyonakaisan.horsechecker.packet.util.TextDisplayDataBuilder;
@@ -19,7 +18,6 @@ import org.bukkit.entity.TextDisplay;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -105,7 +103,8 @@ public final class ProtocolLibHologramLine implements HologramLine {
         PacketType type = PacketType.Play.Server.ENTITY_METADATA;
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
-        List<WrappedDataValue> dataValues = TextDisplayDataBuilder.data()
+        packet.getIntegers().write(0, this.entityId);
+        packet.getDataValueCollectionModifier().write(0, TextDisplayDataBuilder.data()
                 .billboard(Display.Billboard.CENTER)
                 .brightness(15)
                 .viewRange(2f)
@@ -115,10 +114,7 @@ public final class ProtocolLibHologramLine implements HologramLine {
                 .backgroundColor(HorseRank.calcEvaluateRankBackgroundColor(rank))
                 .seeThrough()
                 .alignment(TextDisplay.TextAlignment.LEFT)
-                .build();
-
-        packet.getIntegers().write(0, this.entityId);
-        packet.getDataValueCollectionModifier().write(0, dataValues);
+                .build());
 
         return packet;
     }

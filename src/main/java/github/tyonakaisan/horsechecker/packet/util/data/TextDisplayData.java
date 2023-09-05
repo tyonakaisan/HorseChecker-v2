@@ -11,6 +11,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 @DefaultQualifier(NonNull.class)
 public abstract class TextDisplayData<B> extends DisplayData<B> {
     private byte bitmask = 0x00;
+
     public B text(Component text) {
         WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(text));
         addChatData(22, wrappedChatComponent.getHandle());
