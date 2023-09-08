@@ -6,8 +6,6 @@ import cloud.commandframework.paper.PaperCommandManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import github.tyonakaisan.horsechecker.packet.ProtocolLibHologramFactory;
-import github.tyonakaisan.horsechecker.packet.holograms.HologramFactory;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -56,7 +54,6 @@ public final class HorseCheckerModule extends AbstractModule {
         this.bind(ComponentLogger.class).toInstance(this.logger);
         this.bind(HorseChecker.class).toInstance(this.horseChecker);
         this.bind(Server.class).toInstance(this.horseChecker.getServer());
-        this.bind(HologramFactory.class).to(ProtocolLibHologramFactory.class);
         this.bind(Path.class).toInstance(this.dataDirectory);
     }
 }

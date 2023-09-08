@@ -6,7 +6,7 @@ import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.message.Messages;
-import github.tyonakaisan.horsechecker.packet.holograms.HologramManager;
+import github.tyonakaisan.horsechecker.packet.HologramManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -58,7 +58,6 @@ public final class StatsHologram {
     }
 
     public void show(Player player) {
-
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -98,23 +97,22 @@ public final class StatsHologram {
 
         if (hologramManager.getHologramNames().contains(horse.getUniqueId().toString())) {
             //表示するプレイヤー
-            hologramManager.initPlayer(horseUUID, player);
+            hologramManager.showHologram(horseUUID, player);
         } else {
-            var horseStats = converter.convertHorseStats(horse);
-            hologramManager.createHologram(horseStats.location(), horseStats.uuid().toString(), horseStats.rank());
+            var horseStatsData = converter.convertHorseStats(horse);
 
             //ホログラム作成
             Component statsComponent = MiniMessage.miniMessage().deserialize(this.stats,
-                    Formatter.number("speed", horseStats.speed()),
-                    Formatter.number("jump", horseStats.jump()),
-                    Formatter.number("health", horseStats.health()),
-                    Placeholder.parsed("owner", horseStats.ownerName()),
-                    Placeholder.parsed("rank", horseStats.rank()),
-                    TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
-            );
-            hologramManager.getHologram(horseStats.uuid().toString()).addLine(statsComponent);
+                    Formatter.number("speed", horseStatsData.speed()),
+                    Formatter.number("jump", horseStatsData.jump()),
+                    Formatter.number("health", horseStatsData.health()),
+                    Placeholder.parsed("owner", horseStatsData.ownerName()),
+                    Placeholder.parsed("rank", horseStatsData.rank()),
+                    TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStatsData.rank()))));
+
+            hologramManager.createHologram(horseStatsData, statsComponent);
             //表示するプレイヤー
-            hologramManager.initPlayer(horseUUID, player);
+            hologramManager.showHologram(horseUUID, player);
         }
     }
 
@@ -147,8 +145,8 @@ public final class StatsHologram {
                         TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
                 );
             }
-            hologramManager.getHologram(horseUUID).setLine(0, component);
-            hologramManager.getHologram(horseUUID).setRank(0, horseStats.rank());
+            //hologramManager.getHologram(horseUUID).setLine(0, component);
+            //hologramManager.getHologram(horseUUID).setRank(0, horseStats.rank());
         }
     }
 
@@ -163,7 +161,8 @@ public final class StatsHologram {
         if (hologramManager.getHologramNames().contains(horseUUID)) {
             Location horseLocation = horse.getLocation();
             if (!horse.isAdult()) horseLocation = horseLocation.add(0, -1, 0);
-            hologramManager.getHologram(horseUUID).teleport(horseLocation);
+
+            hologramManager.teleportHologram(horseUUID, horseLocation);
         }
     }
 }

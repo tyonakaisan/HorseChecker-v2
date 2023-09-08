@@ -6,11 +6,9 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
 import github.tyonakaisan.horsechecker.horse.HorseRank;
-import github.tyonakaisan.horsechecker.packet.holograms.HologramLine;
+import github.tyonakaisan.horsechecker.packet.HologramData;
 import github.tyonakaisan.horsechecker.packet.util.TextDisplayDataBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -19,57 +17,34 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 @DefaultQualifier(NonNull.class)
-public final class ProtocolLibHologramLine implements HologramLine {
+public final class HologramPacketManager {
+    private final HologramData hologramData;
 
-    private final UUID entityUid;
-    private final int entityId;
-    private Location location;
-    private Component text = Component.empty();
-    private String rank;
-
-    public ProtocolLibHologramLine(Location location, String rank) {
-        this.location = location;
-        // Could be safer but this is probably fine
-        this.entityId = ThreadLocalRandom.current().nextInt();
-        this.entityUid = UUID.randomUUID();
-        this.rank = rank;
+    public HologramPacketManager(HologramData hologramData) {
+        this.hologramData = hologramData;
     }
 
-    @Override
-    public Component getText() {
-        return text;
-    }
-
-    @Override
-    public void showTo(Player player) {
+    public void show(Player player) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.sendServerPacket(player, createAddPacket());
         protocolManager.sendServerPacket(player, createDataPacket());
     }
 
-    @Override
-    public void hideFrom(Player player) {
+    public void hide(Player player) {
         ProtocolLibrary.getProtocolManager().sendServerPacket(player, createRemovePacket());
     }
 
-    @Override
-    public void teleport(Location location) {
-        this.location = location;
+    public void teleport() {
         ProtocolLibrary.getProtocolManager().broadcastServerPacket(createMovePacket());
     }
 
-    @Override
-    public void setText(Component text) {
-        this.text = text;
+    public void setText() {
         ProtocolLibrary.getProtocolManager().broadcastServerPacket(createDataPacket());
     }
 
-    @Override
-    public void setRank(String rank) {
-        this.rank = rank;
+    public void setRank() {
         ProtocolLibrary.getProtocolManager().broadcastServerPacket(createDataPacket());
     }
 
@@ -83,18 +58,18 @@ public final class ProtocolLibHologramLine implements HologramLine {
         StructureModifier<Double> doubleMod = packet.getDoubles();
 
         // Write id of entity
-        intMod.write(0, this.entityId);
+        intMod.write(0, this.hologramData.entityId());
 
         // Write type of entity
         typeMod.write(0, EntityType.TEXT_DISPLAY);
 
         // Write entities UUID
-        uuidMod.write(0, this.entityUid);
+        uuidMod.write(0, this.hologramData.entityUid());
 
         // Write position
-        doubleMod.write(0, location.getX());
-        doubleMod.write(1, location.getY() + 2.5);
-        doubleMod.write(2, location.getZ());
+        doubleMod.write(0, this.hologramData.location().getX());
+        doubleMod.write(1, this.hologramData.location().getY() + 2.5);
+        doubleMod.write(2, this.hologramData.location().getZ());
 
         return packet;
     }
@@ -103,15 +78,15 @@ public final class ProtocolLibHologramLine implements HologramLine {
         PacketType type = PacketType.Play.Server.ENTITY_METADATA;
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
-        packet.getIntegers().write(0, this.entityId);
+        packet.getIntegers().write(0, this.hologramData.entityId());
         packet.getDataValueCollectionModifier().write(0, TextDisplayDataBuilder.data()
                 .billboard(Display.Billboard.CENTER)
                 .brightness(15)
                 .viewRange(2f)
                 .shadowRadius(0f)
                 .shadowStrength(0f)
-                .text(this.text)
-                .backgroundColor(HorseRank.calcEvaluateRankBackgroundColor(rank))
+                .text(this.hologramData.text())
+                .backgroundColor(HorseRank.calcEvaluateRankBackgroundColor(this.hologramData.rank()))
                 .seeThrough()
                 .alignment(TextDisplay.TextAlignment.LEFT)
                 .build());
@@ -123,12 +98,12 @@ public final class ProtocolLibHologramLine implements HologramLine {
         PacketType type = PacketType.Play.Server.ENTITY_TELEPORT;
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
-        packet.getIntegers().write(0, entityId);
+        packet.getIntegers().write(0, this.hologramData.entityId());
 
         StructureModifier<Double> doubleMod = packet.getDoubles();
-        doubleMod.write(0, this.location.getX());
-        doubleMod.write(1, this.location.getY() + 2.5);
-        doubleMod.write(2, this.location.getZ());
+        doubleMod.write(0, this.hologramData.location().getX());
+        doubleMod.write(1, this.hologramData.location().getY() + 2.5);
+        doubleMod.write(2, this.hologramData.location().getZ());
 
         return packet;
     }
@@ -137,9 +112,8 @@ public final class ProtocolLibHologramLine implements HologramLine {
         PacketType type = PacketType.Play.Server.ENTITY_DESTROY;
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
-        packet.getIntLists().write(0, IntList.of(this.entityId));
+        packet.getIntLists().write(0, IntList.of(this.hologramData.entityId()));
 
         return packet;
     }
-
 }

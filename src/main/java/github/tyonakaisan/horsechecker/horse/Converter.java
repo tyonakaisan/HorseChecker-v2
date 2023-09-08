@@ -11,16 +11,15 @@ import java.util.Objects;
 @DefaultQualifier(NonNull.class)
 public final class Converter {
 
-    public HorseStatsRecord convertHorseStats(AbstractHorse horse) {
+    public HorseStatsData convertHorseStats(AbstractHorse horse) {
         var rank = HorseRank.calcEvaluateRankString(
                 Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
-                Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue()
-        );
+                Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue());
 
         Location horseLocation = horse.getLocation();
         if (!horse.isAdult()) horseLocation = horseLocation.add(0, -1, 0);
 
-        return new HorseStatsRecord(getSpeed(horse), getHorseJump(horse), getMaxHealth(horse), getOwnerName(horse), getHorseName(horse), horse.getUniqueId(), horseLocation, rank);
+        return new HorseStatsData(getSpeed(horse), getHorseJump(horse), getMaxHealth(horse), getOwnerName(horse), getHorseName(horse), horse.getUniqueId(), horseLocation, rank);
     }
 
     private double jumpStrengthToJumpHeight(double strength) {
