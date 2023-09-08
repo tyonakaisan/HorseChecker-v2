@@ -12,7 +12,7 @@ import java.util.List;
 
 @Singleton
 @DefaultQualifier(NonNull.class)
-public abstract class WrappedDataProvider {
+public abstract class WrappedDataManager {
     private final List<WrappedDataValue> dataValues = new ArrayList<>();
     private final WrappedDataWatcher.Serializer byteSerializer = WrappedDataWatcher.Registry.get(Byte.class);
     private final WrappedDataWatcher.Serializer intSerializer = WrappedDataWatcher.Registry.get(Integer.class);

@@ -4,7 +4,7 @@ import org.bukkit.Location;
 
 import java.util.UUID;
 
-public record HorseStatsRecord(
+public record HorseStatsData(
         double speed,
         double jump,
         int health,
