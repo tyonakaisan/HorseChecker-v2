@@ -3,7 +3,7 @@ package github.tyonakaisan.horsechecker.listener;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.horse.StatsHologram;
-import github.tyonakaisan.horsechecker.packet.holograms.HologramManager;
+import github.tyonakaisan.horsechecker.packet.HologramManager;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
