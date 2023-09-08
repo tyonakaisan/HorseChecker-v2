@@ -13,14 +13,13 @@ import java.util.concurrent.ThreadLocalRandom;
 @Singleton
 @DefaultQualifier(NonNull.class)
 public final class HologramData {
-    private final UUID entityUid;
-    private final int entityId;
-
     private final String hologramId;
-    //いつかListに？
     private final Component text;
     private Location location;
     private final String rank;
+
+    private final UUID entityUid;
+    private final int entityId;
 
     public HologramData(
             String hologramId,
