@@ -6,7 +6,6 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
 import github.tyonakaisan.horsechecker.horse.HorseRank;
-import github.tyonakaisan.horsechecker.packet.HologramData;
 import github.tyonakaisan.horsechecker.packet.util.TextDisplayDataBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.bukkit.entity.Display;
@@ -79,7 +78,7 @@ public final class HologramPacketManager {
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
         packet.getIntegers().write(0, this.hologramData.entityId());
-        packet.getDataValueCollectionModifier().write(0, TextDisplayDataBuilder.data()
+        packet.getDataValueCollectionModifier().write(0, TextDisplayDataBuilder.builder()
                 .billboard(Display.Billboard.CENTER)
                 .brightness(15)
                 .viewRange(2f)

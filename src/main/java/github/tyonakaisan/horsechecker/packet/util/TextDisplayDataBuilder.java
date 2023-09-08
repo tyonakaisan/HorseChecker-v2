@@ -12,7 +12,7 @@ public final class TextDisplayDataBuilder extends TextDisplayData<TextDisplayDat
 
     private TextDisplayDataBuilder() {}
 
-    public static TextDisplayDataBuilder data() {
+    public static TextDisplayDataBuilder builder() {
         return new TextDisplayDataBuilder();
     }
 

@@ -102,15 +102,7 @@ public final class StatsHologram {
             var horseStatsData = converter.convertHorseStats(horse);
 
             //ホログラム作成
-            Component statsComponent = MiniMessage.miniMessage().deserialize(this.stats,
-                    Formatter.number("speed", horseStatsData.speed()),
-                    Formatter.number("jump", horseStatsData.jump()),
-                    Formatter.number("health", horseStatsData.health()),
-                    Placeholder.parsed("owner", horseStatsData.ownerName()),
-                    Placeholder.parsed("rank", horseStatsData.rank()),
-                    TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStatsData.rank()))));
-
-            hologramManager.createHologram(horseStatsData, statsComponent);
+            hologramManager.createHologram(horseStatsData, converter.horseStatsMessage(horseStatsData));
             //表示するプレイヤー
             hologramManager.showHologram(horseUUID, player);
         }
