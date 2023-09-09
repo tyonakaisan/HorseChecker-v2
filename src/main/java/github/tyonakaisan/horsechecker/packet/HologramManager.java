@@ -3,7 +3,6 @@ package github.tyonakaisan.horsechecker.packet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.horse.HorseStatsData;
-import github.tyonakaisan.horsechecker.packet.HologramData;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -71,5 +70,12 @@ public final class HologramManager {
 
         if (hologramData == null) return;
         hologramData.teleportTo(targetLocation);
+    }
+
+    public void changeHologramText(String hologramId, Component text) {
+        var hologramData = this.hologramMap.get(hologramId);
+
+        if (hologramData == null) return;
+        hologramData.updateText(text);
     }
 }

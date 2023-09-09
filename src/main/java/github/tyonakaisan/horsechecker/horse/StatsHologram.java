@@ -5,18 +5,11 @@ import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.StateManager;
-import github.tyonakaisan.horsechecker.message.Messages;
 import github.tyonakaisan.horsechecker.packet.HologramManager;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Location;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -33,11 +26,6 @@ public final class StatsHologram {
     private final StateManager stateManager;
     private final Converter converter;
 
-    private final String stats = Messages.STATS_RESULT_SCORE.get()
-            + Messages.STATS_RESULT_SPEED.get()
-            + Messages.STATS_RESULT_JUMP.get()
-            + Messages.STATS_RESULT_HP.get()
-            + Messages.STATS_RESULT_OWNER.get();
     private final HashMap<Player, AbstractHorse> targetedHorseMap = new HashMap<>();
     private final int targetRange;
 
@@ -108,37 +96,15 @@ public final class StatsHologram {
         }
     }
 
-    public void changeHologramText(AbstractHorse horse, PotionEffect effect) {
+    public void changeHologramText(AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
         if (hologramManager.getHologramNames().contains(horseUUID)) {
-            var horseStats = converter.convertHorseStats(horse);
-            Component component;
-
-            //effect.getType() == PotionEffectType.JUMP
-            //これできないのなぜ
-            if (effect.getType().toString().contains("JUMP")) {
-                var x = effect.getAmplifier() + 1;
-                //jump力の計算大体だから合ってなくてわろちー^^
-                component = MiniMessage.miniMessage().deserialize(this.stats,
-                        Formatter.number("speed", horseStats.speed()),
-                        Formatter.number("jump", (Math.pow(0.0308354 * x, 2) + 0.744631 * x) + horseStats.jump()),
-                        Formatter.number("health", horseStats.health()),
-                        Placeholder.parsed("owner", horseStats.ownerName()),
-                        Placeholder.parsed("rank", horseStats.rank()),
-                        TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
-                );
-            } else {
-                component = MiniMessage.miniMessage().deserialize(this.stats,
-                        Formatter.number("speed", horseStats.speed()),
-                        Formatter.number("jump", horseStats.jump()),
-                        Formatter.number("health", horseStats.health()),
-                        Placeholder.parsed("owner", horseStats.ownerName()),
-                        Placeholder.parsed("rank", horseStats.rank()),
-                        TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
-                );
-            }
-            //hologramManager.getHologram(horseUUID).setLine(0, component);
-            //hologramManager.getHologram(horseUUID).setRank(0, horseStats.rank());
+            var horseStatsData = converter.convertHorseStats(horse);
+            //jumpの値変わらないの許せない
+            //誤差あるけどmemo x = ポーションのレベル
+            //Jump = Math.pow(0.0308354 * x, 2) + 0.744631 * x)
+            Component component = converter.horseStatsMessage(horseStatsData);
+            hologramManager.changeHologramText(horseUUID, component);
         }
     }
 

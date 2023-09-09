@@ -39,11 +39,7 @@ public final class HologramPacketManager {
         ProtocolLibrary.getProtocolManager().broadcastServerPacket(createMovePacket());
     }
 
-    public void setText() {
-        ProtocolLibrary.getProtocolManager().broadcastServerPacket(createDataPacket());
-    }
-
-    public void setRank() {
+    public void update() {
         ProtocolLibrary.getProtocolManager().broadcastServerPacket(createDataPacket());
     }
 

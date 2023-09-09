@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @DefaultQualifier(NonNull.class)
 public final class HologramData {
     private final String hologramId;
-    private final Component text;
+    private Component text;
     private Location location;
     private final String rank;
 
@@ -71,5 +71,10 @@ public final class HologramData {
     public void teleportTo(Location targetLocation) {
         this.location = targetLocation;
         new HologramPacketManager(this).teleport();
+    }
+
+    public void updateText(Component text) {
+        this.text = text;
+        new HologramPacketManager(this).update();
     }
 }
