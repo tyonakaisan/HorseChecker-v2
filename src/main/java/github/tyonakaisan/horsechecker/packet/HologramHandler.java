@@ -1,11 +1,10 @@
-package github.tyonakaisan.horsechecker.horse;
+package github.tyonakaisan.horsechecker.packet;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
+import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.manager.StateManager;
-import github.tyonakaisan.horsechecker.packet.HologramManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.AbstractHorse;
@@ -15,22 +14,22 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
-@Singleton
 @DefaultQualifier(NonNull.class)
-public final class StatsHologram {
-
+public final class HologramHandler {
     private final HorseChecker horseChecker;
     private final HologramManager hologramManager;
     private final StateManager stateManager;
     private final Converter converter;
 
-    private final HashMap<Player, AbstractHorse> targetedHorseMap = new HashMap<>();
+    private final Map<Player, Optional<AbstractHorse>> targetedHorseMap = new HashMap<>();
     private final int targetRange;
 
     @Inject
-    public StatsHologram(
+    public HologramHandler(
             final HorseChecker horseChecker,
             final HologramManager hologramManager,
             final StateManager stateManager,
@@ -49,32 +48,33 @@ public final class StatsHologram {
         new BukkitRunnable() {
             @Override
             public void run() {
+                targetedHorseMap.computeIfAbsent(player, k -> Optional.empty());
+
                 if (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle()) {
+                    targetedHorseMap.get(player).ifPresent(horse -> hideHologram(player, horse));
                     this.cancel();
-                    if (targetedHorseMap.get(player) == null) return;
-                    hideHologram(player, targetedHorseMap.get(player));
-                    targetedHorseMap.remove(player);
                     return;
                 }
 
                 if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse) {
-                    if (!targetedHorseMap.containsKey(player)) {
+                    var horseOpt = Optional.of(horse);
+
+                    targetedHorseMap.get(player).ifPresentOrElse(targetedHorse -> {
+                        //同じ馬のとき
+                        if (targetedHorse.equals(horse)) {
+                            //1.20.2でteleport_durationというのが来るらしいからそれでワンチャン滑らかにできる？
+                            teleportHologram(horse);
+                        } else {
+                            //違うウマ
+                            hideHologram(player, targetedHorse);
+                        }
+                    }, () -> {
+                        //それら以外(?)
                         createOrShowHologram(player, horse);
-                        targetedHorseMap.put(player, horse);
-                    }
-                    //同じウマみた時
-                    if (targetedHorseMap.get(player).equals(horse)) {
-                        //1.20.2でteleport_durationというのが来るらしいからそれでワンチャン滑らかにできる？
-                        teleportHologram(horse);
-                    } else {
-                        //違うウマ
-                        hideHologram(player, targetedHorseMap.get(player));
-                        targetedHorseMap.remove(player);
-                    }
+                        targetedHorseMap.put(player, horseOpt);
+                    });
                 } else {
-                    if (targetedHorseMap.get(player) == null) return;
-                    hideHologram(player, targetedHorseMap.get(player));
-                    targetedHorseMap.remove(player);
+                    targetedHorseMap.get(player).ifPresent(horse -> hideHologram(player, horse));
                 }
             }
         }.runTaskTimer(horseChecker, 0, 1);
@@ -83,17 +83,12 @@ public final class StatsHologram {
     public void createOrShowHologram(Player player, AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
 
-        if (hologramManager.getHologramNames().contains(horse.getUniqueId().toString())) {
-            //表示するプレイヤー
-            hologramManager.showHologram(horseUUID, player);
-        } else {
+        if (!hologramManager.getHologramNames().contains(horseUUID)) {
             var horseStatsData = converter.convertHorseStats(horse);
-
             //ホログラム作成
             hologramManager.createHologram(horseStatsData, converter.horseStatsMessage(horseStatsData));
-            //表示するプレイヤー
-            hologramManager.showHologram(horseUUID, player);
         }
+        hologramManager.showHologram(horseUUID, player);
     }
 
     public void changeHologramText(AbstractHorse horse) {
@@ -101,7 +96,8 @@ public final class StatsHologram {
         if (hologramManager.getHologramNames().contains(horseUUID)) {
             var horseStatsData = converter.convertHorseStats(horse);
             //jumpの値変わらないの許せない
-            //誤差あるけどmemo x = ポーションのレベル
+            //誤差あるけどmemo
+            //x = ポーションのレベル
             //Jump = Math.pow(0.0308354 * x, 2) + 0.744631 * x)
             Component component = converter.horseStatsMessage(horseStatsData);
             hologramManager.changeHologramText(horseUUID, component);
@@ -111,6 +107,7 @@ public final class StatsHologram {
     public void hideHologram(Player player, AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
         hologramManager.hideHologram(horseUUID, player);
+        this.targetedHorseMap.put(player, Optional.empty());
     }
 
     public void teleportHologram(AbstractHorse horse) {

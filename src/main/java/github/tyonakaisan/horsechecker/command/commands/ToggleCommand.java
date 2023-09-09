@@ -4,9 +4,9 @@ import cloud.commandframework.CommandManager;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
-import github.tyonakaisan.horsechecker.horse.StatsHologram;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.message.Messages;
+import github.tyonakaisan.horsechecker.packet.HologramHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -17,17 +17,17 @@ public final class ToggleCommand implements HorseCheckerCommand {
 
     private final CommandManager<CommandSender> commandManager;
     private final StateManager stateManager;
-    private final StatsHologram statsHologram;
+    private final HologramHandler hologramHandler;
 
     @Inject
     public ToggleCommand(
             CommandManager<CommandSender> commandManager,
             StateManager stateManager,
-            StatsHologram statsHologram
+            HologramHandler hologramHandler
     ) {
         this.commandManager = commandManager;
         this.stateManager = stateManager;
-        this.statsHologram = statsHologram;
+        this.hologramHandler = hologramHandler;
     }
 
     @Override
@@ -53,7 +53,7 @@ public final class ToggleCommand implements HorseCheckerCommand {
 
         if (stateManager.toggleState(sender, "stats")) {
             sender.sendRichMessage(Messages.SHOW_STATS_ENABLED.getMessageWithPrefix());
-            statsHologram.show(sender);
+            hologramHandler.show(sender);
         } else {
             sender.sendRichMessage(Messages.SHOW_STATS_DISABLED.getMessageWithPrefix());
         }

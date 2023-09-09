@@ -2,7 +2,7 @@ package github.tyonakaisan.horsechecker.listener;
 
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
-import github.tyonakaisan.horsechecker.horse.StatsHologram;
+import github.tyonakaisan.horsechecker.packet.HologramHandler;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,16 +15,16 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 public final class HorsePotionEffectListener implements Listener {
 
     private final HorseChecker horseChecker;
-    private final StatsHologram statsHologram;
+    private final HologramHandler hologramHandler;
 
 
     @Inject
     public HorsePotionEffectListener(
             final HorseChecker horseChecker,
-            final StatsHologram statsHologram
+            final HologramHandler hologramHandler
     ) {
         this.horseChecker = horseChecker;
-        this.statsHologram = statsHologram;
+        this.hologramHandler = hologramHandler;
     }
 
     @EventHandler
@@ -33,7 +33,7 @@ public final class HorsePotionEffectListener implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    statsHologram.changeHologramText(horse);
+                    hologramHandler.changeHologramText(horse);
                 }
             }.runTaskLater(horseChecker, 1);
         }
