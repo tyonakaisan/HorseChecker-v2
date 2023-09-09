@@ -1,41 +1,49 @@
 package github.tyonakaisan.horsechecker.listener;
 
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.horse.StatsHologram;
 import github.tyonakaisan.horsechecker.manager.StateManager;
+import github.tyonakaisan.horsechecker.packet.HologramHandler;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.spigotmc.event.entity.EntityDismountEvent;
 
 @DefaultQualifier(NonNull.class)
-public final class PlayerDismountListener implements Listener {
+public final class PlayerActionListener implements Listener {
 
     private final StateManager stateManager;
-    private final StatsHologram statsHologram;
+    private final HologramHandler hologramHandler;
 
     @Inject
-    public PlayerDismountListener(
+    public PlayerActionListener(
             final StateManager stateManager,
-            final StatsHologram statsHologram
+            final HologramHandler hologramHandler
     ) {
         this.stateManager = stateManager;
-        this.statsHologram = statsHologram;
+        this.hologramHandler = hologramHandler;
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        showHologram(event.getPlayer());
     }
 
     @EventHandler
     public void onDismount(EntityDismountEvent event) {
-
         if (event.getDismounted() instanceof AbstractHorse horse) {
             horse.getPassengers().forEach(passenger -> {
-                if (passenger instanceof Player player &&
-                        this.stateManager.state(player, "stats")) {
-                    statsHologram.show(player);
-                }
+                if (passenger instanceof Player player) showHologram(player);
             });
+        }
+    }
+
+    private void showHologram(Player player) {
+        if (this.stateManager.state(player, "stats")) {
+            hologramHandler.show(player);
         }
     }
 }
