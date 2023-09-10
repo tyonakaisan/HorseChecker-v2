@@ -115,29 +115,14 @@ public final class Share {
 
         int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
         AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(targetRange, false));
-        var horseStats = converter.convertHorseStats(horse);
-
-        String stats = Messages.STATS_RESULT_SCORE.get()
-                + Messages.STATS_RESULT_SPEED.get()
-                + Messages.STATS_RESULT_JUMP.get()
-                + Messages.STATS_RESULT_HP.get()
-                + Messages.STATS_RESULT_OWNER.get();
-
-        Component myHoverMessage = MiniMessage.miniMessage().deserialize(stats,
-                Formatter.number("speed", horseStats.speed()),
-                Formatter.number("jump", horseStats.jump()),
-                Formatter.number("health", horseStats.health()),
-                Placeholder.parsed("owner", horseStats.ownerName()),
-                Placeholder.parsed("rank", horseStats.rank()),
-                TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank())))
-        );
+        var horseStatsData = converter.convertHorseStats(horse);
 
         Component broadcastMessage = MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),
                 Placeholder.parsed("prefix", Messages.PREFIX.get()),
-                TagResolver.resolver("myhover", Tag.styling(HoverEvent.showText(myHoverMessage))),
+                TagResolver.resolver("myhover", Tag.styling(HoverEvent.showText(converter.horseStatsMessage(horseStatsData)))),
                 Placeholder.parsed("random_message", randomMessage[this.random.nextInt(randomMessage.length)]),
-                Placeholder.parsed("horse_name", horseStats.horseName()),
-                TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStats.rank()))),
+                Placeholder.parsed("horse_name", horseStatsData.horseName()),
+                TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStatsData.rank()))),
                 Placeholder.parsed("player", player.getName()));
 
         //もしものため

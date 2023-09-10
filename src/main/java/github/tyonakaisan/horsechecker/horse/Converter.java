@@ -1,5 +1,13 @@
 package github.tyonakaisan.horsechecker.horse;
 
+import github.tyonakaisan.horsechecker.message.Messages;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -10,12 +18,31 @@ import java.util.Objects;
 @DefaultQualifier(NonNull.class)
 public final class Converter {
 
-    public HorseStatsRecord convertHorseStats(AbstractHorse horse) {
+    public HorseStatsData convertHorseStats(AbstractHorse horse) {
         var rank = HorseRank.calcEvaluateRankString(
                 Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
-                Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue()
-        );
-        return new HorseStatsRecord(getSpeed(horse), getHorseJump(horse), getMaxHealth(horse), getOwnerName(horse), getHorseName(horse), rank);
+                Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue());
+
+        Location horseLocation = horse.getLocation();
+        if (!horse.isAdult()) horseLocation = horseLocation.add(0, -1, 0);
+
+        return new HorseStatsData(getSpeed(horse), getHorseJump(horse), getMaxHealth(horse), getOwnerName(horse), getHorseName(horse), horse.getUniqueId(), horseLocation, rank);
+    }
+
+    public Component horseStatsMessage(HorseStatsData horseStatsData) {
+        String stats = Messages.STATS_RESULT_SCORE.get()
+                + Messages.STATS_RESULT_SPEED.get()
+                + Messages.STATS_RESULT_JUMP.get()
+                + Messages.STATS_RESULT_HP.get()
+                + Messages.STATS_RESULT_OWNER.get();
+
+        return MiniMessage.miniMessage().deserialize(stats,
+                Formatter.number("speed", horseStatsData.speed()),
+                Formatter.number("jump", horseStatsData.jump()),
+                Formatter.number("health", horseStatsData.health()),
+                Placeholder.parsed("owner", horseStatsData.ownerName()),
+                Placeholder.parsed("rank", horseStatsData.rank()),
+                TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStatsData.rank()))));
     }
 
     private double jumpStrengthToJumpHeight(double strength) {

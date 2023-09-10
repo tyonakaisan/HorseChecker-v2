@@ -1,10 +1,16 @@
 package github.tyonakaisan.horsechecker.horse;
 
-public record HorseStatsRecord(
+import org.bukkit.Location;
+
+import java.util.UUID;
+
+public record HorseStatsData(
         double speed,
         double jump,
         int health,
         String ownerName,
         String horseName,
+        UUID uuid,
+        Location location,
         String rank
 ) {}

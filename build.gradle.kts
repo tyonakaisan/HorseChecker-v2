@@ -26,14 +26,14 @@ dependencies {
     compileOnly("io.papermc.paper", "paper-api", "1.20.1-R0.1-SNAPSHOT")
 
     // ProtocolLib
-    compileOnly("com.comphenix.protocol", "ProtocolLib", "5.0.0")
+    compileOnly("com.comphenix.protocol", "ProtocolLib", "5.1.0")
 
     // Command
-    paperLibrary("cloud.commandframework", "cloud-paper", "1.8.3")
+    paperLibrary("cloud.commandframework", "cloud-paper", "1.8.4")
 
     // Config
     paperLibrary("org.spongepowered", "configurate-hocon", "4.1.2")
-    paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.12.0")
+    paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.14.0")
 
     // Messages
     paperLibrary("net.kyori.moonshine", "moonshine-standard", "2.0.4")
@@ -43,7 +43,7 @@ dependencies {
     paperLibrary("co.aikar", "taskchain-bukkit", "3.7.2")
 }
 
-version = "1.0-SNAPSHOT"
+version = "1.1.0-SNAPSHOT"
 
 paper {
     val mainPackage = "github.tyonakaisan.horsechecker"

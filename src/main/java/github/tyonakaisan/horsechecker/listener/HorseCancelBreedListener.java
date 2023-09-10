@@ -53,7 +53,10 @@ public final class HorseCancelBreedListener implements Listener {
 
         if (horseManager.isAllowedHorse(event.getRightClicked().getType())) {
             AbstractHorse horse = (AbstractHorse) event.getRightClicked();
-            int maxHealth, health, age, loveMode;
+            int maxHealth;
+            int health;
+            int age;
+            int loveMode;
             Component component;
 
             maxHealth = (int) Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
@@ -68,7 +71,6 @@ public final class HorseCancelBreedListener implements Listener {
                         Formatter.number("cooltime", converter.getBreedingCoolTime(horse)));
                 player.sendActionBar(component);
                 event.setCancelled(true);
-
                 //繫殖モード中(ハートが出てる時)&体力がMAXであればイベントキャンセル
             } else if (loveMode > 0 && health == maxHealth) {
                 component = MiniMessage.miniMessage().deserialize(
