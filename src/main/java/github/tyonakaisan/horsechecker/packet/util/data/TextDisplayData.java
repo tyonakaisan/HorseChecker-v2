@@ -14,40 +14,40 @@ public abstract class TextDisplayData<B> extends DisplayData<B> {
 
     public B text(Component text) {
         WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(text));
-        addChatData(22, wrappedChatComponent.getHandle());
+        addChatData(23, wrappedChatComponent.getHandle());
         return (B) this;
     }
 
     public B lineWidth(int width) {
-        addIntData(23, width);
+        addIntData(24, width);
         return (B) this;
     }
 
     public B backgroundColor() {
         this.bitmask |= 0x04;
-        addIntData(26, bitmask);
+        addIntData(27, bitmask);
         return (B) this;
     }
 
     public B backgroundColor(int color) {
-        addIntData(24, color);
+        addIntData(25, color);
         return (B) this;
     }
 
     public B textOpacity(int opacity) {
-        addByteData(25, (byte) opacity);
+        addByteData(26, (byte) opacity);
         return (B) this;
     }
 
     public B textShadow() {
         this.bitmask |= 0x01;
-        addByteData(26, this.bitmask);
+        addByteData(27, this.bitmask);
         return (B) this;
     }
 
     public B seeThrough() {
         this.bitmask |= 0x02;
-        addByteData(26, this.bitmask);
+        addByteData(27, this.bitmask);
         return (B) this;
     }
 
@@ -57,7 +57,7 @@ public abstract class TextDisplayData<B> extends DisplayData<B> {
             case LEFT -> this.bitmask |= 0x18;
             case RIGHT -> this.bitmask |= 0x28;
         }
-        addByteData(26, this.bitmask);
+        addByteData(27, this.bitmask);
         return (B) this;
     }
 }

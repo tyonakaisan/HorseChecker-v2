@@ -20,67 +20,73 @@ public abstract class DisplayData<B> extends EntityData<B> {
         return (B) this;
     }
 
-    public B translation(Vector3F vector3F) {
-        addVectorData(10, vector3F);
+    //仮
+    public B teleportInterpolationDuration(int duration) {
+        addIntData(10, duration);
         return (B) this;
     }
 
-    public B scale(Vector3F vector3F) {
+    public B translation(Vector3F vector3F) {
         addVectorData(11, vector3F);
         return (B) this;
     }
 
+    public B scale(Vector3F vector3F) {
+        addVectorData(12, vector3F);
+        return (B) this;
+    }
+
     public B rotationLeft(Quaterniond quaterniond) {
-        addQuaternionData(12, quaterniond);
+        addQuaternionData(13, quaterniond);
         return (B) this;
     }
 
     public B rotationRight(Quaterniond quaterniond) {
-        addQuaternionData(13, quaterniond);
+        addQuaternionData(14, quaterniond);
         return (B) this;
     }
     public B billboard(Display.Billboard billboard) {
         switch (billboard) {
-            case FIXED -> addByteData(14, (byte) 0);
-            case VERTICAL -> addByteData(14, (byte) 1);
-            case HORIZONTAL -> addByteData(14, (byte) 2);
-            case CENTER -> addByteData(14, (byte) 3);
+            case FIXED -> addByteData(15, (byte) 0);
+            case VERTICAL -> addByteData(15, (byte) 1);
+            case HORIZONTAL -> addByteData(15, (byte) 2);
+            case CENTER -> addByteData(15, (byte) 3);
         }
         return (B) this;
     }
 
     public B brightness(int lightLevel) {
-        addIntData(15, lightLevel);
+        addIntData(16, lightLevel);
         return (B) this;
     }
 
     public B viewRange(float range) {
-        addFloatData(16, range);
+        addFloatData(17, range);
         return (B) this;
     }
 
     public B shadowRadius(float radius) {
-        addFloatData(17, radius);
+        addFloatData(18, radius);
         return (B) this;
     }
 
     public B shadowStrength(float strength) {
-        addFloatData(18, strength);
+        addFloatData(19, strength);
         return (B) this;
     }
 
     public B width(float width) {
-        addFloatData(19, width);
+        addFloatData(20, width);
         return (B) this;
     }
 
     public B height(float height) {
-        addFloatData(20, height);
+        addFloatData(21, height);
         return (B) this;
     }
 
     public B glowColor(int color) {
-        addIntData(21, color);
+        addIntData(22, color);
         return (B) this;
     }
 }

@@ -75,6 +75,7 @@ public final class HologramPacketManager {
 
         packet.getIntegers().write(0, this.hologramData.entityId());
         packet.getDataValueCollectionModifier().write(0, PacketEntityDataBuilder.textDisplay()
+                .teleportInterpolationDuration(1)
                 .billboard(Display.Billboard.CENTER)
                 .brightness(15)
                 .viewRange(2f)
