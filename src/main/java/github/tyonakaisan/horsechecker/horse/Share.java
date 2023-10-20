@@ -30,6 +30,7 @@ public final class Share {
     private final HorseManager horseManager;
     private final Converter converter;
     private final Random random = new Random();
+    private int targetRange;
 
     @Inject
     public Share(
@@ -42,16 +43,16 @@ public final class Share {
         this.horseManager = horseManager;
         this.converter = converter;
         this.server = server;
+
+        this.targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
     }
 
     private final HashMap<UUID, Long> commandInterval = new HashMap<>();
     private final String[] randomMessage = {"イケイケな", "イマドキな", "可愛らしい", "ホットな", "ハンパない", "バズリ狙いの"};
 
     private boolean isShareable(Player player) {
-        int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
-
         //ターゲットしてるエンティティがnullの場合
-        if (player.getTargetEntity(targetRange, false) == null) {
+        if (player.getTargetEntity(this.targetRange, false) == null) {
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.TARGETED_ENTITY_IS_NULL.getMessageWithPrefix()));
             return false;
         }
@@ -63,7 +64,7 @@ public final class Share {
         }
 
         //ターゲットしてる馬チェック
-        if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse && horseManager.isAllowedHorse(horse.getType())) {
+        if (player.getTargetEntity(this.targetRange, false) instanceof AbstractHorse horse && horseManager.isAllowedHorse(horse.getType())) {
             //オーナーチェック
             if (ownerCheck(horse, player)) {
                 return true;
@@ -113,8 +114,7 @@ public final class Share {
             return;
         }
 
-        int targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
-        AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(targetRange, false));
+        AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(this.targetRange, false));
         var horseStatsData = converter.convertHorseStats(horse);
 
         Component broadcastMessage = MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),

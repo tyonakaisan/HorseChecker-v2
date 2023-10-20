@@ -5,19 +5,15 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @ConfigSerializable
 @DefaultQualifier(NonNull.class)
 public final class PrimaryConfig {
 
     private HorseSettings horse = new HorseSettings();
-
     private ShareSettings share = new ShareSettings();
-
-    private Map<String, String> customPlaceholders = Map.of();
 
     public HorseSettings horse() {
         return this.horse;
@@ -27,10 +23,12 @@ public final class PrimaryConfig {
         return this.share;
     }
 
-    public Set<EntityType> allowedMOBs() {
-        return horse().getAllowedMobs().stream()
+    public List<EntityType> allowedMobs() {
+        return horse().allowedMobs().entrySet().stream()
+                .filter(entry -> entry.getValue().equals(true))
+                .map(Map.Entry::getKey)
                 .map(String::toUpperCase)
                 .map(EntityType::valueOf)
-                .collect(Collectors.toSet());
+                .toList();
     }
 }

@@ -16,7 +16,6 @@ public final class PlayerTrackHorseListener implements Listener {
 
     private final HologramHandler hologramHandler;
 
-
     @Inject
     public PlayerTrackHorseListener(
             final HologramHandler hologramHandler

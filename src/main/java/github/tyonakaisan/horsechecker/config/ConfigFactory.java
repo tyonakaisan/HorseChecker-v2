@@ -3,8 +3,9 @@ package github.tyonakaisan.horsechecker.config;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.config.primary.PrimaryConfig;
-import github.tyonakaisan.horsechecker.serialisation.LocaleSerializerConfigurate;
+import github.tyonakaisan.horsechecker.config.serialisation.LocaleSerializerConfigurate;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -21,23 +22,29 @@ import java.util.Locale;
 @DefaultQualifier(NonNull.class)
 public final class ConfigFactory {
 
+    private static final String PRIMARY_CONFIG_FILE_NAME = "config.conf";
+
     private final Path dataDirectory;
     private final LocaleSerializerConfigurate locale;
+    private final ComponentLogger logger;
 
     private @Nullable PrimaryConfig primaryConfig = null;
 
     @Inject
     public ConfigFactory(
             final Path dataDirectory,
-            final LocaleSerializerConfigurate locale
+            final LocaleSerializerConfigurate locale,
+            final ComponentLogger logger
     ) {
         this.dataDirectory = dataDirectory;
         this.locale = locale;
+        this.logger = logger;
     }
 
     public @Nullable PrimaryConfig reloadPrimaryConfig() {
         try {
-            this.primaryConfig = this.load(PrimaryConfig.class, "config.conf");
+            this.logger.info("Reloading config...");
+            this.primaryConfig = this.load(PrimaryConfig.class, PRIMARY_CONFIG_FILE_NAME);
         } catch (final IOException exception) {
             exception.printStackTrace();
         }
@@ -61,8 +68,7 @@ public final class ConfigFactory {
                             ConfigurateComponentSerializer.configurate();
 
                     return opts.shouldCopyDefaults(true).serializers(serializerBuilder ->
-                            serializerBuilder
-                                        .registerAll(serializer.serializers())
+                            serializerBuilder.registerAll(serializer.serializers())
                                     .register(Locale.class, this.locale)
                     );
                 })

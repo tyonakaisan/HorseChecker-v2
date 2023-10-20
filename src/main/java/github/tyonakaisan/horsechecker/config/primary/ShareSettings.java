@@ -10,14 +10,12 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 public final class ShareSettings {
 
     @Comment("""
-            馬のステータスを共有するかどうか
-            共有メッセージは全体メッセージとして送信されます
+            馬のステータスの共有メッセージを使用可能にするか
             """)
     private boolean allowedHorseShare = true;
 
     @Comment("""
             shareコマンドのクールダウン(秒)
-            連投防止
             """)
     private int horseShareInterval = 60;
 

@@ -26,7 +26,7 @@ public final class HologramHandler {
     private final Converter converter;
 
     private final Map<Player, Optional<AbstractHorse>> targetedHorseMap = new HashMap<>();
-    private final int targetRange;
+    private int targetRange;
 
     @Inject
     public HologramHandler(
@@ -50,19 +50,10 @@ public final class HologramHandler {
             public void run() {
                 targetedHorseMap.computeIfAbsent(player, k -> Optional.empty());
 
-                if (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle()) {
-                    targetedHorseMap.get(player).ifPresent(horse -> hideHologram(player, horse));
-                    this.cancel();
-                    return;
-                }
-
                 if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse) {
-                    var horseOpt = Optional.of(horse);
-
                     targetedHorseMap.get(player).ifPresentOrElse(targetedHorse -> {
                         //同じ馬のとき
                         if (targetedHorse.equals(horse)) {
-                            //1.20.2でteleport_durationというのが来るらしいからそれでワンチャン滑らかにできる？
                             teleportHologram(horse);
                         } else {
                             //違うウマ
@@ -71,10 +62,13 @@ public final class HologramHandler {
                     }, () -> {
                         //それら以外(?)
                         createOrShowHologram(player, horse);
-                        targetedHorseMap.put(player, horseOpt);
+                        targetedHorseMap.put(player, Optional.of(horse));
                     });
                 } else {
                     targetedHorseMap.get(player).ifPresent(horse -> hideHologram(player, horse));
+                    if (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle()) {
+                        this.cancel();
+                    }
                 }
             }
         }.runTaskTimer(horseChecker, 0, 1);
