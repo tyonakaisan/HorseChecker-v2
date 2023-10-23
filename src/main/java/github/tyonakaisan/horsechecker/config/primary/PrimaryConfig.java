@@ -6,7 +6,6 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.List;
-import java.util.Map;
 
 @ConfigSerializable
 @DefaultQualifier(NonNull.class)
@@ -24,9 +23,7 @@ public final class PrimaryConfig {
     }
 
     public List<EntityType> allowedMobs() {
-        return horse().allowedMobs().entrySet().stream()
-                .filter(entry -> entry.getValue().equals(true))
-                .map(Map.Entry::getKey)
+        return horse().allowedMobs().stream()
                 .map(String::toUpperCase)
                 .map(EntityType::valueOf)
                 .toList();

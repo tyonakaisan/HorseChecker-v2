@@ -16,17 +16,15 @@ public final class HorseSettings {
             """)
     private int targetRange = 20;
 
-    //ゴリ押し
-    //そもそもこれ無くてもいい説
-    private Map<String, Boolean> allowedMobs = Map.of(
-            "horse", true,
-            "donkey", true,
-            "mule", true,
-            "skeleton_horse", true,
-            "zombie_horse", true
+    private List<String> allowedMobs = List.of(
+            "horse",
+            "donkey",
+            "mule",
+            "skeleton_horse",
+            "zombie_horse"
         );
 
-    public Map<String, Boolean> allowedMobs() {
+    public List<String> allowedMobs() {
         return this.allowedMobs;
     }
 

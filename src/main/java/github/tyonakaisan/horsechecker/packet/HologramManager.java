@@ -68,7 +68,7 @@ public final class HologramManager {
     public void teleportHologram(String hologramId, Location targetLocation) {
         var hologramData = this.hologramMap.get(hologramId);
 
-        if (hologramData == null || hologramData.location() == targetLocation) return;
+        if (hologramData == null) return;
         hologramData.teleportTo(targetLocation);
     }
 

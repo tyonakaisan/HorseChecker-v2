@@ -54,6 +54,7 @@ public final class HologramHandler {
                     targetedHorseMap.get(player).ifPresentOrElse(targetedHorse -> {
                         //同じ馬のとき
                         if (targetedHorse.equals(horse)) {
+                            if (hologramManager.getHologramData(horse.getUniqueId().toString()).location().equals(horse.getLocation())) return;
                             teleportHologram(horse);
                         } else {
                             //違うウマ
