@@ -38,7 +38,7 @@ public final class HologramManager {
 
     public void createHologram(HorseStatsData statsData, Component text) {
         var hologramId = statsData.uuid().toString();
-        var hologramData = new HologramData(hologramId, text, statsData.location(), statsData.rank());
+        var hologramData = new HologramData(hologramId, text, statsData.location(), statsData.rankData());
 
         if (this.hologramMap.containsKey(hologramId)) return;
         this.hologramMap.put(hologramId, hologramData);

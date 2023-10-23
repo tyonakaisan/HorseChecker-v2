@@ -12,5 +12,5 @@ public record HorseStatsData(
         String horseName,
         UUID uuid,
         Location location,
-        String rank
+        HorseRank.HorseRankData rankData
 ) {}

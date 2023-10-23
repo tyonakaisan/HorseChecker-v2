@@ -5,7 +5,6 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
-import github.tyonakaisan.horsechecker.horse.HorseRank;
 import github.tyonakaisan.horsechecker.packet.util.PacketEntityDataBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.bukkit.entity.Display;
@@ -82,7 +81,7 @@ public final class HologramPacketManager {
                 .shadowRadius(0f)
                 .shadowStrength(0f)
                 .text(this.hologramData.text())
-                .backgroundColor(HorseRank.calcEvaluateRankBackgroundColor(this.hologramData.rank()))
+                .backgroundColor(this.hologramData.rankData().BackgroundColor())
                 .seeThrough()
                 .alignment(TextDisplay.TextAlignment.LEFT)
                 .build());

@@ -19,7 +19,7 @@ import java.util.Objects;
 public final class Converter {
 
     public HorseStatsData convertHorseStats(AbstractHorse horse) {
-        var rank = HorseRank.calcEvaluateRankString(
+        var rank = HorseRank.calcEvaluateRankData(
                 Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
                 Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue());
 
@@ -41,8 +41,8 @@ public final class Converter {
                 Formatter.number("jump", horseStatsData.jump()),
                 Formatter.number("health", horseStatsData.health()),
                 Placeholder.parsed("owner", horseStatsData.ownerName()),
-                Placeholder.parsed("rank", horseStatsData.rank()),
-                TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStatsData.rank()))));
+                Placeholder.parsed("rank", horseStatsData.rankData().rank()),
+                TagResolver.resolver("rankcolor", Tag.styling(horseStatsData.rankData().textColor())));
     }
 
     private double jumpStrengthToJumpHeight(double strength) {

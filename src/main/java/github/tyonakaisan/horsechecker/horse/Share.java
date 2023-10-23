@@ -123,7 +123,7 @@ public final class Share {
                 TagResolver.resolver("myhover", Tag.styling(HoverEvent.showText(converter.horseStatsMessage(horseStatsData)))),
                 Placeholder.parsed("random_message", randomMessage[this.random.nextInt(randomMessage.length)]),
                 Placeholder.parsed("horse_name", horseStatsData.horseName()),
-                TagResolver.resolver("rankcolor", Tag.styling(HorseRank.calcEvaluateRankColor(horseStatsData.rank()))),
+                TagResolver.resolver("rankcolor", Tag.styling(horseStatsData.rankData().textColor())),
                 Placeholder.parsed("player", player.getName()));
 
         //もしものため

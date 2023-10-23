@@ -1,6 +1,7 @@
 package github.tyonakaisan.horsechecker.packet;
 
 import com.google.inject.Singleton;
+import github.tyonakaisan.horsechecker.horse.HorseRank;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,7 +17,7 @@ public final class HologramData {
     private final String hologramId;
     private Component text;
     private Location location;
-    private final String rank;
+    private final HorseRank.HorseRankData horseRankData;
 
     private final UUID entityUid;
     private final int entityId;
@@ -25,39 +26,39 @@ public final class HologramData {
             String hologramId,
             Component text,
             Location location,
-            String rank
+            HorseRank.HorseRankData horseRankData
     ) {
         this.hologramId = hologramId;
         this.text = text;
         this.location = location;
-        this.rank = rank;
+        this.horseRankData = horseRankData;
 
         this.entityId = ThreadLocalRandom.current().nextInt();
         this.entityUid = UUID.randomUUID();
     }
 
     public String hologramId() {
-        return hologramId;
+        return this.hologramId;
     }
 
     public UUID entityUid() {
-        return entityUid;
+        return this.entityUid;
     }
 
     public int entityId() {
-        return entityId;
+        return this.entityId;
     }
 
     public Component text() {
-        return text;
+        return this.text;
     }
 
     public Location location() {
-        return location;
+        return this.location;
     }
 
-    public String rank() {
-        return rank;
+    public HorseRank.HorseRankData rankData() {
+        return this.horseRankData;
     }
 
     public void showFrom(Player player) {

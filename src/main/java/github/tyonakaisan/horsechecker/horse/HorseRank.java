@@ -6,6 +6,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.awt.Color;
 
+
 @DefaultQualifier(NonNull.class)
 public final class HorseRank {
 
@@ -24,10 +25,13 @@ public final class HorseRank {
         return value / valueMax;
     }
 
-    public static String calcEvaluateRankString(double paramSpeed, double jumpHeight) {
+    public static HorseRankData calcEvaluateRankData(double paramSpeed, double jumpHeight) {
         double horseEvaluate = calcEvaluateValue(paramSpeed, jumpHeight);
+        String rank;
+        TextColor textColor;
+        int alpha = 32;
 
-        final String [] rankString = {
+        final String[] ratingStage = {
                 "G", "G", "G",
                 "F", "F", "F",
                 "E", "E", "E",
@@ -40,49 +44,41 @@ public final class HorseRank {
         };
 
         double rate = horseEvaluate * 2.0D - 1.0;
+        int pt = (int) (rate * ratingStage.length);
 
-        int pt = (int)(rate * rankString.length);
-        if (pt >= rankString.length) {
-            return rankString[rankString.length-1];
+        if (pt >= ratingStage.length) {
+            rank = ratingStage[ratingStage.length - 1];
+            textColor = TextColor.color(255, 204, 255);
+
+            return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB());
         }
         if (pt < 0) {
-            return rankString[0];
+            rank = ratingStage[0];
+            textColor = TextColor.color(85, 85, 85);
+
+            return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB());
         }
 
-        return rankString[pt];
+        rank = ratingStage[pt];
+        switch (rank) {
+            case "B", "B+" -> textColor = TextColor.color(85, 85, 255);
+            case "B++" -> textColor = TextColor.color(0, 170, 255);
+            case "A" -> textColor = TextColor.color(85, 255, 255);
+            case "A+" -> textColor = TextColor.color(85, 255, 85);
+            case "A++" -> textColor = TextColor.color(255, 255, 85);
+            case "S" -> textColor = TextColor.color(255, 170, 0);
+            case "S+" -> textColor = TextColor.color(255, 85, 85);
+            case "S++" -> textColor = TextColor.color(255, 85, 255);
+            case "LEGEND" -> textColor = TextColor.color(255, 204, 255);
+            default -> textColor = TextColor.color(85, 85, 85);
+        }
+
+        return new HorseRankData(rank, textColor, new Color(0, 0, 0, alpha).getRGB());
     }
 
-    public static TextColor calcEvaluateRankColor(String rankString) {
-
-        return switch (rankString) {
-            case "B", "B+" -> TextColor.color(85, 85, 255);
-            case "B++" -> TextColor.color(0, 170, 255);
-            case "A" -> TextColor.color(85, 255, 255);
-            case "A+" -> TextColor.color(85, 255, 85);
-            case "A++" -> TextColor.color(255, 255, 85);
-            case "S" -> TextColor.color(255, 170, 0);
-            case "S+" -> TextColor.color(255, 85, 85);
-            case "S++" -> TextColor.color(255, 85, 255);
-            case "LEGEND" -> TextColor.color(255, 204, 255);
-            default -> TextColor.color(85, 85, 85);
-        };
-    }
-
-    public static int calcEvaluateRankBackgroundColor(String rankString) {
-        int alpha = 32;
-
-        return switch (rankString) {
-            case "B", "B+" -> new Color(85, 85, 255, alpha).getRGB();
-            case "B++" -> new Color(0, 170, 255, alpha).getRGB();
-            case "A" -> new Color(85, 255, 255, alpha).getRGB();
-            case "A+" -> new Color(85, 255, 85, alpha).getRGB();
-            case "A++" -> new Color(255, 255, 85, alpha).getRGB();
-            case "S" -> new Color(255, 170, 0, alpha).getRGB();
-            case "S+" -> new Color(255, 85, 85, alpha).getRGB();
-            case "S++" -> new Color(255, 85, 255, alpha).getRGB();
-            case "LEGEND" -> new Color(255, 204, 255, alpha).getRGB();
-            default -> new Color(85, 85, 85, alpha).getRGB();
-        };
-    }
-
+    public record HorseRankData(
+            String rank,
+            TextColor textColor,
+            int BackgroundColor
+    ) {}
 }
