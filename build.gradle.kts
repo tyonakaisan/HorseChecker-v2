@@ -32,8 +32,8 @@ dependencies {
     paperLibrary("cloud.commandframework", "cloud-paper", "1.8.4")
 
     // Config
-    paperLibrary("org.spongepowered", "configurate-hocon", "4.1.2")
-    paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.14.0")
+    implementation("org.spongepowered", "configurate-hocon", "4.1.2")
+    implementation("net.kyori", "adventure-serializer-configurate4", "4.14.0")
 
     // Messages
     paperLibrary("net.kyori.moonshine", "moonshine-standard", "2.0.4")
@@ -71,6 +71,7 @@ tasks {
 
     shadowJar {
         this.archiveClassifier.set(null as String?)
+        relocate("org.spongepowered.configurate", "github.tyonakaisan.horsechecker.configurate")
     }
 
     runServer {
