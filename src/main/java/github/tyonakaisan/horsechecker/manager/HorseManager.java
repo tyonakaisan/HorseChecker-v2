@@ -32,5 +32,8 @@ public final class HorseManager {
     public boolean isAllowedHorse(EntityType entityType) {
         return Objects.requireNonNull(this.configFactory.primaryConfig()).allowedMobs().contains(entityType);
     }
-    
+
+    public int targetRange() {
+        return Objects.requireNonNull(this.configFactory.primaryConfig()).horse().targetRange();
+    }
 }

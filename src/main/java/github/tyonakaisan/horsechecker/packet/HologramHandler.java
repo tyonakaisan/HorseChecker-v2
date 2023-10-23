@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.Converter;
+import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -15,7 +16,6 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @DefaultQualifier(NonNull.class)
@@ -23,25 +23,27 @@ public final class HologramHandler {
     private final HorseChecker horseChecker;
     private final HologramManager hologramManager;
     private final StateManager stateManager;
+    private final HorseManager horseManager;
     private final Converter converter;
+    private final ConfigFactory configFactory;
 
     private final Map<Player, Optional<AbstractHorse>> targetedHorseMap = new HashMap<>();
-    private int targetRange;
 
     @Inject
     public HologramHandler(
             final HorseChecker horseChecker,
             final HologramManager hologramManager,
             final StateManager stateManager,
+            final HorseManager horseManager,
             final Converter converter,
             final ConfigFactory configFactory
     ) {
         this.horseChecker = horseChecker;
         this.hologramManager = hologramManager;
         this.stateManager = stateManager;
+        this.horseManager = horseManager;
         this.converter = converter;
-
-        this.targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
+        this.configFactory = configFactory;
     }
 
     public void show(Player player) {
@@ -50,7 +52,7 @@ public final class HologramHandler {
             public void run() {
                 targetedHorseMap.computeIfAbsent(player, k -> Optional.empty());
 
-                if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse) {
+                if (player.getTargetEntity(horseManager.targetRange(), false) instanceof AbstractHorse horse) {
                     targetedHorseMap.get(player).ifPresentOrElse(targetedHorse -> {
                         //同じ馬のとき
                         if (targetedHorse.equals(horse)) {

@@ -4,6 +4,7 @@ import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
+import github.tyonakaisan.horsechecker.manager.ShareManager;
 import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -28,23 +29,23 @@ public final class Share {
     private final Server server;
     private final ConfigFactory configFactory;
     private final HorseManager horseManager;
+    private final ShareManager shareManager;
     private final Converter converter;
     private final Random random = new Random();
-    private int targetRange;
 
     @Inject
     public Share(
             final ConfigFactory configFactory,
             final HorseManager horseManager,
+            final ShareManager shareManager,
             final Converter converter,
             final Server server
     ) {
         this.configFactory = configFactory;
         this.horseManager = horseManager;
+        this.shareManager = shareManager;
         this.converter = converter;
         this.server = server;
-
-        this.targetRange = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
     }
 
     private final HashMap<UUID, Long> commandInterval = new HashMap<>();
@@ -52,19 +53,19 @@ public final class Share {
 
     private boolean isShareable(Player player) {
         //ターゲットしてるエンティティがnullの場合
-        if (player.getTargetEntity(this.targetRange, false) == null) {
+        if (player.getTargetEntity(this.horseManager.targetRange(), false) == null) {
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.TARGETED_ENTITY_IS_NULL.getMessageWithPrefix()));
             return false;
         }
 
         //shareが使用可能か
-        if (!Objects.requireNonNull(configFactory.primaryConfig()).share().allowedHorseShare()) {
+        if (!shareManager.isAllowedHorseShare()) {
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.NOT_ALLOWED_SHARE.getMessageWithPrefix()));
             return false;
         }
 
         //ターゲットしてる馬チェック
-        if (player.getTargetEntity(this.targetRange, false) instanceof AbstractHorse horse && horseManager.isAllowedHorse(horse.getType())) {
+        if (player.getTargetEntity(this.horseManager.targetRange(), false) instanceof AbstractHorse horse && horseManager.isAllowedHorse(horse.getType())) {
             //オーナーチェック
             if (ownerCheck(horse, player)) {
                 return true;
@@ -80,7 +81,7 @@ public final class Share {
     }
 
     private boolean checkInterval(Player player) {
-        int intervalTime = Objects.requireNonNull(configFactory.primaryConfig()).share().horseShareInterval() * 1000;
+        int intervalTime = shareManager.shareInterval();
         var uuid = player.getUniqueId();
 
         if (commandInterval.containsKey(uuid)) {
@@ -114,7 +115,7 @@ public final class Share {
             return;
         }
 
-        AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(this.targetRange, false));
+        AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(this.horseManager.targetRange(), false));
         var horseStatsData = converter.convertHorseStats(horse);
 
         Component broadcastMessage = MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),
@@ -143,7 +144,7 @@ public final class Share {
 
         if (horse.getOwner() == null) return true;
 
-        if (Objects.requireNonNull(configFactory.primaryConfig()).share().ownerOnly()) {
+        if (shareManager.ownerOnly()) {
             return Objects.requireNonNull(horse.getOwnerUniqueId()).equals(player.getUniqueId());
         } else {
             return true;
