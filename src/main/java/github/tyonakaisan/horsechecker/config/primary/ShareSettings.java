@@ -17,7 +17,7 @@ public final class ShareSettings {
     @Comment("""
             shareコマンドのクールダウン(秒)
             """)
-    private int horseShareInterval = 60;
+    private int shareCommandIntervalTime = 60;
 
     @Comment("""
             所有者関係なくShareコマンドを使えるかどうか
@@ -31,8 +31,8 @@ public final class ShareSettings {
         return this.allowedHorseShare;
     }
 
-    public int horseShareInterval() {
-        return this.horseShareInterval;
+    public int shareCommandIntervalTime() {
+        return this.shareCommandIntervalTime;
     }
 
     public boolean ownerOnly() {

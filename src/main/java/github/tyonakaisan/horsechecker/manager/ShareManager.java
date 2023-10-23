@@ -23,8 +23,8 @@ public final class ShareManager {
         return Objects.requireNonNull(this.configFactory.primaryConfig()).share().allowedHorseShare();
     }
 
-    public int shareInterval() {
-        return Objects.requireNonNull(this.configFactory.primaryConfig()).share().horseShareInterval() * 1000;
+    public int shareCommandIntervalTime() {
+        return Objects.requireNonNull(this.configFactory.primaryConfig()).share().shareCommandIntervalTime() * 1000;
     }
 
     public boolean ownerOnly() {

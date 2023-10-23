@@ -81,7 +81,7 @@ public final class Share {
     }
 
     private boolean checkInterval(Player player) {
-        int intervalTime = shareManager.shareInterval();
+        int intervalTime = shareManager.shareCommandIntervalTime();
         var uuid = player.getUniqueId();
 
         if (commandInterval.containsKey(uuid)) {
