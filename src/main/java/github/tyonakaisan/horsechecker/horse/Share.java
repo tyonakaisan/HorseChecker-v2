@@ -2,7 +2,6 @@ package github.tyonakaisan.horsechecker.horse;
 
 import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.ShareManager;
 import github.tyonakaisan.horsechecker.message.Messages;
@@ -27,7 +26,6 @@ import java.util.UUID;
 @DefaultQualifier(NonNull.class)
 public final class Share {
     private final Server server;
-    private final ConfigFactory configFactory;
     private final HorseManager horseManager;
     private final ShareManager shareManager;
     private final Converter converter;
@@ -35,13 +33,11 @@ public final class Share {
 
     @Inject
     public Share(
-            final ConfigFactory configFactory,
             final HorseManager horseManager,
             final ShareManager shareManager,
             final Converter converter,
             final Server server
     ) {
-        this.configFactory = configFactory;
         this.horseManager = horseManager;
         this.shareManager = shareManager;
         this.converter = converter;

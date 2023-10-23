@@ -2,7 +2,6 @@ package github.tyonakaisan.horsechecker.packet;
 
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
-import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.StateManager;
@@ -25,7 +24,6 @@ public final class HologramHandler {
     private final StateManager stateManager;
     private final HorseManager horseManager;
     private final Converter converter;
-    private final ConfigFactory configFactory;
 
     private final Map<Player, Optional<AbstractHorse>> targetedHorseMap = new HashMap<>();
 
@@ -35,15 +33,13 @@ public final class HologramHandler {
             final HologramManager hologramManager,
             final StateManager stateManager,
             final HorseManager horseManager,
-            final Converter converter,
-            final ConfigFactory configFactory
+            final Converter converter
     ) {
         this.horseChecker = horseChecker;
         this.hologramManager = hologramManager;
         this.stateManager = stateManager;
         this.horseManager = horseManager;
         this.converter = converter;
-        this.configFactory = configFactory;
     }
 
     public void show(Player player) {
@@ -56,7 +52,6 @@ public final class HologramHandler {
                     targetedHorseMap.get(player).ifPresentOrElse(targetedHorse -> {
                         //同じ馬のとき
                         if (targetedHorse.equals(horse)) {
-                            if (hologramManager.getHologramData(horse.getUniqueId().toString()).location().equals(horse.getLocation())) return;
                             teleportHologram(horse);
                         } else {
                             //違うウマ
@@ -69,7 +64,7 @@ public final class HologramHandler {
                     });
                 } else {
                     targetedHorseMap.get(player).ifPresent(horse -> hideHologram(player, horse));
-                    if (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle()) {
+                    if (playerStateCheck(player)) {
                         this.cancel();
                     }
                 }
@@ -110,11 +105,17 @@ public final class HologramHandler {
     public void teleportHologram(AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
 
+        if (hologramManager.getHologramData(horseUUID).location().equals(horse.getLocation())) return;
+
         if (hologramManager.getHologramNames().contains(horseUUID)) {
             Location horseLocation = horse.getLocation();
             if (!horse.isAdult()) horseLocation = horseLocation.add(0, -1, 0);
 
             hologramManager.teleportHologram(horseUUID, horseLocation);
         }
+    }
+
+    private boolean playerStateCheck(Player player) {
+        return (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle());
     }
 }
