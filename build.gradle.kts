@@ -64,6 +64,13 @@ paper {
 }
 
 tasks {
+    val paperPlugins = runPaper.downloadPluginsSpec {
+        // tabTps
+        url("https://cdn.modrinth.com/data/cUhi3iB2/versions/QmxLremu/tabtps-spigot-1.3.21.jar")
+        // spark
+        url("https://ci.lucko.me/job/spark/396/artifact/spark-bukkit/build/libs/spark-1.10.55-bukkit.jar")
+    }
+
     compileJava {
         this.options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
@@ -76,5 +83,9 @@ tasks {
 
     runServer {
         minecraftVersion("1.20.2")
+
+        downloadPlugins {
+            downloadPlugins.from(paperPlugins)
+        }
     }
 }
