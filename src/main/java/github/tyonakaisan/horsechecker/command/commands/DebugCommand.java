@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
+import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -29,17 +30,26 @@ import java.util.Random;
 public final class DebugCommand implements HorseCheckerCommand {
     private final HorseChecker horseChecker;
     private final ConfigFactory configFactory;
+    private final HorseManager horseManager;
     private final CommandManager<CommandSender> commandManager;
+
+    private final int DEBUG_FIRST_TARGET_RANGE;
+    private final int DEBUG_THIRD_TARGET_RANGE;
 
     @Inject
     public DebugCommand(
             HorseChecker horseChecker,
             ConfigFactory configFactory,
+            HorseManager horseManager,
             CommandManager<CommandSender> commandManager
     ) {
         this.horseChecker = horseChecker;
         this.configFactory = configFactory;
+        this.horseManager = horseManager;
         this.commandManager = commandManager;
+
+        this.DEBUG_FIRST_TARGET_RANGE = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
+        this.DEBUG_THIRD_TARGET_RANGE = horseManager.targetRange();
     }
     @Override
     public void init() {
@@ -56,6 +66,23 @@ public final class DebugCommand implements HorseCheckerCommand {
                 .senderType(CommandSender.class)
                 .handler(this::spawnRandomHorse)
         );
+
+        this.commandManager.command(debug.literal("targetRange")
+                .permission("horsechecker.command.targetRange")
+                .senderType(CommandSender.class)
+                .handler(this::targetRange)
+        );
+    }
+
+    private void targetRange(final @NonNull CommandContext<CommandSender> context) {
+        final var sender = (Player) context.getSender();
+        final var DEBUG_SECOND_TARGET_RANGE = Objects.requireNonNull(configFactory.primaryConfig()).horse().targetRange();
+        final var DEBUG_FOURTH_TARGET_RANGE = this.horseManager.targetRange();
+
+        sender.sendRichMessage("1 -> " + this.DEBUG_FIRST_TARGET_RANGE);
+        sender.sendRichMessage("2 -> " + DEBUG_SECOND_TARGET_RANGE);
+        sender.sendRichMessage("3 -> " + DEBUG_THIRD_TARGET_RANGE);
+        sender.sendRichMessage("4 -> " + DEBUG_FOURTH_TARGET_RANGE);
     }
 
     private void spawnRandomHorse(final @NonNull CommandContext<CommandSender> context) {
