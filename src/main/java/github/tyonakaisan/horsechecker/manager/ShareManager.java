@@ -5,6 +5,7 @@ import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
+import java.util.List;
 import java.util.Objects;
 
 @DefaultQualifier(NonNull.class)
@@ -29,5 +30,9 @@ public final class ShareManager {
 
     public boolean ownerOnly() {
         return Objects.requireNonNull(this.configFactory.primaryConfig()).share().ownerOnly();
+    }
+
+    public List<String> getHorseNamePrefix() {
+        return Objects.requireNonNull(this.configFactory.primaryConfig()).share().horseNamePrefix();
     }
 }

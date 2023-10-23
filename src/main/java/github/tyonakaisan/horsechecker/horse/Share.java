@@ -45,7 +45,6 @@ public final class Share {
     }
 
     private final HashMap<UUID, Long> commandInterval = new HashMap<>();
-    private final String[] randomMessage = {"イケイケな", "イマドキな", "可愛らしい", "ホットな", "ハンパない", "バズリ狙いの"};
 
     private boolean isShareable(Player player) {
         //ターゲットしてるエンティティがnullの場合
@@ -117,7 +116,7 @@ public final class Share {
         Component broadcastMessage = MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),
                 Placeholder.parsed("prefix", Messages.PREFIX.get()),
                 TagResolver.resolver("myhover", Tag.styling(HoverEvent.showText(converter.horseStatsMessage(horseStatsData)))),
-                Placeholder.parsed("random_message", randomMessage[this.random.nextInt(randomMessage.length)]),
+                Placeholder.parsed("random_message", shareManager.getHorseNamePrefix().get(random.nextInt(shareManager.getHorseNamePrefix().size()))),
                 Placeholder.parsed("horse_name", horseStatsData.horseName()),
                 TagResolver.resolver("rankcolor", Tag.styling(horseStatsData.rankData().textColor())),
                 Placeholder.parsed("player", player.getName()));

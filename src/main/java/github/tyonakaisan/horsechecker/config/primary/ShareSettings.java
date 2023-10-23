@@ -5,6 +5,8 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
+import java.util.List;
+
 @ConfigSerializable
 @DefaultQualifier(NonNull.class)
 public final class ShareSettings {
@@ -27,6 +29,18 @@ public final class ShareSettings {
             """)
     private boolean ownerOnly = false;
 
+    @Comment("""
+            shareメッセージを送った際に出る、馬の名前の前に付いてるメッセージの設定
+            """)
+    private List<String> horseNamePrefix = List.of(
+            "イケイケな",
+            "イマドキな",
+            "可愛らしい",
+            "ホットな",
+            "ハンパない",
+            "バズリ狙いの"
+    );
+
     public boolean allowedHorseShare() {
         return this.allowedHorseShare;
     }
@@ -37,5 +51,9 @@ public final class ShareSettings {
 
     public boolean ownerOnly() {
         return this.ownerOnly;
+    }
+
+    public List<String> horseNamePrefix() {
+        return this.horseNamePrefix;
     }
 }
