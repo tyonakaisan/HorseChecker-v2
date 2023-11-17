@@ -23,8 +23,7 @@ public final class Converter {
                 Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
                 Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue());
 
-        Location horseLocation = horse.getLocation();
-        if (!horse.isAdult()) horseLocation = horseLocation.add(0, -1, 0);
+        Location horseLocation = horse.isAdult() ? horse.getLocation() : horse.getLocation().subtract(0, 1, 0);
 
         return new HorseStatsData(getSpeed(horse), getHorseJump(horse), getMaxHealth(horse), getOwnerName(horse), getHorseName(horse), horse.getUniqueId(), horseLocation, rank);
     }
@@ -78,19 +77,11 @@ public final class Converter {
     }
 
     public String getOwnerName(AbstractHorse horse) {
-        if (horse.getOwner() == null) {
-            return "no owner";
-        } else {
-            return "owned by <#ffa500>" + horse.getOwner().getName() + "</#ffa500>";
-        }
+        return horse.getOwner() != null ? "owned by <#ffa500>" + horse.getOwner().getName() + "</#ffa500>" : "no owner";
     }
 
     public String getHorseName(AbstractHorse horse) {
-        if (horse.getName().equals("Horse")) {
-            return "<lang:entity.minecraft.horse>";
-        } else {
-            return horse.getName();
-        }
+        return horse.getName().equals("Horse") ? "<lang:entity.minecraft.horse>" : horse.getName();
     }
 
     public int getBreedingCoolTime(AbstractHorse horse) {

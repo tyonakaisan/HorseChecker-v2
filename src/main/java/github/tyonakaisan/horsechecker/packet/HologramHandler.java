@@ -108,8 +108,7 @@ public final class HologramHandler {
         if (hologramManager.getHologramData(horseUUID).location().equals(horse.getLocation())) return;
 
         if (hologramManager.getHologramNames().contains(horseUUID)) {
-            Location horseLocation = horse.getLocation();
-            if (!horse.isAdult()) horseLocation = horseLocation.add(0, -1, 0);
+            Location horseLocation = horse.isAdult() ? horse.getLocation() : horse.getLocation().subtract(0, 1, 0);
 
             hologramManager.teleportHologram(horseUUID, horseLocation);
         }
