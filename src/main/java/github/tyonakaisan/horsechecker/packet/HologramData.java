@@ -1,11 +1,13 @@
 package github.tyonakaisan.horsechecker.packet;
 
+import com.comphenix.protocol.events.PacketContainer;
 import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.horse.HorseRank;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.UUID;
@@ -21,6 +23,7 @@ public final class HologramData {
 
     private final UUID entityUid;
     private final int entityId;
+    private @Nullable PacketContainer entityMetadataPacket;
 
     public HologramData(
             String hologramId,
@@ -62,7 +65,10 @@ public final class HologramData {
     }
 
     public void showFrom(Player player) {
-        new HologramPacketManager(this).show(player);
+        if (this.entityMetadataPacket == null) {
+            this.entityMetadataPacket = new HologramPacketManager(this).createEntityMetadataPacket();
+        }
+        new HologramPacketManager(this).show(player, this.entityMetadataPacket);
     }
 
     public void hideFrom(Player player) {

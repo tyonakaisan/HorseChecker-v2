@@ -24,10 +24,14 @@ public final class HologramPacketManager {
         this.hologramData = hologramData;
     }
 
-    public void show(Player player) {
+    public PacketContainer createEntityMetadataPacket() {
+        return this.createDataPacket();
+    }
+
+    public void show(Player player, PacketContainer entityMetadataPacket) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.sendServerPacket(player, createAddPacket());
-        protocolManager.sendServerPacket(player, createDataPacket());
+        protocolManager.sendServerPacket(player, entityMetadataPacket);
     }
 
     public void hide(Player player) {
