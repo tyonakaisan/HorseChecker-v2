@@ -10,6 +10,8 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.Objects;
 
+// PersistentDataTypeにbooleanがあることを知らずStringにした過去の愚行によって地味にややこしいことになった(他も色々)
+// 置き換えする場合はremove -> addでやるしかなさそう?とりあえずこのままで
 @DefaultQualifier(NonNull.class)
 public final class StateManager {
 
