@@ -73,7 +73,7 @@ public final class HorseRank {
             default -> textColor = TextColor.color(85, 85, 85);
         }
 
-        return new HorseRankData(rank, textColor, new Color(0, 0, 0, alpha).getRGB());
+        return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB());
     }
 
     public record HorseRankData(

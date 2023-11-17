@@ -25,7 +25,7 @@ public enum Messages {
     STATS_RESULT_OWNER("<owner>"),
 
     //BREEDING
-    BREEDING_COOL_TIME("繫殖クールタイム中(<color:#ffc414><cooltime>s</color>)は出来ません!</color>"),
+    BREEDING_COOL_TIME("<color:#ff4775>繫殖クールタイム中(<color:#ffc414><cooltime>s</color>)は出来ません!</color>"),
     LOVE_MODE_TIME("<color:#ff4775>繫殖モード中(<color:#ffc414><cooltime>s</color>)は出来ません!</color>"),
 
     //SHARE
