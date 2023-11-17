@@ -13,6 +13,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Singleton
 @DefaultQualifier(NonNull.class)
@@ -38,9 +39,9 @@ public final class HologramManager {
 
     public void createHologram(HorseStatsData statsData, Component text) {
         var hologramId = statsData.uuid().toString();
+        if (this.hologramMap.containsKey(hologramId)) return;
         var hologramData = new HologramData(hologramId, text, statsData.location(), statsData.rankData());
 
-        if (this.hologramMap.containsKey(hologramId)) return;
         this.hologramMap.put(hologramId, hologramData);
     }
 
@@ -52,30 +53,18 @@ public final class HologramManager {
     }
 
     public void hideHologram(String hologramId, Player player) {
-        var hologramData = this.hologramMap.get(hologramId);
-
-        if (hologramData == null) return;
-        hologramData.hideFrom(player);
+        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.hideFrom(player));
     }
 
     public void showHologram(String hologramId, Player player) {
-        var hologramData = this.hologramMap.get(hologramId);
-
-        if (hologramData == null) return;
-        hologramData.showFrom(player);
+        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.showFrom(player));
     }
 
     public void teleportHologram(String hologramId, Location targetLocation) {
-        var hologramData = this.hologramMap.get(hologramId);
-
-        if (hologramData == null) return;
-        hologramData.teleportTo(targetLocation);
+        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.teleportTo(targetLocation));
     }
 
     public void changeHologramText(String hologramId, Component text) {
-        var hologramData = this.hologramMap.get(hologramId);
-
-        if (hologramData == null) return;
-        hologramData.updateText(text);
+        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.updateText(text));
     }
 }
