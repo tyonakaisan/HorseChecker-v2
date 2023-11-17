@@ -1,9 +1,7 @@
 package github.tyonakaisan.horsechecker.command.commands;
 
 import cloud.commandframework.CommandManager;
-import cloud.commandframework.arguments.standard.DoubleArgument;
-import cloud.commandframework.arguments.standard.EnumArgument;
-import cloud.commandframework.arguments.standard.IntegerArgument;
+import cloud.commandframework.arguments.standard.*;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
@@ -60,6 +58,7 @@ public final class DebugCommand implements HorseCheckerCommand {
         this.commandManager.command(debug.literal("spawnRandomHorse")
                 .argument(IntegerArgument.optional("time"))
                 .argument(EnumArgument.optional(HorseType.class, "horseType"))
+                .argument(BooleanArgument.optional("tame"))
                 .argument(DoubleArgument.optional("addSpeed"))
                 .argument(DoubleArgument.optional("addJump"))
                 .permission("horsechecker.command.spawnrandomhorse")
@@ -89,6 +88,7 @@ public final class DebugCommand implements HorseCheckerCommand {
         final var sender = (Player) context.getSender();
         final int[] time = {(int) context.getOptional("time").orElse(1)};
         final var horseType = (HorseType) context.getOptional("horseType").orElse(HorseType.HORSE);
+        final var tame = (boolean) context.getOptional("tame").orElse(false);
         final double addSpeed = (double) context.getOptional("addSpeed").orElse(0.0);
         final double addJump = (double) context.getOptional("addJump").orElse(0.0);
 
@@ -107,6 +107,8 @@ public final class DebugCommand implements HorseCheckerCommand {
 
                 Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(speed);
                 horse.setJumpStrength(jump);
+                horse.setTamed(tame);
+                horse.setOwner(tame ? sender : null);
                 sender.sendMessage(MiniMessage.miniMessage().deserialize(
                         Messages.SPAWN_HORSE.getMessageWithPrefix(),
                         Placeholder.parsed("speed", df.format(speed)),
