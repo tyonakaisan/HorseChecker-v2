@@ -10,10 +10,7 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Singleton
 @DefaultQualifier(NonNull.class)
@@ -29,8 +26,8 @@ public final class HologramManager {
         this.server = server;
     }
 
-    public List<String> getHologramNames() {
-        return List.copyOf(this.hologramMap.keySet());
+    public Set<String> getHologramNames() {
+        return Set.copyOf(this.hologramMap.keySet());
     }
 
     public HologramData getHologramData(String hologramId) {

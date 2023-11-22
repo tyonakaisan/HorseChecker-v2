@@ -43,11 +43,10 @@ public final class HologramHandler {
     }
 
     public void show(Player player) {
+        targetedHorseMap.computeIfAbsent(player, k -> Optional.empty());
         new BukkitRunnable() {
             @Override
             public void run() {
-                targetedHorseMap.computeIfAbsent(player, k -> Optional.empty());
-
                 if (player.getTargetEntity(horseManager.targetRange(), false) instanceof AbstractHorse horse) {
                     targetedHorseMap.get(player).ifPresentOrElse(targetedHorse -> {
                         //同じ馬のとき
@@ -63,10 +62,10 @@ public final class HologramHandler {
                         targetedHorseMap.put(player, Optional.of(horse));
                     });
                 } else {
-                    targetedHorseMap.get(player).ifPresent(horse -> hideHologram(player, horse));
-                    if (playerStateCheck(player)) {
-                        this.cancel();
-                    }
+                    targetedHorseMap.get(player).ifPresent(horse -> {
+                        hideHologram(player, horse);
+                        if (playerStateCheck(player)) this.cancel();
+                    });
                 }
             }
         }.runTaskTimer(horseChecker, 0, 1);
@@ -83,6 +82,14 @@ public final class HologramHandler {
         hologramManager.showHologram(horseUUID, player);
     }
 
+    public void hideHologram(Player player, AbstractHorse horse) {
+        var horseUUID = horse.getUniqueId().toString();
+        if (hologramManager.getHologramNames().contains(horseUUID)) {
+            hologramManager.hideHologram(horseUUID, player);
+            this.targetedHorseMap.put(player, Optional.empty());
+        }
+    }
+
     public void changeHologramText(AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
         if (hologramManager.getHologramNames().contains(horseUUID)) {
@@ -94,12 +101,6 @@ public final class HologramHandler {
             Component component = converter.horseStatsMessage(horseStatsData);
             hologramManager.changeHologramText(horseUUID, component);
         }
-    }
-
-    public void hideHologram(Player player, AbstractHorse horse) {
-        var horseUUID = horse.getUniqueId().toString();
-        hologramManager.hideHologram(horseUUID, player);
-        this.targetedHorseMap.put(player, Optional.empty());
     }
 
     public void teleportHologram(AbstractHorse horse) {
