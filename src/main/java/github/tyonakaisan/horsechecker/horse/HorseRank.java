@@ -1,10 +1,11 @@
 package github.tyonakaisan.horsechecker.horse;
 
+import com.tyonakaisan.glowlib.glow.Glow;
 import net.kyori.adventure.text.format.TextColor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
-import java.awt.Color;
+import java.awt.*;
 
 
 @DefaultQualifier(NonNull.class)
@@ -29,6 +30,7 @@ public final class HorseRank {
         double horseEvaluate = calcEvaluateValue(paramSpeed, jumpHeight);
         String rank;
         TextColor textColor;
+        Glow.Color glowColor;
         int alpha = 32;
 
         final String[] ratingStage = {
@@ -50,35 +52,66 @@ public final class HorseRank {
             rank = ratingStage[ratingStage.length - 1];
             textColor = TextColor.color(255, 204, 255);
 
-            return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB());
+            return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB(), Glow.Color.LIGHT_PURPLE);
         }
         if (pt < 0) {
             rank = ratingStage[0];
             textColor = TextColor.color(85, 85, 85);
 
-            return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB());
+            return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB(), Glow.Color.GRAY);
         }
 
         rank = ratingStage[pt];
         switch (rank) {
-            case "B", "B+" -> textColor = TextColor.color(85, 85, 255);
-            case "B++" -> textColor = TextColor.color(0, 170, 255);
-            case "A" -> textColor = TextColor.color(85, 255, 255);
-            case "A+" -> textColor = TextColor.color(85, 255, 85);
-            case "A++" -> textColor = TextColor.color(255, 255, 85);
-            case "S" -> textColor = TextColor.color(255, 170, 0);
-            case "S+" -> textColor = TextColor.color(255, 85, 85);
-            case "S++" -> textColor = TextColor.color(255, 85, 255);
-            case "LEGEND" -> textColor = TextColor.color(255, 204, 255);
-            default -> textColor = TextColor.color(85, 85, 85);
+            case "B", "B+" -> {
+                textColor = TextColor.color(85, 85, 255);
+                glowColor = Glow.Color.BLUE;
+            }
+            case "B++" -> {
+                textColor = TextColor.color(0, 170, 255);
+                glowColor = Glow.Color.DARK_AQUA;
+            }
+            case "A" -> {
+                textColor = TextColor.color(85, 255, 255);
+                glowColor = Glow.Color.AQUA;
+            }
+            case "A+" -> {
+                textColor = TextColor.color(85, 255, 85);
+                glowColor = Glow.Color.GREEN;
+            }
+            case "A++" -> {
+                textColor = TextColor.color(255, 255, 85);
+                glowColor = Glow.Color.YELLOW;
+            }
+            case "S" -> {
+                textColor = TextColor.color(255, 170, 0);
+                glowColor = Glow.Color.GOLD;
+            }
+            case "S+" -> {
+                textColor = TextColor.color(255, 85, 85);
+                glowColor = Glow.Color.RED;
+            }
+            case "S++" -> {
+                textColor = TextColor.color(255, 85, 255);
+                glowColor = Glow.Color.DARK_PURPLE;
+            }
+            case "LEGEND" -> {
+                textColor = TextColor.color(255, 204, 255);
+                glowColor = Glow.Color.LIGHT_PURPLE;
+            }
+            default -> {
+                textColor = TextColor.color(85, 85, 85);
+                glowColor = Glow.Color.GRAY;
+            }
         }
 
-        return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB());
+        return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB(), glowColor);
     }
 
     public record HorseRankData(
             String rank,
             TextColor textColor,
-            int BackgroundColor
+            int BackgroundColor,
+            Glow.Color glowColor
     ) {}
 }

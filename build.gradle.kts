@@ -19,6 +19,9 @@ repositories {
     // Inventory
     // TaskChain
     maven("https://repo.aikar.co/content/groups/aikar/")
+
+    // GlowLib
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -41,6 +44,8 @@ dependencies {
     // Utils
     paperLibrary("com.google.inject", "guice", "7.0.0")
     paperLibrary("co.aikar", "taskchain-bukkit", "3.7.2")
+    //implementation("com.github.tyonakaisan", "GlowLib", "0.1.6")
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }
 
 version = "1.1.0-SNAPSHOT"

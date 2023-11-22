@@ -14,6 +14,8 @@ public enum Messages {
     SHOW_STATS_DISABLED("<color:#ff4775>ステータス非表示中!</color>"),
     CANCEL_BREEDING_ENABLED("<color:#ff4775>連続餌やり無効中!</color>"),
     CANCEL_BREEDING_DISABLED("<color:#59ffa4>連続餌やり有効中!</color>"),
+    BREED_NOTIFICATION_ENABLED("<color:#59ffa4>ブリーディング通知有効中!</color>"),
+    BREED_NOTIFICATION_DISABLED("<color:#ff4775>ブリーディング通知無効中!</color>"),
     CONFIG_RELOAD("<color:#59ffa4>configリロード完了!</color>"),
     COMMAND_INTERVAL("<color:#ff4775>このコマンドは<color:#ffc414><interval></color>秒後に使用できます!</color>"),
 
@@ -27,13 +29,14 @@ public enum Messages {
     //BREEDING
     BREEDING_COOL_TIME("<color:#ff4775>繫殖クールタイム中(<color:#ffc414><cooltime>s</color>)は出来ません!</color>"),
     LOVE_MODE_TIME("<color:#ff4775>繫殖モード中(<color:#ffc414><cooltime>s</color>)は出来ません!</color>"),
+    BREEDING_NOTIFICATION("<myhover><call><prefix><color:#59ffa4>産まれた馬のステータスはこちら!</color><newline><b><gray>[クリックして表示]</gray></call></myhover>"),
 
     //SHARE
     TARGETED_ENTITY_IS_NULL("<color:#ff4775>mobを見て使用してください!</color>"),
     NOT_ALLOWED_SHARE("<color:#ff4775>馬の共有は許可されていません!</color>"),
     UNSHAREABLE_ENTITY("<color:#ff4775>そのmobは共有できません!</color>"),
     DIFFERENT_OWNER("<color:#ff4775>所有者が違うため共有できません!</color>"),
-    BROADCAST_SHARE("<myhover><prefix><color:#5cb8ff><player></color><white>が<random_message><rankcolor><horse_name></rankcolor>を共有しました！</white><newline><b><gray>[カーソルを合わせて表示]</gray></b></myhover>"),
+    BROADCAST_SHARE("<myhover><prefix><color:#5cb8ff><player></color><white>が<random_message><rankcolor><horse_name></rankcolor>を共有しました!</white><newline><b><gray>[カーソルを合わせて表示]</gray></b></myhover>"),
     BROADCAST_SHARE_SUCSESS("<color:#59ffa4>共有メッセージを送りました!"),
 
     //DEBUG

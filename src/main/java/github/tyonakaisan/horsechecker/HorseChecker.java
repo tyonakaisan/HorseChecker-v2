@@ -2,8 +2,10 @@ package github.tyonakaisan.horsechecker;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.tyonakaisan.glowlib.GlowLib;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.command.commands.DebugCommand;
+import github.tyonakaisan.horsechecker.command.commands.NotificationCommand;
 import github.tyonakaisan.horsechecker.command.commands.ReloadCommand;
 import github.tyonakaisan.horsechecker.command.commands.ShareCommand;
 import github.tyonakaisan.horsechecker.command.commands.ToggleCommand;
@@ -32,7 +34,8 @@ public final class HorseChecker extends JavaPlugin {
             ReloadCommand.class,
             DebugCommand.class,
             ShareCommand.class,
-            ToggleCommand.class
+            ToggleCommand.class,
+            NotificationCommand.class
     );
     private final Injector injector;
 
@@ -46,6 +49,9 @@ public final class HorseChecker extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+
+        // Beta
+        GlowLib.init(this);
 
         // Listeners
         for (final Class<? extends Listener> listenerClass : LISTENER_CLASSES) {
