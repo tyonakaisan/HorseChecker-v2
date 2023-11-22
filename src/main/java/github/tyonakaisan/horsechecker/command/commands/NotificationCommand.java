@@ -4,7 +4,6 @@ import cloud.commandframework.CommandManager;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
-import github.tyonakaisan.horsechecker.horse.HorseFinder;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.message.Messages;
 import org.bukkit.command.CommandSender;
@@ -17,17 +16,14 @@ public final class NotificationCommand implements HorseCheckerCommand {
 
     private final CommandManager<CommandSender> commandManager;
     private final StateManager stateManager;
-    private final HorseFinder horseFinder;
 
     @Inject
     public NotificationCommand(
             CommandManager<CommandSender> commandManager,
-            StateManager stateManager,
-            HorseFinder horseFinder
+            StateManager stateManager
     ) {
         this.commandManager = commandManager;
         this.stateManager = stateManager;
-        this.horseFinder = horseFinder;
     }
 
     @Override
@@ -45,7 +41,7 @@ public final class NotificationCommand implements HorseCheckerCommand {
     private void toggleBreedNotification(final @NonNull CommandContext<CommandSender> context) {
         final var sender = (Player) context.getSender();
 
-        if (stateManager.toggleState(sender, "breed_notification")) {
+        if (this.stateManager.toggleState(sender, "breed_notification")) {
             sender.sendRichMessage(Messages.BREED_NOTIFICATION_ENABLED.getMessageWithPrefix());
         } else {
             sender.sendRichMessage(Messages.BREED_NOTIFICATION_DISABLED.getMessageWithPrefix());

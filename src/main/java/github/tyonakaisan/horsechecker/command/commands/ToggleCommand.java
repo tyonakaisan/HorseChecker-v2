@@ -51,9 +51,9 @@ public final class ToggleCommand implements HorseCheckerCommand {
     private void toggleStats(final @NonNull CommandContext<CommandSender> context) {
         final var sender = (Player) context.getSender();
 
-        if (stateManager.toggleState(sender, "stats")) {
+        if (this.stateManager.toggleState(sender, "stats")) {
             sender.sendRichMessage(Messages.SHOW_STATS_ENABLED.getMessageWithPrefix());
-            hologramHandler.show(sender);
+            this.hologramHandler.show(sender);
         } else {
             sender.sendRichMessage(Messages.SHOW_STATS_DISABLED.getMessageWithPrefix());
         }
@@ -62,7 +62,7 @@ public final class ToggleCommand implements HorseCheckerCommand {
     private void toggleBreed(final @NonNull CommandContext<CommandSender> context) {
         final var sender = (Player) context.getSender();
 
-        if (stateManager.toggleState(sender, "breed")) {
+        if (this.stateManager.toggleState(sender, "breed")) {
             sender.sendRichMessage(Messages.CANCEL_BREEDING_ENABLED.getMessageWithPrefix());
         } else {
             sender.sendRichMessage(Messages.CANCEL_BREEDING_DISABLED.getMessageWithPrefix());

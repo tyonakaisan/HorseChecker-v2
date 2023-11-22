@@ -22,7 +22,7 @@ public final class HorseSettings {
             "mule",
             "skeleton_horse",
             "zombie_horse"
-        );
+    );
 
     public List<String> allowedMobs() {
         return this.allowedMobs;

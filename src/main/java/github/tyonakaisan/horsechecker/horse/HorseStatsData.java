@@ -13,4 +13,5 @@ public record HorseStatsData(
         UUID uuid,
         Location location,
         HorseRank.HorseRankData rankData
-) {}
+) {
+}

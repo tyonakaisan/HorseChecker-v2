@@ -8,6 +8,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 @SuppressWarnings("unchecked")
 @DefaultQualifier(NonNull.class)
 public abstract class EntityData<B> extends WrappedDataManager {
+
     private byte bitmask = 0x00;
 
     public B fire() {

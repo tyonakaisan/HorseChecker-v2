@@ -13,6 +13,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 
 @DefaultQualifier(NonNull.class)
 public final class ShareCommand implements HorseCheckerCommand {
+
     private final CommandManager<CommandSender> commandManager;
     private final Share share;
 
@@ -32,7 +33,7 @@ public final class ShareCommand implements HorseCheckerCommand {
                 .handler(handler -> {
             final var sender = (Player) handler.getSender();
             final MultiplePlayerSelector target = handler.get("player");
-            share.broadcastShareMessage(sender, target);
+            this.share.broadcastShareMessage(sender, target);
         }).build();
 
         this.commandManager.command(command);

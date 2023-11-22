@@ -16,6 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Singleton
 @DefaultQualifier(NonNull.class)
 public final class HologramData {
+
     private final String hologramId;
     private Component text;
     private Location location;

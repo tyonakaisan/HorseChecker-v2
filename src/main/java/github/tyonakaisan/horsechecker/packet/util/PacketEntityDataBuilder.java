@@ -9,6 +9,7 @@ import java.util.List;
 
 @DefaultQualifier(NonNull.class)
 public final class PacketEntityDataBuilder {
+
     private PacketEntityDataBuilder() {
         throw new AssertionError();
     }
@@ -16,8 +17,12 @@ public final class PacketEntityDataBuilder {
     public static TextDisplay textDisplay() {
         return new TextDisplay();
     }
+
     public static final class TextDisplay extends TextDisplayData<TextDisplay> {
-        private TextDisplay() {}
+
+        private TextDisplay() {
+        }
+
         public List<WrappedDataValue> build() {
             return this.getDataValues();
         }

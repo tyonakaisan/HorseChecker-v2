@@ -10,6 +10,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 @SuppressWarnings("unchecked")
 @DefaultQualifier(NonNull.class)
 public abstract class TextDisplayData<B> extends DisplayData<B> {
+
     private byte bitmask = 0x00;
 
     public B text(Component text) {

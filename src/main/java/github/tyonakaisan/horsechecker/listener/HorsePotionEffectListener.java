@@ -17,7 +17,6 @@ public final class HorsePotionEffectListener implements Listener {
     private final HorseChecker horseChecker;
     private final HologramHandler hologramHandler;
 
-
     @Inject
     public HorsePotionEffectListener(
             final HorseChecker horseChecker,
@@ -35,7 +34,7 @@ public final class HorsePotionEffectListener implements Listener {
                 public void run() {
                     hologramHandler.changeHologramText(horse);
                 }
-            }.runTaskLater(horseChecker, 1);
+            }.runTaskLater(this.horseChecker, 1);
         }
     }
 }

@@ -6,6 +6,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 @SuppressWarnings("SpellCheckingInspection")
 @DefaultQualifier(NonNull.class)
 public enum Messages {
+
     //PREFIX
     PREFIX("<white>[<gradient:#ff2e4a:#ffd452>HorseChecker-v2</gradient>] </white>"),
 
@@ -44,6 +45,7 @@ public enum Messages {
     ;
 
     private final String message;
+
     Messages(
             String message
     ) {

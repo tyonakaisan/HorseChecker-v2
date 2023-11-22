@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @DefaultQualifier(NonNull.class)
 public final class HologramHandler {
+
     private final HorseChecker horseChecker;
     private final HologramManager hologramManager;
     private final StateManager stateManager;
@@ -68,54 +69,54 @@ public final class HologramHandler {
                     });
                 }
             }
-        }.runTaskTimer(horseChecker, 0, 1);
+        }.runTaskTimer(this.horseChecker, 0, 1);
     }
 
     public void createOrShowHologram(Player player, AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
 
-        if (!hologramManager.getHologramNames().contains(horseUUID)) {
-            var horseStatsData = converter.convertHorseStats(horse);
+        if (!this.hologramManager.getHologramNames().contains(horseUUID)) {
+            var horseStatsData = this.converter.convertHorseStats(horse);
             //ホログラム作成
-            hologramManager.createHologram(horseStatsData, converter.horseStatsMessage(horseStatsData));
+            this.hologramManager.createHologram(horseStatsData, this.converter.horseStatsMessage(horseStatsData));
         }
-        hologramManager.showHologram(horseUUID, player);
+        this.hologramManager.showHologram(horseUUID, player);
     }
 
     public void hideHologram(Player player, AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
-        if (hologramManager.getHologramNames().contains(horseUUID)) {
-            hologramManager.hideHologram(horseUUID, player);
+        if (this.hologramManager.getHologramNames().contains(horseUUID)) {
+            this.hologramManager.hideHologram(horseUUID, player);
             this.targetedHorseMap.put(player, Optional.empty());
         }
     }
 
     public void changeHologramText(AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
-        if (hologramManager.getHologramNames().contains(horseUUID)) {
-            var horseStatsData = converter.convertHorseStats(horse);
+        if (this.hologramManager.getHologramNames().contains(horseUUID)) {
+            var horseStatsData = this.converter.convertHorseStats(horse);
             //jumpの値変わらないの許せない
             //誤差あるけどmemo
             //x = ポーションのレベル
             //Jump = Math.pow(0.0308354 * x, 2) + 0.744631 * x)
-            Component component = converter.horseStatsMessage(horseStatsData);
-            hologramManager.changeHologramText(horseUUID, component);
+            Component component = this.converter.horseStatsMessage(horseStatsData);
+            this.hologramManager.changeHologramText(horseUUID, component);
         }
     }
 
     public void teleportHologram(AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
 
-        if (hologramManager.getHologramData(horseUUID).location().equals(horse.getLocation())) return;
+        if (this.hologramManager.getHologramData(horseUUID).location().equals(horse.getLocation())) return;
 
-        if (hologramManager.getHologramNames().contains(horseUUID)) {
+        if (this.hologramManager.getHologramNames().contains(horseUUID)) {
             Location horseLocation = horse.isAdult() ? horse.getLocation() : horse.getLocation().subtract(0, 1, 0);
 
-            hologramManager.teleportHologram(horseUUID, horseLocation);
+            this.hologramManager.teleportHologram(horseUUID, horseLocation);
         }
     }
 
     private boolean playerStateCheck(Player player) {
-        return (!player.isOnline() || !stateManager.state(player, "stats") || player.isInsideVehicle());
+        return (!player.isOnline() || !this.stateManager.state(player, "stats") || player.isInsideVehicle());
     }
 }

@@ -17,6 +17,7 @@ import java.util.function.Function;
 
 @DefaultQualifier(NonNull.class)
 public final class HorseCheckerModule extends AbstractModule {
+
     private final ComponentLogger logger;
     private final HorseChecker horseChecker;
     private final Path dataDirectory;

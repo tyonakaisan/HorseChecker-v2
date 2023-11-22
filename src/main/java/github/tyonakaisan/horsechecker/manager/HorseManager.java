@@ -17,7 +17,7 @@ public final class HorseManager {
 
     @Inject
     public HorseManager(
-            ConfigFactory configFactory
+            final ConfigFactory configFactory
     ) {
         this.configFactory = configFactory;
     }

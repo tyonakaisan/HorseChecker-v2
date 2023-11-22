@@ -1,7 +1,6 @@
 package github.tyonakaisan.horsechecker.listener;
 
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.horse.HorseFinder;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
@@ -29,7 +28,6 @@ import java.util.Objects;
 @DefaultQualifier(NonNull.class)
 public final class HorseCancelBreedListener implements Listener {
 
-    private final HorseChecker horseChecker;
     private final HorseManager horseManager;
     private final StateManager stateManager;
     private final HorseFinder horseFinder;
@@ -37,13 +35,11 @@ public final class HorseCancelBreedListener implements Listener {
 
     @Inject
     public HorseCancelBreedListener(
-            final HorseChecker horseChecker,
             final HorseManager horseManager,
             final StateManager stateManager,
             final HorseFinder horseFinder,
             final Converter converter
     ) {
-        this.horseChecker = horseChecker;
         this.horseManager = horseManager;
         this.stateManager = stateManager;
         this.horseFinder = horseFinder;
@@ -57,9 +53,9 @@ public final class HorseCancelBreedListener implements Listener {
 
         //toggleチェック
         //繫殖させるためのアイテムか
-        if (!stateManager.state(player, "breed") || !horseManager.isBreedItem(itemStack)) return;
+        if (!this.stateManager.state(player, "breed") || !this.horseManager.isBreedItem(itemStack)) return;
 
-        if (horseManager.isAllowedHorse(event.getRightClicked().getType())) {
+        if (this.horseManager.isAllowedHorse(event.getRightClicked().getType())) {
             AbstractHorse horse = (AbstractHorse) event.getRightClicked();
             int maxHealth = (int) Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
             int health = (int) horse.getHealth();
@@ -70,13 +66,13 @@ public final class HorseCancelBreedListener implements Listener {
             //繫殖クールタイム中&体力がMAXであればイベントキャンセル
             if (age > 0 && health == maxHealth) {
                 component = MiniMessage.miniMessage().deserialize(Messages.BREEDING_COOL_TIME.get(),
-                        Formatter.number("cooltime", converter.getBreedingCoolTime(horse)));
+                        Formatter.number("cooltime", this.converter.getBreedingCoolTime(horse)));
                 player.sendActionBar(component);
                 event.setCancelled(true);
-            //繫殖モード中(ハートが出てる時)&体力がMAXであればイベントキャンセル
+                //繫殖モード中(ハートが出てる時)&体力がMAXであればイベントキャンセル
             } else if (loveMode > 0 && health == maxHealth) {
                 component = MiniMessage.miniMessage().deserialize(Messages.LOVE_MODE_TIME.get(),
-                        Formatter.number("cooltime", converter.getLoveModeTime(horse)));
+                        Formatter.number("cooltime", this.converter.getLoveModeTime(horse)));
                 player.sendActionBar(component);
                 event.setCancelled(true);
             }
@@ -85,13 +81,13 @@ public final class HorseCancelBreedListener implements Listener {
 
     @EventHandler
     public void onBreeding(EntityBreedEvent event) {
-        if (horseManager.isAllowedHorse(event.getEntity().getType())
+        if (this.horseManager.isAllowedHorse(event.getEntity().getType())
                 && event.getBreeder() instanceof Player player) {
 
             if (!this.stateManager.state(player, "breed_notification")) return;
 
             AbstractHorse childrenHorse = (AbstractHorse) event.getEntity();
-            var horseData = converter.convertHorseStats(childrenHorse);
+            var horseData = this.converter.convertHorseStats(childrenHorse);
 
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BREEDING_NOTIFICATION.get(),
                     Placeholder.parsed("prefix", Messages.PREFIX.get()),
@@ -100,7 +96,7 @@ public final class HorseCancelBreedListener implements Listener {
                             this.horseFinder.fromUuid(childrenHorse.getUniqueId(), callPlayer);
                         }
                     })),
-                    Placeholder.styling("myhover", HoverEvent.showText(converter.horseStatsMessage(horseData)))));
+                    Placeholder.styling("myhover", HoverEvent.showText(this.converter.horseStatsMessage(horseData)))));
         }
     }
 }

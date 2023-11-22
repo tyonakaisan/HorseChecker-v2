@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings({"UnstableApiUsage", "unused"})
 @DefaultQualifier(NonNull.class)
 public final class HorseCheckerBootstrap implements PluginBootstrap {
+
     @Override
     public void bootstrap(BootstrapContext context) {
         // メソッド実装なし

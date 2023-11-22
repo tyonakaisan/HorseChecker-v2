@@ -18,6 +18,7 @@ import java.util.UUID;
 
 @DefaultQualifier(NonNull.class)
 public final class HologramPacketManager {
+
     private final HologramData hologramData;
 
     public HologramPacketManager(HologramData hologramData) {
@@ -30,20 +31,20 @@ public final class HologramPacketManager {
 
     public void show(Player player, PacketContainer entityMetadataPacket) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-        protocolManager.sendServerPacket(player, createAddPacket());
+        protocolManager.sendServerPacket(player, this.createAddPacket());
         protocolManager.sendServerPacket(player, entityMetadataPacket);
     }
 
     public void hide(Player player) {
-        ProtocolLibrary.getProtocolManager().sendServerPacket(player, createRemovePacket());
+        ProtocolLibrary.getProtocolManager().sendServerPacket(player, this.createRemovePacket());
     }
 
     public void teleport() {
-        ProtocolLibrary.getProtocolManager().broadcastServerPacket(createMovePacket());
+        ProtocolLibrary.getProtocolManager().broadcastServerPacket(this.createMovePacket());
     }
 
     public void update() {
-        ProtocolLibrary.getProtocolManager().broadcastServerPacket(createDataPacket());
+        ProtocolLibrary.getProtocolManager().broadcastServerPacket(this.createDataPacket());
     }
 
     private PacketContainer createAddPacket() {

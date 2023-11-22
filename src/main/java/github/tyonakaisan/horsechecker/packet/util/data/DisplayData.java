@@ -45,6 +45,7 @@ public abstract class DisplayData<B> extends EntityData<B> {
         addQuaternionData(14, quaterniond);
         return (B) this;
     }
+
     public B billboard(Display.Billboard billboard) {
         switch (billboard) {
             case FIXED -> addByteData(15, (byte) 0);

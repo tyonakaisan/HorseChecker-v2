@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 @SuppressWarnings({"UnstableApiUsage", "unused"})
 @DefaultQualifier(NonNull.class)
 public final class HorseCheckerLoader implements PluginLoader {
+
     @Override
     public void classloader(PluginClasspathBuilder classpathBuilder) {
         MavenLibraryResolver resolver = new MavenLibraryResolver();

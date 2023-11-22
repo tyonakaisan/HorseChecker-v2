@@ -15,7 +15,7 @@ public final class ShareManager {
 
     @Inject
     public ShareManager(
-            ConfigFactory configFactory
+            final ConfigFactory configFactory
     ) {
         this.configFactory = configFactory;
     }

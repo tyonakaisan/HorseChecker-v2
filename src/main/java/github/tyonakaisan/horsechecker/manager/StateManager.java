@@ -26,7 +26,7 @@ public final class StateManager {
 
     public boolean toggleState(Player player, String stateKey) {
         var pdc = player.getPersistentDataContainer();
-        NamespacedKey namespacedKey = new NamespacedKey(horseChecker, stateKey);
+        NamespacedKey namespacedKey = new NamespacedKey(this.horseChecker, stateKey);
 
         if (!pdc.has(namespacedKey)) {
             pdc.set(namespacedKey, PersistentDataType.STRING, "false");
@@ -46,11 +46,10 @@ public final class StateManager {
 
     public boolean state(Player player, String stateKey) {
         var pdc = player.getPersistentDataContainer();
-        NamespacedKey namespacedKey = new NamespacedKey(horseChecker, stateKey);
+        NamespacedKey namespacedKey = new NamespacedKey(this.horseChecker, stateKey);
 
         if (!pdc.has(namespacedKey)) return false;
 
         return Objects.requireNonNull(pdc.get(namespacedKey, PersistentDataType.STRING)).equalsIgnoreCase("true");
     }
-
 }

@@ -26,21 +26,21 @@ public final class PlayerTrackHorseListener implements Listener {
     @EventHandler
     public void onTrackHorse(PlayerTrackEntityEvent event) {
         if (event.getEntity() instanceof AbstractHorse horse) {
-            hologramHandler.createOrShowHologram(event.getPlayer(), horse);
+            this.hologramHandler.createOrShowHologram(event.getPlayer(), horse);
         }
     }
 
     @EventHandler
     public void onUnTrackHorse(PlayerUntrackEntityEvent event) {
         if (event.getEntity() instanceof AbstractHorse horse) {
-            hologramHandler.hideHologram(event.getPlayer(), horse);
+            this.hologramHandler.hideHologram(event.getPlayer(), horse);
         }
     }
 
     @EventHandler
     public void onMoveEntity(EntityMoveEvent event) {
         if (event.getEntity() instanceof AbstractHorse horse) {
-            hologramHandler.teleportHologram(horse);
+            this.hologramHandler.teleportHologram(horse);
         }
     }
 }

@@ -113,5 +113,6 @@ public final class HorseRank {
             TextColor textColor,
             int BackgroundColor,
             Glow.Color glowColor
-    ) {}
+    ) {
+    }
 }

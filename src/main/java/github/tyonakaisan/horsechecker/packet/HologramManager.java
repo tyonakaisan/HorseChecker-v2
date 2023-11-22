@@ -15,6 +15,7 @@ import java.util.*;
 @Singleton
 @DefaultQualifier(NonNull.class)
 public final class HologramManager {
+
     private final Map<String, HologramData> hologramMap = new HashMap<>();
 
     private final Server server;
