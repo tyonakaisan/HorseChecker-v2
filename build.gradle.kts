@@ -88,6 +88,7 @@ tasks {
 
     runServer {
         minecraftVersion("1.20.2")
+        maxHeapSize = "4g"
 
         downloadPlugins {
             downloadPlugins.from(paperPlugins)
