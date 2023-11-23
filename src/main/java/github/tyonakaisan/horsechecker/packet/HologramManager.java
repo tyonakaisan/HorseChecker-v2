@@ -28,7 +28,7 @@ public final class HologramManager {
     }
 
     public Set<String> getHologramNames() {
-        return Set.copyOf(this.hologramMap.keySet());
+        return Collections.unmodifiableSet(this.hologramMap.keySet());
     }
 
     public HologramData getHologramData(String hologramId) {
@@ -59,7 +59,10 @@ public final class HologramManager {
     }
 
     public void teleportHologram(String hologramId, Location targetLocation) {
-        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.teleportTo(targetLocation));
+        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
+            if (this.hologramMap.get(hologramId).location().equals(targetLocation)) return;
+            hologramData.teleportTo(targetLocation);
+        });
     }
 
     public void changeHologramText(String hologramId, Component text) {
