@@ -3,6 +3,8 @@ package github.tyonakaisan.horsechecker.horse;
 import com.google.inject.Inject;
 import com.tyonakaisan.glowlib.glow.Glow;
 import github.tyonakaisan.horsechecker.HorseChecker;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
@@ -38,6 +40,7 @@ public final class HorseFinder {
         horseOptional.ifPresent(horse -> {
             if (horse instanceof AbstractHorse abstractHorse) {
                 this.glowing(abstractHorse, player);
+                this.playSound(player);
             }
         });
     }
@@ -49,5 +52,12 @@ public final class HorseFinder {
         glow.show(player);
 
         Bukkit.getScheduler().runTaskLater(this.horseChecker, () -> glow.hide(player), 400L);
+    }
+
+    private void playSound(Player player) {
+        player.playSound(Sound.sound()
+                .type(Key.key("minecraft:entity.experience_orb.pickup"))
+                .pitch(1.5f)
+                .build());
     }
 }

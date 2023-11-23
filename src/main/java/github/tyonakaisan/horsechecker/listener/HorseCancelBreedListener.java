@@ -95,7 +95,7 @@ public final class HorseCancelBreedListener implements Listener {
                         if (audience instanceof Player callPlayer) {
                             this.horseFinder.fromUuid(childrenHorse.getUniqueId(), callPlayer);
                         }
-                    })),
+                    }, builder -> builder.uses(3))),
                     Placeholder.styling("myhover", HoverEvent.showText(this.converter.horseStatsMessage(horseData)))));
         }
     }
