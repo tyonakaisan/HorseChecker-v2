@@ -44,8 +44,7 @@ dependencies {
     // Utils
     paperLibrary("com.google.inject", "guice", "7.0.0")
     paperLibrary("co.aikar", "taskchain-bukkit", "3.7.2")
-    //implementation("com.github.tyonakaisan", "GlowLib", "0.1.6")
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation("com.github.tyonakaisan", "GlowLib", "0.2.0")
 }
 
 version = "1.1.0-SNAPSHOT"
