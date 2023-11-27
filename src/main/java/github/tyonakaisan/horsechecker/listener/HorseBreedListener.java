@@ -26,7 +26,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import java.util.Objects;
 
 @DefaultQualifier(NonNull.class)
-public final class HorseCancelBreedListener implements Listener {
+public final class HorseBreedListener implements Listener {
 
     private final HorseManager horseManager;
     private final StateManager stateManager;
@@ -34,7 +34,7 @@ public final class HorseCancelBreedListener implements Listener {
     private final Converter converter;
 
     @Inject
-    public HorseCancelBreedListener(
+    public HorseBreedListener(
             final HorseManager horseManager,
             final StateManager stateManager,
             final HorseFinder horseFinder,
@@ -89,6 +89,12 @@ public final class HorseCancelBreedListener implements Listener {
             AbstractHorse childrenHorse = (AbstractHorse) event.getEntity();
             var horseData = this.converter.convertHorseStats(childrenHorse);
 
+            var locationMessage = MiniMessage.miniMessage().deserialize(Messages.BABY_HORSE_LOCATION.get(),
+                    Placeholder.parsed("world", horseData.location().getWorld().getName()),
+                    Formatter.number("x", (int) horseData.location().getX()),
+                    Formatter.number("y", (int) horseData.location().getY()),
+                    Formatter.number("z", (int) horseData.location().getZ()));
+
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BREEDING_NOTIFICATION.get(),
                     Placeholder.parsed("prefix", Messages.PREFIX.get()),
                     Placeholder.styling("call", ClickEvent.callback(audience -> {
@@ -96,7 +102,10 @@ public final class HorseCancelBreedListener implements Listener {
                             this.horseFinder.fromUuid(childrenHorse.getUniqueId(), callPlayer);
                         }
                     }, builder -> builder.uses(3))),
-                    Placeholder.styling("myhover", HoverEvent.showText(this.converter.horseStatsMessage(horseData)))));
+                    Placeholder.styling("myhover", HoverEvent.showText(Component.text()
+                            .append(this.converter.horseStatsMessage(horseData))
+                            .appendNewline()
+                            .append(locationMessage)))));
         }
     }
 }
