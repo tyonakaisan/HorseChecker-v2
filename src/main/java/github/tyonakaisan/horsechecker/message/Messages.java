@@ -9,6 +9,7 @@ public enum Messages {
 
     //PREFIX
     PREFIX("<white>[<gradient:#ff2e4a:#ffd452>HorseChecker-v2</gradient>] </white>"),
+    SHORT_PREFIX("<white>[<gradient:#ff2e4a:#ffd452>HC-v2</gradient>] </white>"),
 
     //COMMAND
     SHOW_STATS_ENABLED("<color:#59ffa4>ステータス表示中!</color>"),
@@ -31,6 +32,7 @@ public enum Messages {
     BREEDING_COOL_TIME("<color:#ff4775>繫殖クールタイム中(<color:#ffc414><cooltime>s</color>)は出来ません!</color>"),
     LOVE_MODE_TIME("<color:#ff4775>繫殖モード中(<color:#ffc414><cooltime>s</color>)は出来ません!</color>"),
     BREEDING_NOTIFICATION("<myhover><call><prefix><color:#59ffa4>産まれた馬のステータスはこちら!</color><newline><b><gray>[クリックして表示]</gray></call></myhover>"),
+    BABY_HORSE_LOCATION("world: <gold><world></gold> <newline>x: <gold><x></gold> y: <gold><y></gold> z: <gold><z></gold>"),
 
     //SHARE
     TARGETED_ENTITY_IS_NULL("<color:#ff4775>mobを見て使用してください!</color>"),

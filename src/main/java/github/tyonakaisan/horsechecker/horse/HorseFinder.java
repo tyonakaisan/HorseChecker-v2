@@ -39,16 +39,16 @@ public final class HorseFinder {
 
         horseOptional.ifPresent(horse -> {
             if (horse instanceof AbstractHorse abstractHorse) {
-                this.glowing(abstractHorse, player);
+                this.showing(abstractHorse, player);
                 this.playSound(player);
             }
         });
     }
 
-    private void glowing(AbstractHorse horse, Player player) {
+    private void showing(AbstractHorse horse, Player player) {
         var horseData = this.converter.convertHorseStats(horse);
         Glow glow = Glow.glowing(horseData.rankData().glowColor(), horse.getUniqueId().toString());
-        glow.entities(horse);
+        glow.addEntities(horse);
         glow.show(player);
 
         Bukkit.getScheduler().runTaskLater(this.horseChecker, () -> glow.hide(player), 400L);
