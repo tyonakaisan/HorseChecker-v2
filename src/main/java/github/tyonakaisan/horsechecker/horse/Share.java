@@ -126,12 +126,12 @@ public final class Share {
             this.server.forEachAudience(receiver -> {
                 if (receiver instanceof Player) {
                     receiver.sendMessage(broadcastMessage);
-                    player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCSESS.getMessageWithPrefix()));
+                    player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
                 }
             });
         } else {
             targets.getPlayers().forEach(target -> target.sendMessage(broadcastMessage));
-            player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCSESS.getMessageWithPrefix()));
+            player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
         }
     }
 
