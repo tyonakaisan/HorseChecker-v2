@@ -47,7 +47,7 @@ dependencies {
     implementation("com.github.tyonakaisan", "GlowLib", "0.2.0")
 }
 
-version = "1.1.0-SNAPSHOT"
+version = "1.2.0-SNAPSHOT"
 
 paper {
     val mainPackage = "github.tyonakaisan.horsechecker"
