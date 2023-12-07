@@ -33,6 +33,10 @@ public final class HorseManager {
         return Objects.requireNonNull(this.configFactory.primaryConfig()).allowedMobs().contains(entityType);
     }
 
+    public long glowingTime() {
+        return Objects.requireNonNull(this.configFactory.primaryConfig()).horse().glowingTime();
+    }
+
     public int targetRange() {
         return Objects.requireNonNull(this.configFactory.primaryConfig()).horse().targetRange();
     }

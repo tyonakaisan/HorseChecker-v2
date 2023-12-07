@@ -11,11 +11,6 @@ import java.util.*;
 @DefaultQualifier(NonNull.class)
 public final class HorseSettings {
 
-    @Comment("""
-            検知可能距離
-            """)
-    private int targetRange = 20;
-
     private List<String> allowedMobs = List.of(
             "horse",
             "donkey",
@@ -24,8 +19,22 @@ public final class HorseSettings {
             "zombie_horse"
     );
 
+    @Comment("""
+            発光エフェクトの効果時間
+            """)
+    private long glowingTime = 400L;
+
+    @Comment("""
+            検知可能距離
+            """)
+    private int targetRange = 20;
+
     public List<String> allowedMobs() {
         return this.allowedMobs;
+    }
+
+    public long glowingTime() {
+        return this.glowingTime;
     }
 
     public int targetRange() {
