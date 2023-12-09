@@ -101,16 +101,16 @@ public final class Share {
         return false;
     }
 
-    public void broadcastShareMessage(Player player, MultiplePlayerSelector targets) {
-        if (!this.isShareable(player)) {
+    public void broadcastShareMessage(Player sender, MultiplePlayerSelector targets) {
+        if (!this.isShareable(sender)) {
             return;
         }
 
-        if (!this.checkInterval(player)) {
+        if (!this.checkInterval(sender)) {
             return;
         }
 
-        AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(player.getTargetEntity(this.horseManager.targetRange(), false));
+        AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(sender.getTargetEntity(this.horseManager.targetRange(), false));
         var horseStatsData = this.converter.convertHorseStats(horse);
 
         Component broadcastMessage = MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),
@@ -119,19 +119,21 @@ public final class Share {
                 Placeholder.parsed("random_message", this.shareManager.getHorseNamePrefix().get(ThreadLocalRandom.current().nextInt(this.shareManager.getHorseNamePrefix().size()))),
                 Placeholder.parsed("horse_name", horseStatsData.horseName()),
                 TagResolver.resolver("rankcolor", Tag.styling(horseStatsData.rankData().textColor())),
-                Placeholder.parsed("player", player.getName()));
+                Placeholder.parsed("player", sender.getName()));
 
         //もしものため
         if (targets.getPlayers().isEmpty()) {
             this.server.forEachAudience(receiver -> {
                 if (receiver instanceof Player) {
                     receiver.sendMessage(broadcastMessage);
-                    player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
+                    sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
                 }
             });
         } else {
-            targets.getPlayers().forEach(target -> target.sendMessage(broadcastMessage));
-            player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
+            targets.getPlayers().forEach(target -> {
+                target.sendMessage(broadcastMessage);
+            });
+            sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
         }
     }
 

@@ -1,7 +1,7 @@
 package github.tyonakaisan.horsechecker.packet.util;
 
 import com.comphenix.protocol.wrappers.WrappedDataValue;
-import github.tyonakaisan.horsechecker.packet.util.data.TextDisplayData;
+import github.tyonakaisan.horsechecker.packet.util.data.display.TextDisplayData;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -20,8 +20,7 @@ public final class PacketEntityDataBuilder {
 
     public static final class TextDisplay extends TextDisplayData<TextDisplay> {
 
-        private TextDisplay() {
-        }
+        private TextDisplay() {}
 
         public List<WrappedDataValue> build() {
             return this.getDataValues();
