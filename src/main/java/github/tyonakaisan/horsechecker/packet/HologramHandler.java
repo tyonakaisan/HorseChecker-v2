@@ -16,6 +16,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @DefaultQualifier(NonNull.class)
 public final class HologramHandler {
@@ -26,7 +27,7 @@ public final class HologramHandler {
     private final HorseManager horseManager;
     private final Converter converter;
 
-    private final Map<Player, Optional<AbstractHorse>> targetedHorseMap = new HashMap<>();
+    private final Map<UUID, Optional<AbstractHorse>> targetedHorseMap = new HashMap<>();
 
     @Inject
     public HologramHandler(
@@ -44,7 +45,8 @@ public final class HologramHandler {
     }
 
     public void show(Player player) {
-        this.targetedHorseMap.computeIfAbsent(player, k -> Optional.empty());
+        var playerUuid = player.getUniqueId();
+        this.targetedHorseMap.computeIfAbsent(playerUuid, k -> Optional.empty());
         var targetRange = this.horseManager.targetRange();
         new BukkitRunnable() {
             @Override
@@ -52,7 +54,7 @@ public final class HologramHandler {
                 if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse) {
                     operateHologram(player, horse);
                 } else {
-                    targetedHorseMap.get(player).ifPresent(targetedHorse -> {
+                    targetedHorseMap.get(playerUuid).ifPresent(targetedHorse -> {
                         hideHologram(player, targetedHorse);
                         if (playerStateCheck(player)) this.cancel();
                     });
@@ -62,7 +64,8 @@ public final class HologramHandler {
     }
 
     private void operateHologram(Player player, AbstractHorse horse) {
-        this.targetedHorseMap.get(player).ifPresentOrElse(targetedHorse -> {
+        var playerUuid = player.getUniqueId();
+        this.targetedHorseMap.get(playerUuid).ifPresentOrElse(targetedHorse -> {
             //同じ馬のとき
             if (targetedHorse.equals(horse)) {
                 this.teleportHologram(horse);
@@ -76,19 +79,21 @@ public final class HologramHandler {
     }
 
     public void createHologram(Player player, AbstractHorse horse) {
-        var horseUUID = horse.getUniqueId().toString();
+        var playerUuid = player.getUniqueId();
+        var horseUuid = horse.getUniqueId().toString();
         var horseStatsData = this.converter.convertHorseStats(horse);
 
         //ホログラム作成
         this.hologramManager.createHologram(horseStatsData, this.converter.horseStatsMessage(horseStatsData));
-        this.hologramManager.showHologram(horseUUID, player);
-        this.targetedHorseMap.put(player, Optional.of(horse));
+        this.hologramManager.showHologram(horseUuid, player);
+        this.targetedHorseMap.put(playerUuid, Optional.of(horse));
     }
 
     public void hideHologram(Player player, AbstractHorse horse) {
-        var horseUUID = horse.getUniqueId().toString();
-        this.hologramManager.hideHologram(horseUUID, player);
-        this.targetedHorseMap.put(player, Optional.empty());
+        var playerUuid = player.getUniqueId();
+        var horseUuid = horse.getUniqueId().toString();
+        this.hologramManager.hideHologram(horseUuid, player);
+        this.targetedHorseMap.put(playerUuid, Optional.empty());
     }
 
     public void changeHologramText(AbstractHorse horse) {
