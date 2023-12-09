@@ -130,9 +130,7 @@ public final class Share {
                 }
             });
         } else {
-            targets.getPlayers().forEach(target -> {
-                target.sendMessage(broadcastMessage);
-            });
+            targets.getPlayers().forEach(target -> target.sendMessage(broadcastMessage));
             sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
         }
     }
