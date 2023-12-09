@@ -53,7 +53,7 @@ public final class Converter {
     }
 
     private double jumpStrengthToJumpHeight(double strength) {
-        return -0.1817584952 * strength * strength * strength + 3.689713992 * strength * strength + 2.128599134 * strength - 0.343930367;
+        return -0.1817584952 * Math.pow(strength, 3) + 3.689713992 * Math.pow(strength, 2) + 2.128599134 * strength - 0.343930367;
     }
 
     private double genericSpeedToBlocPerSec(double speed) {
