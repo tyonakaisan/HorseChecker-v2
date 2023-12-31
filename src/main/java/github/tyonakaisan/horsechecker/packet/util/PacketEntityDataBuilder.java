@@ -5,6 +5,7 @@ import github.tyonakaisan.horsechecker.packet.util.data.display.TextDisplayData;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
+import java.util.Collections;
 import java.util.List;
 
 @DefaultQualifier(NonNull.class)
@@ -23,7 +24,7 @@ public final class PacketEntityDataBuilder {
         private TextDisplay() {}
 
         public List<WrappedDataValue> build() {
-            return this.getDataValues();
+            return Collections.unmodifiableList(this.getDataValues());
         }
     }
 }

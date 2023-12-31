@@ -65,11 +65,11 @@ public final class HologramData {
         return this.horseRankData;
     }
 
-    public void showFrom(Player player) {
+    public void showFrom(Player player, int vehicleId) {
         if (this.entityMetadataPacket == null) {
             this.entityMetadataPacket = new HologramPacketManager(this).createEntityMetadataPacket();
         }
-        new HologramPacketManager(this).show(player, this.entityMetadataPacket);
+        new HologramPacketManager(this).show(player, vehicleId, this.entityMetadataPacket);
     }
 
     public void hideFrom(Player player) {
@@ -84,5 +84,9 @@ public final class HologramData {
     public void updateText(Component text) {
         this.text = text;
         new HologramPacketManager(this).update();
+    }
+
+    public void updateLocation(Location location) {
+        this.location = location;
     }
 }

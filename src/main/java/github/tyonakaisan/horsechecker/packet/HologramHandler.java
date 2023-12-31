@@ -60,17 +60,14 @@ public final class HologramHandler {
                     });
                 }
             }
-        }.runTaskTimer(this.horseChecker, 0L, 1L);
+        }.runTaskTimer(this.horseChecker, 0, 2);
     }
 
     private void operateHologram(Player player, AbstractHorse horse) {
         var playerUuid = player.getUniqueId();
         this.targetedHorseMap.get(playerUuid).ifPresentOrElse(targetedHorse -> {
-            //同じ馬のとき
-            if (targetedHorse.equals(horse)) {
-                this.teleportHologram(horse);
-            } else {
-                //違うウマ
+            //違う馬のとき
+            if (!targetedHorse.equals(horse)) {
                 this.hideHologram(player, targetedHorse);
                 this.createHologram(player, horse);
             }
@@ -82,17 +79,18 @@ public final class HologramHandler {
         var playerUuid = player.getUniqueId();
         var horseUuid = horse.getUniqueId().toString();
         var horseStatsData = this.converter.convertHorseStats(horse);
+        var vehicleId = horse.getEntityId();
 
         //ホログラム作成
         this.hologramManager.createHologram(horseStatsData, this.converter.horseStatsMessage(horseStatsData));
-        this.hologramManager.showHologram(horseUuid, player);
+        this.hologramManager.showHologram(horseUuid, player, vehicleId);
         this.targetedHorseMap.put(playerUuid, Optional.of(horse));
     }
 
     public void hideHologram(Player player, AbstractHorse horse) {
         var playerUuid = player.getUniqueId();
-        var horseUuid = horse.getUniqueId().toString();
-        this.hologramManager.hideHologram(horseUuid, player);
+        var horseStatsData = this.converter.convertHorseStats(horse);
+        this.hologramManager.hideHologram(horseStatsData, player);
         this.targetedHorseMap.put(playerUuid, Optional.empty());
     }
 

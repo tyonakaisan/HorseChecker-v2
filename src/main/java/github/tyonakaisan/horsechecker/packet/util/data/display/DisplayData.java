@@ -1,8 +1,8 @@
 package github.tyonakaisan.horsechecker.packet.util.data.display;
 
-import com.comphenix.protocol.wrappers.Vector3F;
 import github.tyonakaisan.horsechecker.packet.util.data.EntityData;
 import org.bukkit.entity.Display;
+import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.joml.Quaterniond;
@@ -27,13 +27,13 @@ public abstract class DisplayData<B> extends EntityData<B> {
         return (B) this;
     }
 
-    public B translation(Vector3F vector3F) {
-        this.addVectorData(11, vector3F);
+    public B translation(Vector vector) {
+        this.addVectorData(11, vector);
         return (B) this;
     }
 
-    public B scale(Vector3F vector3F) {
-        this.addVectorData(12, vector3F);
+    public B scale(Vector vector) {
+        this.addVectorData(12, vector);
         return (B) this;
     }
 

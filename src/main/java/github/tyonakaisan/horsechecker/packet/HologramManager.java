@@ -43,19 +43,24 @@ public final class HologramManager {
         this.hologramMap.put(hologramId, hologramData);
     }
 
-    public void deleteHologram(String hologramId) {
+    public void deleteHologram(HorseStatsData horseStatsData) {
         this.server.forEachAudience(audience -> {
-            if (audience instanceof Player player) this.hideHologram(hologramId, player);
+            if (audience instanceof Player player) this.hideHologram(horseStatsData, player);
         });
-        this.hologramMap.remove(hologramId);
+        var horseUuid = horseStatsData.uuid().toString();
+        this.hologramMap.remove(horseUuid);
     }
 
-    public void hideHologram(String hologramId, Player player) {
-        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.hideFrom(player));
+    public void hideHologram(HorseStatsData statsData, Player player) {
+        var hologramId = statsData.uuid().toString();
+        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
+            hologramData.updateLocation(statsData.location());
+            hologramData.hideFrom(player);
+        });
     }
 
-    public void showHologram(String hologramId, Player player) {
-        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.showFrom(player));
+    public void showHologram(String hologramId, Player player, int vehicleId) {
+        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.showFrom(player, vehicleId));
     }
 
     public void teleportHologram(String hologramId, Location targetLocation) {
