@@ -44,7 +44,9 @@ public enum Messages {
     BROADCAST_SHARE_SUCCESS("<color:#59ffa4>共有メッセージを送りました!"),
 
     //DEBUG
+    MAX_SPAWN("<color:#ff4775>1回のコマンドで出せる最大数は<max>体までです!</color>"),
     SPAWN_HORSE("<color:#59ffa4>馬を召喚しました!</color> (sp:<color:#ffc414><speed></color>/jp:<color:#ffc414><jump></color>)"),
+    REMOVE_HORSE("<color:#ffc414><counts> </color><color:#59ffa4>体の馬が消されました...</color>")
     ;
 
     private final String message;
