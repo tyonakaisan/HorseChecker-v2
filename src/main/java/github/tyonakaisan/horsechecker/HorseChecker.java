@@ -28,7 +28,6 @@ public final class HorseChecker extends JavaPlugin {
             PlayerActionListener.class,
             HorseBreedListener.class,
             HorsePotionEffectListener.class
-            //PlayerTrackHorseListener.class
     );
     private static final Set<Class<? extends HorseCheckerCommand>> COMMAND_CLASSES = Set.of(
             ReloadCommand.class,
