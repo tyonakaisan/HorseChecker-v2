@@ -9,7 +9,6 @@ public enum Messages {
 
     //PREFIX
     PREFIX("<white>[<gradient:#ff2e4a:#ffd452>HorseChecker-v2</gradient>] </white>"),
-    SHORT_PREFIX("<white>[<gradient:#ff2e4a:#ffd452>HCv2</gradient>] </white>"),
 
     //COMMAND
     SHOW_STATS_ENABLED("<color:#59ffa4>ステータス表示中!</color>"),
@@ -63,9 +62,5 @@ public enum Messages {
 
     public String getMessageWithPrefix() {
         return PREFIX.get() + this.message;
-    }
-
-    public String getMessageWithShortPrefix() {
-        return SHORT_PREFIX.get() + this.message;
     }
 }

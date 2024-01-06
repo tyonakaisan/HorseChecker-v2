@@ -51,7 +51,7 @@ public final class HorseFinder {
                         .pitch(1.5f)
                         .build());
             }
-        }, () -> showPlayer.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BABY_HORSE_NOT_FOUND.getMessageWithShortPrefix())));
+        }, () -> showPlayer.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BABY_HORSE_NOT_FOUND.getMessageWithPrefix())));
     }
 
     private void showing(AbstractHorse horse, Player player) {
