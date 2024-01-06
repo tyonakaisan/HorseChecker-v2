@@ -47,7 +47,7 @@ dependencies {
     implementation("com.github.tyonakaisan", "GlowLib", "0.2.0")
 }
 
-version = "1.2.0-SNAPSHOT"
+version = "1.2.1-SNAPSHOT"
 
 paper {
     val mainPackage = "github.tyonakaisan.horsechecker"
@@ -87,7 +87,6 @@ tasks {
 
     runServer {
         minecraftVersion("1.20.2")
-        maxHeapSize = "4g"
 
         downloadPlugins {
             downloadPlugins.from(paperPlugins)
