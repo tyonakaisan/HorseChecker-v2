@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.horse.HorseStatsData;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -61,13 +60,6 @@ public final class HologramManager {
 
     public void showHologram(String hologramId, Player player, int vehicleId) {
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.showFrom(player, vehicleId));
-    }
-
-    public void teleportHologram(String hologramId, Location targetLocation) {
-        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            if (this.hologramMap.get(hologramId).location().equals(targetLocation)) return;
-            hologramData.teleportTo(targetLocation);
-        });
     }
 
     public void changeHologramText(String hologramId, Component text) {

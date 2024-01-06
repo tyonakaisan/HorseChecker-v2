@@ -41,22 +41,8 @@ public final class HologramPacketManager {
         ProtocolLibrary.getProtocolManager().sendServerPacket(player, this.createRemovePacket());
     }
 
-    public void teleport() {
-        ProtocolLibrary.getProtocolManager().broadcastServerPacket(this.createMovePacket());
-    }
-
     public void update() {
         ProtocolLibrary.getProtocolManager().broadcastServerPacket(this.createDataPacket());
-    }
-
-    private PacketContainer createSetPassengerPacket(int vehicleId) {
-        PacketType type = PacketType.Play.Server.MOUNT;
-        PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
-
-        packet.getIntegers().write(0, vehicleId);
-        packet.getIntegerArrays().write(0, new int[]{this.hologramData.entityId()});
-
-        return packet;
     }
 
     private PacketContainer createAddPacket() {
@@ -107,16 +93,12 @@ public final class HologramPacketManager {
         return packet;
     }
 
-    private PacketContainer createMovePacket() {
-        PacketType type = PacketType.Play.Server.ENTITY_TELEPORT;
+    private PacketContainer createSetPassengerPacket(int vehicleId) {
+        PacketType type = PacketType.Play.Server.MOUNT;
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
-        packet.getIntegers().write(0, this.hologramData.entityId());
-
-        StructureModifier<Double> doubleMod = packet.getDoubles();
-        doubleMod.write(0, this.hologramData.location().getX());
-        doubleMod.write(1, this.hologramData.location().getY() + 2.5);
-        doubleMod.write(2, this.hologramData.location().getZ());
+        packet.getIntegers().write(0, vehicleId);
+        packet.getIntegerArrays().write(0, new int[]{this.hologramData.entityId()});
 
         return packet;
     }

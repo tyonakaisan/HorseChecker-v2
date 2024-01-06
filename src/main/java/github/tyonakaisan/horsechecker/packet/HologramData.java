@@ -76,13 +76,9 @@ public final class HologramData {
         new HologramPacketManager(this).hide(player);
     }
 
-    public void teleportTo(Location targetLocation) {
-        this.location = targetLocation;
-        new HologramPacketManager(this).teleport();
-    }
-
     public void updateText(Component text) {
         this.text = text;
+        this.entityMetadataPacket = new HologramPacketManager(this).createEntityMetadataPacket();
         new HologramPacketManager(this).update();
     }
 

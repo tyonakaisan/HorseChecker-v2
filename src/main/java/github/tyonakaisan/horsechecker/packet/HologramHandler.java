@@ -6,7 +6,6 @@ import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -97,19 +96,9 @@ public final class HologramHandler {
     public void changeHologramText(AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
         var horseStatsData = this.converter.convertHorseStats(horse);
-        //jumpの値変わらないの許せない
-        //誤差あるけどmemo
-        //x = ポーションのレベル
-        //Jump = Math.pow(0.0308354 * x, 2) + 0.744631 * x)
+
         Component component = this.converter.horseStatsMessage(horseStatsData);
         this.hologramManager.changeHologramText(horseUUID, component);
-    }
-
-    public void teleportHologram(AbstractHorse horse) {
-        var horseUUID = horse.getUniqueId().toString();
-        Location horseLocation = horse.isAdult() ? horse.getLocation() : horse.getLocation().subtract(0, 1, 0);
-
-        this.hologramManager.teleportHologram(horseUUID, horseLocation);
     }
 
     private boolean playerStateCheck(Player player) {
