@@ -11,6 +11,7 @@ import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
+import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -29,18 +30,15 @@ public final class HologramPacketManager {
         return this.createDataPacket();
     }
 
-    public void show(Player player, PacketContainer entityMetadataPacket) {
+    public void show(Player player, int vehicleId, PacketContainer entityMetadataPacket) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.sendServerPacket(player, this.createAddPacket());
+        protocolManager.sendServerPacket(player, this.createSetPassengerPacket(vehicleId));
         protocolManager.sendServerPacket(player, entityMetadataPacket);
     }
 
     public void hide(Player player) {
         ProtocolLibrary.getProtocolManager().sendServerPacket(player, this.createRemovePacket());
-    }
-
-    public void teleport() {
-        ProtocolLibrary.getProtocolManager().broadcastServerPacket(this.createMovePacket());
     }
 
     public void update() {
@@ -67,7 +65,7 @@ public final class HologramPacketManager {
 
         // Write position
         doubleMod.write(0, this.hologramData.location().getX());
-        doubleMod.write(1, this.hologramData.location().getY() + 2.5);
+        doubleMod.write(1, this.hologramData.location().getY() + 1);
         doubleMod.write(2, this.hologramData.location().getZ());
 
         return packet;
@@ -80,6 +78,7 @@ public final class HologramPacketManager {
         packet.getIntegers().write(0, this.hologramData.entityId());
         packet.getDataValueCollectionModifier().write(0, PacketEntityDataBuilder.textDisplay()
                 .teleportInterpolationDuration(1)
+                .translation(new Vector(0, 1, 0))
                 .billboard(Display.Billboard.CENTER)
                 .brightness(15)
                 .viewRange(2f)
@@ -94,16 +93,12 @@ public final class HologramPacketManager {
         return packet;
     }
 
-    private PacketContainer createMovePacket() {
-        PacketType type = PacketType.Play.Server.ENTITY_TELEPORT;
+    private PacketContainer createSetPassengerPacket(int vehicleId) {
+        PacketType type = PacketType.Play.Server.MOUNT;
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
-        packet.getIntegers().write(0, this.hologramData.entityId());
-
-        StructureModifier<Double> doubleMod = packet.getDoubles();
-        doubleMod.write(0, this.hologramData.location().getX());
-        doubleMod.write(1, this.hologramData.location().getY() + 2.5);
-        doubleMod.write(2, this.hologramData.location().getZ());
+        packet.getIntegers().write(0, vehicleId);
+        packet.getIntegerArrays().write(0, new int[]{this.hologramData.entityId()});
 
         return packet;
     }

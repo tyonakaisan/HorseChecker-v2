@@ -29,7 +29,7 @@ dependencies {
     compileOnly("io.papermc.paper", "paper-api", "1.20.2-R0.1-SNAPSHOT")
 
     // ProtocolLib
-    compileOnly("com.comphenix.protocol", "ProtocolLib", "5.1.0")
+    compileOnly("com.comphenix.protocol", "ProtocolLib", "5.2.0-SNAPSHOT")
 
     // Command
     paperLibrary("cloud.commandframework", "cloud-paper", "1.8.4")
@@ -47,7 +47,7 @@ dependencies {
     implementation("com.github.tyonakaisan", "GlowLib", "0.2.0")
 }
 
-version = "1.2.0-SNAPSHOT"
+version = "1.2.1-SNAPSHOT"
 
 paper {
     val mainPackage = "github.tyonakaisan.horsechecker"
@@ -87,7 +87,6 @@ tasks {
 
     runServer {
         minecraftVersion("1.20.2")
-        maxHeapSize = "4g"
 
         downloadPlugins {
             downloadPlugins.from(paperPlugins)

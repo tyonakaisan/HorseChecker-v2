@@ -4,8 +4,10 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.google.inject.Singleton;
+import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ public abstract class WrappedDataManager {
     private final WrappedDataWatcher.Serializer intSerializer = WrappedDataWatcher.Registry.get(Integer.class);
     private final WrappedDataWatcher.Serializer floatSerializer = WrappedDataWatcher.Registry.get(Float.class);
     private final WrappedDataWatcher.Serializer booleanSerializer = WrappedDataWatcher.Registry.get(Boolean.class);
-    private final WrappedDataWatcher.Serializer vectorSerializer = WrappedDataWatcher.Registry.getVectorSerializer();
+    private final WrappedDataWatcher.Serializer vectorSerializer = WrappedDataWatcher.Registry.get(Vector3f.class);
     private final WrappedDataWatcher.Serializer quaternionSerializer = WrappedDataWatcher.Registry.getVectorSerializer();
     private final WrappedDataWatcher.Serializer poseSerializer = WrappedDataWatcher.Registry.get(EnumWrappers.getEntityPoseClass());
     private final WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer();
@@ -41,8 +43,11 @@ public abstract class WrappedDataManager {
         this.dataValues.add(new WrappedDataValue(index, this.booleanSerializer, object));
     }
 
-    protected void addVectorData(int index, Object object) {
-        this.dataValues.add(new WrappedDataValue(index, this.vectorSerializer, object));
+    protected void addVectorData(int index, Vector vector) {
+        WrappedDataValue value = new WrappedDataValue(index, this.vectorSerializer, null);
+        value.setValue(vector.toVector3f());
+
+        this.dataValues.add(value);
     }
 
     protected void addQuaternionData(int index, Object object) {

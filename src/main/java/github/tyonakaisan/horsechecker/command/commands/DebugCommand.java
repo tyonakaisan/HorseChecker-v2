@@ -12,6 +12,7 @@ import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -62,15 +63,29 @@ public final class DebugCommand implements HorseCheckerCommand {
                 .senderType(CommandSender.class)
                 .handler(this::spawnRandomHorse)
         );
+
+        this.commandManager.command(debug.literal("removeAllDebugHorse")
+                .permission("horsechecker.command.removealldebughorse")
+                .senderType(CommandSender.class)
+                .handler(this::removeAllDebugHorse)
+        );
     }
 
     private void spawnRandomHorse(final @NonNull CommandContext<CommandSender> context) {
         final var sender = (Player) context.getSender();
         final int[] time = {(int) context.getOptional("time").orElse(1)};
+        final int max = 100;
         final var horseType = (HorseType) context.getOptional("horseType").orElse(HorseType.HORSE);
         final var tame = (boolean) context.getOptional("tame").orElse(false);
         final double addSpeed = (double) context.getOptional("addSpeed").orElse(0.0);
         final double addJump = (double) context.getOptional("addJump").orElse(0.0);
+
+        if (time[0] > 100) {
+            sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.MAX_SPAWN.getMessageWithPrefix(),
+                    Formatter.number("max", max)
+            ));
+            return;
+        }
 
         new BukkitRunnable() {
             @Override
@@ -96,6 +111,25 @@ public final class DebugCommand implements HorseCheckerCommand {
                 ));
             }
         }.runTaskTimer(this.horseChecker, 0, 1);
+    }
+
+    private void removeAllDebugHorse(final @NonNull CommandContext<CommandSender> context) {
+        final var sender = (Player) context.getSender();
+        final int[] counts = {0};
+
+        sender.getServer().getWorlds().forEach(world ->
+                world.getEntities().forEach(entity -> {
+                    if (entity instanceof AbstractHorse horse
+                            && horse.getPersistentDataContainer().has(new NamespacedKey(horseChecker, "debug"), PersistentDataType.BOOLEAN)) {
+                        horse.remove();
+                        counts[0] ++;
+                    }
+                })
+        );
+
+        sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.REMOVE_HORSE.getMessageWithPrefix(),
+                Formatter.number("counts", counts[0])
+                ));
     }
 
     enum HorseType {

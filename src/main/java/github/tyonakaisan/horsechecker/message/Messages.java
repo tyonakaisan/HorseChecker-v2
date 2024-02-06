@@ -9,7 +9,6 @@ public enum Messages {
 
     //PREFIX
     PREFIX("<white>[<gradient:#ff2e4a:#ffd452>HorseChecker-v2</gradient>] </white>"),
-    SHORT_PREFIX("<white>[<gradient:#ff2e4a:#ffd452>HCv2</gradient>] </white>"),
 
     //COMMAND
     SHOW_STATS_ENABLED("<color:#59ffa4>ステータス表示中!</color>"),
@@ -44,7 +43,9 @@ public enum Messages {
     BROADCAST_SHARE_SUCCESS("<color:#59ffa4>共有メッセージを送りました!"),
 
     //DEBUG
+    MAX_SPAWN("<color:#ff4775>1回のコマンドで出せる最大数は<max>体までです!</color>"),
     SPAWN_HORSE("<color:#59ffa4>馬を召喚しました!</color> (sp:<color:#ffc414><speed></color>/jp:<color:#ffc414><jump></color>)"),
+    REMOVE_HORSE("<color:#ffc414><counts> </color><color:#59ffa4>体の馬が消されました...</color>")
     ;
 
     private final String message;
@@ -61,9 +62,5 @@ public enum Messages {
 
     public String getMessageWithPrefix() {
         return PREFIX.get() + this.message;
-    }
-
-    public String getMessageWithShortPrefix() {
-        return SHORT_PREFIX.get() + this.message;
     }
 }

@@ -2,8 +2,7 @@ package github.tyonakaisan.horsechecker.horse;
 
 import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.manager.HorseManager;
-import github.tyonakaisan.horsechecker.manager.ShareManager;
+import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -14,8 +13,10 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Server;
 import org.bukkit.entity.AbstractHorse;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.util.HashMap;
@@ -26,20 +27,17 @@ import java.util.concurrent.ThreadLocalRandom;
 @DefaultQualifier(NonNull.class)
 public final class Share {
 
+    private final ConfigFactory configFactory;
     private final Server server;
-    private final HorseManager horseManager;
-    private final ShareManager shareManager;
     private final Converter converter;
 
     @Inject
     public Share(
-            final HorseManager horseManager,
-            final ShareManager shareManager,
+            final ConfigFactory configFactory,
             final Converter converter,
             final Server server
     ) {
-        this.horseManager = horseManager;
-        this.shareManager = shareManager;
+        this.configFactory = configFactory;
         this.converter = converter;
         this.server = server;
     }
@@ -47,20 +45,21 @@ public final class Share {
     private final HashMap<UUID, Long> commandInterval = new HashMap<>();
 
     private boolean isShareable(Player player) {
+        var targetRange = this.configFactory.primaryConfig().horse().targetRange();
         //ターゲットしてるエンティティがnullの場合
-        if (player.getTargetEntity(this.horseManager.targetRange(), false) == null) {
+        if (player.getTargetEntity(targetRange, false) == null) {
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.TARGETED_ENTITY_IS_NULL.getMessageWithPrefix()));
             return false;
         }
 
         //shareが使用可能か
-        if (!this.shareManager.isAllowedHorseShare()) {
+        if (!this.configFactory.primaryConfig().share().allowedHorseShare()) {
             player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.NOT_ALLOWED_SHARE.getMessageWithPrefix()));
             return false;
         }
 
         //ターゲットしてる馬チェック
-        if (player.getTargetEntity(this.horseManager.targetRange(), false) instanceof AbstractHorse horse && this.horseManager.isAllowedHorse(horse.getType())) {
+        if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse) {
             //オーナーチェック
             if (ownerCheck(horse, player)) {
                 return true;
@@ -76,7 +75,7 @@ public final class Share {
     }
 
     private boolean checkInterval(Player player) {
-        int intervalTime = this.shareManager.shareCommandIntervalTime();
+        int intervalTime = this.configFactory.primaryConfig().share().shareCommandIntervalTime();
         var uuid = player.getUniqueId();
 
         if (this.commandInterval.containsKey(uuid)) {
@@ -110,36 +109,41 @@ public final class Share {
             return;
         }
 
-        AbstractHorse horse = (AbstractHorse) Objects.requireNonNull(sender.getTargetEntity(this.horseManager.targetRange(), false));
-        var horseStatsData = this.converter.convertHorseStats(horse);
+        @Nullable Entity targetEntity = sender.getTargetEntity(this.configFactory.primaryConfig().horse().targetRange(), false);
 
-        Component broadcastMessage = MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),
-                Placeholder.parsed("prefix", Messages.PREFIX.get()),
-                Placeholder.styling("myhover", HoverEvent.showText(this.converter.horseStatsMessage(horseStatsData))),
-                Placeholder.parsed("random_message", this.shareManager.getHorseNamePrefix().get(ThreadLocalRandom.current().nextInt(this.shareManager.getHorseNamePrefix().size()))),
-                Placeholder.parsed("horse_name", horseStatsData.horseName()),
-                TagResolver.resolver("rankcolor", Tag.styling(horseStatsData.rankData().textColor())),
-                Placeholder.parsed("player", sender.getName()));
+        if (targetEntity instanceof AbstractHorse horse) {
+            var horseStatsData = this.converter.convertHorseStats(horse);
+            var horseNamePrefix = this.configFactory.primaryConfig().share().horseNamePrefix();
 
-        //もしものため
-        if (targets.getPlayers().isEmpty()) {
-            this.server.forEachAudience(receiver -> {
-                if (receiver instanceof Player) {
-                    receiver.sendMessage(broadcastMessage);
-                    sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
-                }
-            });
-        } else {
-            targets.getPlayers().forEach(target -> target.sendMessage(broadcastMessage));
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
+            Component broadcastMessage = MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),
+                    Placeholder.parsed("prefix", Messages.PREFIX.get()),
+                    Placeholder.styling("myhover", HoverEvent.showText(this.converter.horseStatsMessage(horseStatsData))),
+                    Placeholder.parsed("random_message", horseNamePrefix.get(ThreadLocalRandom.current().nextInt(horseNamePrefix.size()))),
+                    Placeholder.parsed("horse_name", horseStatsData.horseName()),
+                    TagResolver.resolver("rankcolor", Tag.styling(horseStatsData.rankData().textColor())),
+                    Placeholder.parsed("player", sender.getName()));
+
+            //もしものため
+            if (targets.getPlayers().isEmpty()) {
+                this.server.forEachAudience(receiver -> {
+                    if (receiver instanceof Player) {
+                        receiver.sendMessage(broadcastMessage);
+                        sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
+                    }
+                });
+            } else {
+                targets.getPlayers().forEach(target -> target.sendMessage(broadcastMessage));
+                sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
+            }
         }
     }
 
     private boolean ownerCheck(AbstractHorse horse, Player player) {
+        if (horse.getOwner() == null) {
+            return true;
+        }
 
-        if (horse.getOwner() == null) return true;
-
-        if (this.shareManager.ownerOnly()) {
+        if (this.configFactory.primaryConfig().share().ownerOnly()) {
             return Objects.requireNonNull(horse.getOwnerUniqueId()).equals(player.getUniqueId());
         } else {
             return true;

@@ -2,11 +2,10 @@ package github.tyonakaisan.horsechecker.packet;
 
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
+import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.Converter;
-import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,9 +21,9 @@ import java.util.UUID;
 public final class HologramHandler {
 
     private final HorseChecker horseChecker;
+    private final ConfigFactory configFactory;
     private final HologramManager hologramManager;
     private final StateManager stateManager;
-    private final HorseManager horseManager;
     private final Converter converter;
 
     private final Map<UUID, Optional<AbstractHorse>> targetedHorseMap = new HashMap<>();
@@ -32,22 +31,22 @@ public final class HologramHandler {
     @Inject
     public HologramHandler(
             final HorseChecker horseChecker,
+            final ConfigFactory configFactory,
             final HologramManager hologramManager,
             final StateManager stateManager,
-            final HorseManager horseManager,
             final Converter converter
     ) {
         this.horseChecker = horseChecker;
+        this.configFactory = configFactory;
         this.hologramManager = hologramManager;
         this.stateManager = stateManager;
-        this.horseManager = horseManager;
         this.converter = converter;
     }
 
     public void show(Player player) {
         var playerUuid = player.getUniqueId();
         this.targetedHorseMap.computeIfAbsent(playerUuid, k -> Optional.empty());
-        var targetRange = this.horseManager.targetRange();
+        var targetRange = this.configFactory.primaryConfig().horse().targetRange();
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -60,17 +59,14 @@ public final class HologramHandler {
                     });
                 }
             }
-        }.runTaskTimer(this.horseChecker, 0L, 1L);
+        }.runTaskTimer(this.horseChecker, 0, 2);
     }
 
     private void operateHologram(Player player, AbstractHorse horse) {
         var playerUuid = player.getUniqueId();
         this.targetedHorseMap.get(playerUuid).ifPresentOrElse(targetedHorse -> {
-            //同じ馬のとき
-            if (targetedHorse.equals(horse)) {
-                this.teleportHologram(horse);
-            } else {
-                //違うウマ
+            //違う馬のとき
+            if (!targetedHorse.equals(horse)) {
                 this.hideHologram(player, targetedHorse);
                 this.createHologram(player, horse);
             }
@@ -82,36 +78,27 @@ public final class HologramHandler {
         var playerUuid = player.getUniqueId();
         var horseUuid = horse.getUniqueId().toString();
         var horseStatsData = this.converter.convertHorseStats(horse);
+        var vehicleId = horse.getEntityId();
 
         //ホログラム作成
         this.hologramManager.createHologram(horseStatsData, this.converter.horseStatsMessage(horseStatsData));
-        this.hologramManager.showHologram(horseUuid, player);
+        this.hologramManager.showHologram(horseUuid, player, vehicleId);
         this.targetedHorseMap.put(playerUuid, Optional.of(horse));
     }
 
     public void hideHologram(Player player, AbstractHorse horse) {
         var playerUuid = player.getUniqueId();
-        var horseUuid = horse.getUniqueId().toString();
-        this.hologramManager.hideHologram(horseUuid, player);
+        var horseStatsData = this.converter.convertHorseStats(horse);
+        this.hologramManager.hideHologram(horseStatsData, player);
         this.targetedHorseMap.put(playerUuid, Optional.empty());
     }
 
     public void changeHologramText(AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
         var horseStatsData = this.converter.convertHorseStats(horse);
-        //jumpの値変わらないの許せない
-        //誤差あるけどmemo
-        //x = ポーションのレベル
-        //Jump = Math.pow(0.0308354 * x, 2) + 0.744631 * x)
+
         Component component = this.converter.horseStatsMessage(horseStatsData);
         this.hologramManager.changeHologramText(horseUUID, component);
-    }
-
-    public void teleportHologram(AbstractHorse horse) {
-        var horseUUID = horse.getUniqueId().toString();
-        Location horseLocation = horse.isAdult() ? horse.getLocation() : horse.getLocation().subtract(0, 1, 0);
-
-        this.hologramManager.teleportHologram(horseUUID, horseLocation);
     }
 
     private boolean playerStateCheck(Player player) {
