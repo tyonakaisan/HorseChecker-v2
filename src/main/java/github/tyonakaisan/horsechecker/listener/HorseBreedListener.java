@@ -1,7 +1,6 @@
 package github.tyonakaisan.horsechecker.listener;
 
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.horse.HorseFinder;
 import github.tyonakaisan.horsechecker.manager.StateManager;
@@ -29,19 +28,16 @@ import java.util.Objects;
 @DefaultQualifier(NonNull.class)
 public final class HorseBreedListener implements Listener {
 
-    private final ConfigFactory configFactory;
     private final StateManager stateManager;
     private final HorseFinder horseFinder;
     private final Converter converter;
 
     @Inject
     public HorseBreedListener(
-            final ConfigFactory configFactory,
             final StateManager stateManager,
             final HorseFinder horseFinder,
             final Converter converter
     ) {
-        this.configFactory = configFactory;
         this.stateManager = stateManager;
         this.horseFinder = horseFinder;
         this.converter = converter;
@@ -56,35 +52,31 @@ public final class HorseBreedListener implements Listener {
         //繫殖させるためのアイテムか
         if (!this.stateManager.state(player, "breed") || !this.isBreedItem(itemStack)) return;
 
-        if (this.configFactory.primaryConfig().horse().allowedMobs().contains(event.getRightClicked().getType())) {
-            AbstractHorse horse = (AbstractHorse) event.getRightClicked();
-            int maxHealth = (int) Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
-            int health = (int) horse.getHealth();
-            int age = horse.getAge();
-            int loveMode = horse.getLoveModeTicks();
-            Component component;
+        AbstractHorse horse = (AbstractHorse) event.getRightClicked();
+        int maxHealth = (int) Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+        int health = (int) horse.getHealth();
+        int age = horse.getAge();
+        int loveMode = horse.getLoveModeTicks();
+        Component component;
 
-            //繫殖クールタイム中&体力がMAXであればイベントキャンセル
-            if (age > 0 && health == maxHealth) {
-                component = MiniMessage.miniMessage().deserialize(Messages.BREEDING_COOL_TIME.get(),
-                        Formatter.number("cooltime", this.converter.getBreedingCoolTime(horse)));
-                player.sendActionBar(component);
-                event.setCancelled(true);
-                //繫殖モード中(ハートが出てる時)&体力がMAXであればイベントキャンセル
-            } else if (loveMode > 0 && health == maxHealth) {
-                component = MiniMessage.miniMessage().deserialize(Messages.LOVE_MODE_TIME.get(),
-                        Formatter.number("cooltime", this.converter.getLoveModeTime(horse)));
-                player.sendActionBar(component);
-                event.setCancelled(true);
-            }
+        //繫殖クールタイム中&体力がMAXであればイベントキャンセル
+        if (age > 0 && health == maxHealth) {
+            component = MiniMessage.miniMessage().deserialize(Messages.BREEDING_COOL_TIME.get(),
+                    Formatter.number("cooltime", this.converter.getBreedingCoolTime(horse)));
+            player.sendActionBar(component);
+            event.setCancelled(true);
+            //繫殖モード中(ハートが出てる時)&体力がMAXであればイベントキャンセル
+        } else if (loveMode > 0 && health == maxHealth) {
+            component = MiniMessage.miniMessage().deserialize(Messages.LOVE_MODE_TIME.get(),
+                    Formatter.number("cooltime", this.converter.getLoveModeTime(horse)));
+            player.sendActionBar(component);
+            event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBreeding(EntityBreedEvent event) {
-        if (this.configFactory.primaryConfig().horse().allowedMobs().contains(event.getEntity().getType())
-                && event.getBreeder() instanceof Player player) {
-
+        if (event.getBreeder() instanceof Player player) {
             if (!this.stateManager.state(player, "breed_notification")) return;
 
             AbstractHorse childrenHorse = (AbstractHorse) event.getEntity();

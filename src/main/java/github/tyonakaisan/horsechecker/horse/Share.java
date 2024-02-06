@@ -59,8 +59,7 @@ public final class Share {
         }
 
         //ターゲットしてる馬チェック
-        if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse
-                && this.configFactory.primaryConfig().horse().allowedMobs().contains(horse.getType())) {
+        if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse) {
             //オーナーチェック
             if (ownerCheck(horse, player)) {
                 return true;
