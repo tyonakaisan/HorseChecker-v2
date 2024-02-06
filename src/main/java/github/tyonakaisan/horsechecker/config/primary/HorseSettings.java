@@ -1,5 +1,6 @@
 package github.tyonakaisan.horsechecker.config.primary;
 
+import org.bukkit.entity.EntityType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -29,8 +30,11 @@ public final class HorseSettings {
             """)
     private int targetRange = 20;
 
-    public List<String> allowedMobs() {
-        return this.allowedMobs;
+    public List<EntityType> allowedMobs() {
+        return this.allowedMobs.stream()
+                .map(String::toUpperCase)
+                .map(EntityType::valueOf)
+                .toList();
     }
 
     public long glowingTime() {

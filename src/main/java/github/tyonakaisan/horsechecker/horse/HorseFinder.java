@@ -3,7 +3,7 @@ package github.tyonakaisan.horsechecker.horse;
 import com.google.inject.Inject;
 import com.tyonakaisan.glowlib.glow.Glow;
 import github.tyonakaisan.horsechecker.HorseChecker;
-import github.tyonakaisan.horsechecker.manager.HorseManager;
+import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -22,18 +22,18 @@ import java.util.UUID;
 public final class HorseFinder {
 
     private final HorseChecker horseChecker;
+    private final ConfigFactory configFactory;
     private final Converter converter;
-    private final HorseManager horseManager;
 
     @Inject
     public HorseFinder(
             final HorseChecker horseChecker,
-            final Converter converter,
-            final HorseManager horseManager
+            final ConfigFactory configFactory,
+            final Converter converter
     ) {
         this.horseChecker = horseChecker;
+        this.configFactory = configFactory;
         this.converter = converter;
-        this.horseManager = horseManager;
     }
 
     public void fromUuid(UUID uuid, Player showPlayer) {
@@ -60,6 +60,6 @@ public final class HorseFinder {
         glow.addEntities(horse);
         glow.show(player);
 
-        Bukkit.getScheduler().runTaskLater(this.horseChecker, () -> glow.hide(player), this.horseManager.glowingTime());
+        Bukkit.getScheduler().runTaskLater(this.horseChecker, () -> glow.hide(player), this.configFactory.primaryConfig().horse().glowingTime());
     }
 }

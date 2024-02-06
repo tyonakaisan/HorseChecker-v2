@@ -2,8 +2,8 @@ package github.tyonakaisan.horsechecker.packet;
 
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
+import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.Converter;
-import github.tyonakaisan.horsechecker.manager.HorseManager;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.AbstractHorse;
@@ -21,9 +21,9 @@ import java.util.UUID;
 public final class HologramHandler {
 
     private final HorseChecker horseChecker;
+    private final ConfigFactory configFactory;
     private final HologramManager hologramManager;
     private final StateManager stateManager;
-    private final HorseManager horseManager;
     private final Converter converter;
 
     private final Map<UUID, Optional<AbstractHorse>> targetedHorseMap = new HashMap<>();
@@ -31,22 +31,22 @@ public final class HologramHandler {
     @Inject
     public HologramHandler(
             final HorseChecker horseChecker,
+            final ConfigFactory configFactory,
             final HologramManager hologramManager,
             final StateManager stateManager,
-            final HorseManager horseManager,
             final Converter converter
     ) {
         this.horseChecker = horseChecker;
+        this.configFactory = configFactory;
         this.hologramManager = hologramManager;
         this.stateManager = stateManager;
-        this.horseManager = horseManager;
         this.converter = converter;
     }
 
     public void show(Player player) {
         var playerUuid = player.getUniqueId();
         this.targetedHorseMap.computeIfAbsent(playerUuid, k -> Optional.empty());
-        var targetRange = this.horseManager.targetRange();
+        var targetRange = this.configFactory.primaryConfig().horse().targetRange();
         new BukkitRunnable() {
             @Override
             public void run() {
