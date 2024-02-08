@@ -2,7 +2,7 @@ package github.tyonakaisan.horsechecker.packet;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import github.tyonakaisan.horsechecker.horse.HorseStatsData;
+import github.tyonakaisan.horsechecker.horse.HorseStats;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -13,6 +13,7 @@ import java.util.*;
 
 @Singleton
 @DefaultQualifier(NonNull.class)
+@SuppressWarnings("unused")
 public final class HologramManager {
 
     private final Map<String, HologramData> hologramMap = new HashMap<>();
@@ -34,26 +35,26 @@ public final class HologramManager {
         return this.hologramMap.get(hologramId);
     }
 
-    public void createHologram(HorseStatsData statsData, Component text) {
-        var hologramId = statsData.uuid().toString();
+    public void createHologram(HorseStats horseStats, Component text) {
+        var hologramId = horseStats.horse().getUniqueId().toString();
         if (this.hologramMap.containsKey(hologramId)) return;
-        var hologramData = new HologramData(hologramId, text, statsData.location(), statsData.rankData());
+        var hologramData = new HologramData(hologramId, text, horseStats.location(), horseStats.rankData());
 
         this.hologramMap.put(hologramId, hologramData);
     }
 
-    public void deleteHologram(HorseStatsData horseStatsData) {
+    public void deleteHologram(HorseStats horseStats) {
         this.server.forEachAudience(audience -> {
-            if (audience instanceof Player player) this.hideHologram(horseStatsData, player);
+            if (audience instanceof Player player) this.hideHologram(horseStats, player);
         });
-        var horseUuid = horseStatsData.uuid().toString();
+        var horseUuid = horseStats.horse().getUniqueId().toString();
         this.hologramMap.remove(horseUuid);
     }
 
-    public void hideHologram(HorseStatsData statsData, Player player) {
-        var hologramId = statsData.uuid().toString();
+    public void hideHologram(HorseStats horseStats, Player player) {
+        var hologramId = horseStats.horse().getUniqueId().toString();
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            hologramData.updateLocation(statsData.location());
+            hologramData.updateLocation(horseStats.location());
             hologramData.hideFrom(player);
         });
     }

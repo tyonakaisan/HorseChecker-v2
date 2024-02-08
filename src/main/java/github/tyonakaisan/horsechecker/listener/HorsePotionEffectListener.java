@@ -3,11 +3,11 @@ package github.tyonakaisan.horsechecker.listener;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.packet.HologramHandler;
+import org.bukkit.Server;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -15,26 +15,28 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 public final class HorsePotionEffectListener implements Listener {
 
     private final HorseChecker horseChecker;
+    private final Server server;
     private final HologramHandler hologramHandler;
 
     @Inject
     public HorsePotionEffectListener(
             final HorseChecker horseChecker,
+            final Server server,
             final HologramHandler hologramHandler
     ) {
         this.horseChecker = horseChecker;
+        this.server = server;
         this.hologramHandler = hologramHandler;
     }
 
     @EventHandler
     public void onPotionEffect(EntityPotionEffectEvent event) {
         if (event.getEntity() instanceof AbstractHorse horse) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    hologramHandler.changeHologramText(horse);
-                }
-            }.runTaskLater(this.horseChecker, 1);
+            this.server.getScheduler()
+                    .runTaskLater(
+                            this.horseChecker,
+                            () -> this.hologramHandler.changeHologramText(horse),
+                            1L);
         }
     }
 }

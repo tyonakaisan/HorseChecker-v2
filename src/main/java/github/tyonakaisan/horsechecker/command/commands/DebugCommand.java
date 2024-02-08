@@ -11,9 +11,9 @@ import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
@@ -30,20 +30,24 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 @DefaultQualifier(NonNull.class)
+@SuppressWarnings("unused")
 public final class DebugCommand implements HorseCheckerCommand {
 
     private final HorseChecker horseChecker;
     private final ConfigFactory configFactory;
+    private final Messages messages;
     private final CommandManager<CommandSender> commandManager;
 
     @Inject
     public DebugCommand(
             HorseChecker horseChecker,
             ConfigFactory configFactory,
+            Messages messages,
             CommandManager<CommandSender> commandManager
     ) {
         this.horseChecker = horseChecker;
         this.configFactory = configFactory;
+        this.messages = messages;
         this.commandManager = commandManager;
     }
 
@@ -81,9 +85,14 @@ public final class DebugCommand implements HorseCheckerCommand {
         final double addJump = (double) context.getOptional("addJump").orElse(0.0);
 
         if (time[0] > 100) {
-            sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.MAX_SPAWN.getMessageWithPrefix(),
-                    Formatter.number("max", max)
-            ));
+            sender.sendMessage(
+                    this.messages.translatable(
+                            Messages.Style.ERROR,
+                            sender,
+                            "command.debug.error.maximum_number_on_command",
+                            TagResolver.builder()
+                                    .tag("max", Tag.selfClosingInserting(Component.text(max)))
+                                    .build()));
             return;
         }
 
@@ -104,11 +113,16 @@ public final class DebugCommand implements HorseCheckerCommand {
                 horse.setTamed(tame);
                 horse.setOwner(tame ? sender : null);
                 horse.getPersistentDataContainer().set(new NamespacedKey(horseChecker, "debug"), PersistentDataType.BOOLEAN, true);
-                sender.sendMessage(MiniMessage.miniMessage().deserialize(
-                        Messages.SPAWN_HORSE.getMessageWithPrefix(),
-                        Placeholder.parsed("speed", df.format(speed)),
-                        Placeholder.parsed("jump", df.format(jump))
-                ));
+                sender.sendMessage(
+                        messages.translatable(
+                                Messages.Style.SUCCESS,
+                                sender,
+                                "command.debug.success.spawn_horse",
+                                TagResolver.builder()
+                                        .tag("speed", Tag.selfClosingInserting(Component.text(df.format(speed))))
+                                        .tag("jump", Tag.selfClosingInserting(Component.text(df.format(jump))))
+                                        .build())
+                );
             }
         }.runTaskTimer(this.horseChecker, 0, 1);
     }
@@ -127,9 +141,14 @@ public final class DebugCommand implements HorseCheckerCommand {
                 })
         );
 
-        sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.REMOVE_HORSE.getMessageWithPrefix(),
-                Formatter.number("counts", counts[0])
-                ));
+        sender.sendMessage(
+                this.messages.translatable(
+                        Messages.Style.SUCCESS,
+                        sender,
+                        "command.debug.success.remove_horse",
+                        TagResolver.builder()
+                                .tag("counts", Tag.selfClosingInserting(Component.text(counts[0])))
+                                .build()));
     }
 
     enum HorseType {

@@ -16,16 +16,19 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 public final class ToggleCommand implements HorseCheckerCommand {
 
     private final CommandManager<CommandSender> commandManager;
+    private final Messages messages;
     private final StateManager stateManager;
     private final HologramHandler hologramHandler;
 
     @Inject
     public ToggleCommand(
             CommandManager<CommandSender> commandManager,
+            Messages messages,
             StateManager stateManager,
             HologramHandler hologramHandler
     ) {
         this.commandManager = commandManager;
+        this.messages = messages;
         this.stateManager = stateManager;
         this.hologramHandler = hologramHandler;
     }
@@ -52,10 +55,10 @@ public final class ToggleCommand implements HorseCheckerCommand {
         final var sender = (Player) context.getSender();
 
         if (this.stateManager.toggleState(sender, "stats")) {
-            sender.sendRichMessage(Messages.SHOW_STATS_ENABLED.getMessageWithPrefix());
+            sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.toggle.success.show_stats_enable"));
             this.hologramHandler.show(sender);
         } else {
-            sender.sendRichMessage(Messages.SHOW_STATS_DISABLED.getMessageWithPrefix());
+            sender.sendMessage(this.messages.translatable(Messages.Style.ERROR, sender, "command.toggle.success.show_stats_disable"));
         }
     }
 
@@ -63,9 +66,9 @@ public final class ToggleCommand implements HorseCheckerCommand {
         final var sender = (Player) context.getSender();
 
         if (this.stateManager.toggleState(sender, "breed")) {
-            sender.sendRichMessage(Messages.CANCEL_BREEDING_ENABLED.getMessageWithPrefix());
+            sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.toggle.success.cancel_breed_enable"));
         } else {
-            sender.sendRichMessage(Messages.CANCEL_BREEDING_DISABLED.getMessageWithPrefix());
+            sender.sendMessage(this.messages.translatable(Messages.Style.ERROR, sender, "command.toggle.success.cancel_breed_disable"));
         }
     }
 }

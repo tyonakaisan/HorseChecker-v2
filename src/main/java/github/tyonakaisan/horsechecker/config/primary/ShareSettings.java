@@ -9,6 +9,7 @@ import java.util.List;
 
 @ConfigSerializable
 @DefaultQualifier(NonNull.class)
+@SuppressWarnings({"FieldMayBeFinal","FieldCanBeLocal"})
 public final class ShareSettings {
 
     @Comment("""

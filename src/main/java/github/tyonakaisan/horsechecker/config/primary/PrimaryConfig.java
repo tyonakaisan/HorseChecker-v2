@@ -6,6 +6,7 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
 @DefaultQualifier(NonNull.class)
+@SuppressWarnings("FieldMayBeFinal")
 public final class PrimaryConfig {
 
     private HorseSettings horse = new HorseSettings();

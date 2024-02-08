@@ -13,14 +13,17 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 public final class ReloadCommand implements HorseCheckerCommand {
 
     private final ConfigFactory configFactory;
+    private final Messages messages;
     private final CommandManager<CommandSender> commandManager;
 
     @Inject
     public ReloadCommand(
             ConfigFactory configFactory,
+            Messages messages,
             CommandManager<CommandSender> commandManager
     ) {
         this.configFactory = configFactory;
+        this.messages = messages;
         this.commandManager = commandManager;
     }
 
@@ -30,9 +33,11 @@ public final class ReloadCommand implements HorseCheckerCommand {
                 .literal("reload")
                 .permission("horsechecker.command.reload")
                 .senderType(CommandSender.class)
-                .handler(context -> {
+                .handler(handler -> {
+                    var sender = handler.getSender();
                     this.configFactory.reloadPrimaryConfig();
-                    context.getSender().sendRichMessage(Messages.CONFIG_RELOAD.getMessageWithPrefix());
+                    this.messages.reloadMessage();
+                    sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.reload.success"));
                 })
                 .build();
 

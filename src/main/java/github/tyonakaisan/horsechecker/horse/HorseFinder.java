@@ -7,7 +7,6 @@ import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
@@ -23,16 +22,19 @@ public final class HorseFinder {
 
     private final HorseChecker horseChecker;
     private final ConfigFactory configFactory;
+    private final Messages messages;
     private final Converter converter;
 
     @Inject
     public HorseFinder(
             final HorseChecker horseChecker,
             final ConfigFactory configFactory,
+            final Messages messages,
             final Converter converter
     ) {
         this.horseChecker = horseChecker;
         this.configFactory = configFactory;
+        this.messages = messages;
         this.converter = converter;
     }
 
@@ -51,7 +53,7 @@ public final class HorseFinder {
                         .pitch(1.5f)
                         .build());
             }
-        }, () -> showPlayer.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BABY_HORSE_NOT_FOUND.getMessageWithPrefix())));
+        }, () -> showPlayer.sendMessage(this.messages.translatable(Messages.Style.ERROR, showPlayer, "breeding.notification.baby_horse_not_found")));
     }
 
     private void showing(AbstractHorse horse, Player player) {

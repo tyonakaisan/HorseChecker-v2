@@ -1,13 +1,10 @@
 package github.tyonakaisan.horsechecker.horse;
 
-import github.tyonakaisan.horsechecker.message.Messages;
+import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -18,86 +15,60 @@ import java.util.Objects;
 @DefaultQualifier(NonNull.class)
 public final class Converter {
 
-    public HorseStatsData convertHorseStats(AbstractHorse horse) {
+    public HorseStats convertHorseStats(AbstractHorse horse) {
         var rank = HorseRank.calcEvaluateRankData(
                 Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
                 Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue());
 
-        Location horseLocation = horse.isAdult() ? horse.getLocation() : horse.getLocation().subtract(0, 1, 0);
-
-        return new HorseStatsData(
-                this.getSpeed(horse),
-                this.getHorseJump(horse),
-                this.getMaxHealth(horse),
-                this.getOwnerName(horse),
-                this.getHorseName(horse),
-                horse.getUniqueId(),
-                horseLocation,
+        return new HorseStats(
+                horse,
                 rank);
     }
 
-    public Component horseStatsMessage(HorseStatsData horseStatsData) {
-        String stats = Messages.STATS_RESULT_SCORE.get()
-                + Messages.STATS_RESULT_SPEED.get()
-                + Messages.STATS_RESULT_JUMP.get()
-                + Messages.STATS_RESULT_HP.get()
-                + Messages.STATS_RESULT_OWNER.get();
+    public Component statsMessageResolver(HorseStats horseStats, ConfigFactory configFactory) {
+        var tagResolver = TagResolver.builder()
+                .resolver(TagResolver.standard());
 
-        return MiniMessage.miniMessage().deserialize(stats,
-                Formatter.number("speed", horseStatsData.speed()),
-                Formatter.number("jump", horseStatsData.jump()),
-                Formatter.number("health", horseStatsData.health()),
-                Placeholder.parsed("owner", horseStatsData.ownerName()),
-                Placeholder.parsed("rank", horseStatsData.rankData().rank()),
-                TagResolver.resolver("rankcolor", Tag.styling(horseStatsData.rankData().textColor())));
+        var rank = MiniMessage.miniMessage().deserialize(
+                configFactory.primaryConfig().horse().rankScoreResultText(),
+                tagResolver
+                        .tag("rank", Tag.selfClosingInserting(Component.text(horseStats.rankData().rank())))
+                        .tag("rank_color", Tag.styling(style -> style.color(horseStats.rankData().textColor())))
+                        .build());
+
+        var speed = MiniMessage.miniMessage().deserialize(
+                configFactory.primaryConfig().horse().speedResultText(),
+                tagResolver
+                        .tag("speed", Tag.selfClosingInserting(Component.text(horseStats.genericSpeedToBlocPerSec())))
+                        .build());
+
+        var jump = MiniMessage.miniMessage().deserialize(
+                configFactory.primaryConfig().horse().jumpResultText(),
+                tagResolver
+                        .tag("jump", Tag.selfClosingInserting(Component.text(horseStats.jumpStrengthToJumpHeight())))
+                        .build());
+
+        var health = MiniMessage.miniMessage().deserialize(
+                configFactory.primaryConfig().horse().healthResultText(),
+                tagResolver
+                        .tag("health", Tag.selfClosingInserting(
+                                Component.text((int) Objects.requireNonNull(horseStats.horse().getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue())))
+                        .build());
+
+        var owner = MiniMessage.miniMessage().deserialize(
+                configFactory.primaryConfig().horse().ownerResultText(),
+                tagResolver
+                        .tag("owner", Tag.selfClosingInserting(horseStats.ownerName()))
+                        .build());
+
+        return MiniMessage.miniMessage().deserialize(configFactory.primaryConfig().horse().resultText(),
+                tagResolver
+                        .tag("rank_score", Tag.selfClosingInserting(rank))
+                        .tag("speed", Tag.selfClosingInserting(speed))
+                        .tag("jump", Tag.selfClosingInserting(jump))
+                        .tag("health", Tag.selfClosingInserting(health))
+                        .tag("owner", Tag.selfClosingInserting(owner))
+                        .build()
+                );
     }
-
-    private double jumpStrengthToJumpHeight(double strength) {
-        return -0.1817584952 * Math.pow(strength, 3) + 3.689713992 * Math.pow(strength, 2) + 2.128599134 * strength - 0.343930367;
-    }
-
-    private double genericSpeedToBlocPerSec(double speed) {
-        return 42.162962963 * speed;
-    }
-
-    private int ageToBreedingCoolTime(double age) {
-        return (int) (age / 20);
-    }
-
-    private int loveModeTicksToLoveModeTime(double loveModeTicks) {
-        return (int) (loveModeTicks / 20);
-    }
-
-    public int getMaxHealth(AbstractHorse horse) {
-        return (int) Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
-    }
-
-    public double getSpeed(AbstractHorse horse) {
-        return genericSpeedToBlocPerSec(Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue());
-    }
-
-    public double getHorseJump(AbstractHorse horse) {
-        return jumpStrengthToJumpHeight(Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue());
-    }
-
-    public double getAge(AbstractHorse horse) {
-        return horse.getAge();
-    }
-
-    public String getOwnerName(AbstractHorse horse) {
-        return horse.getOwner() != null ? "owned by <#ffa500>" + horse.getOwner().getName() + "</#ffa500>" : "no owner";
-    }
-
-    public String getHorseName(AbstractHorse horse) {
-        return horse.getName().equals("Horse") ? "<lang:entity.minecraft.horse>" : horse.getName();
-    }
-
-    public int getBreedingCoolTime(AbstractHorse horse) {
-        return ageToBreedingCoolTime(getAge(horse));
-    }
-
-    public int getLoveModeTime(AbstractHorse horse) {
-        return loveModeTicksToLoveModeTime(horse.getLoveModeTicks());
-    }
-
 }

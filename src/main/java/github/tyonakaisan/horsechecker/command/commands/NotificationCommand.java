@@ -15,14 +15,17 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 public final class NotificationCommand implements HorseCheckerCommand {
 
     private final CommandManager<CommandSender> commandManager;
+    private final Messages messages;
     private final StateManager stateManager;
 
     @Inject
     public NotificationCommand(
             CommandManager<CommandSender> commandManager,
+            Messages messages,
             StateManager stateManager
     ) {
         this.commandManager = commandManager;
+        this.messages = messages;
         this.stateManager = stateManager;
     }
 
@@ -42,9 +45,9 @@ public final class NotificationCommand implements HorseCheckerCommand {
         final var sender = (Player) context.getSender();
 
         if (this.stateManager.toggleState(sender, "breed_notification")) {
-            sender.sendRichMessage(Messages.BREED_NOTIFICATION_ENABLED.getMessageWithPrefix());
+            sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.notification.success.breed_notification_enable"));
         } else {
-            sender.sendRichMessage(Messages.BREED_NOTIFICATION_DISABLED.getMessageWithPrefix());
+            sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.notification.success.breed_notification_disable"));
         }
     }
 }

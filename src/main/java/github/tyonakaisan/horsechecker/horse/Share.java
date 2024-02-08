@@ -6,10 +6,7 @@ import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.Formatter;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Server;
 import org.bukkit.entity.AbstractHorse;
@@ -29,16 +26,19 @@ public final class Share {
 
     private final ConfigFactory configFactory;
     private final Server server;
+    private final Messages messages;
     private final Converter converter;
 
     @Inject
     public Share(
             final ConfigFactory configFactory,
             final Converter converter,
+            final Messages messages,
             final Server server
     ) {
         this.configFactory = configFactory;
         this.converter = converter;
+        this.messages = messages;
         this.server = server;
     }
 
@@ -48,28 +48,36 @@ public final class Share {
         var targetRange = this.configFactory.primaryConfig().horse().targetRange();
         //ターゲットしてるエンティティがnullの場合
         if (player.getTargetEntity(targetRange, false) == null) {
-            player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.TARGETED_ENTITY_IS_NULL.getMessageWithPrefix()));
+            player.sendMessage(this.messages.translatable(Messages.Style.ERROR, player, "share.error.targeted_horse_is_null"));
             return false;
         }
 
         //shareが使用可能か
         if (!this.configFactory.primaryConfig().share().allowedHorseShare()) {
-            player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.NOT_ALLOWED_SHARE.getMessageWithPrefix()));
+            player.sendMessage(this.messages.translatable(Messages.Style.ERROR, player, "share.error.not_allowed_share"));
             return false;
         }
 
         //ターゲットしてる馬チェック
         if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse) {
             //オーナーチェック
-            if (ownerCheck(horse, player)) {
+            if (this.ownerCheck(horse, player)) {
                 return true;
             } else {
-                player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.DIFFERENT_OWNER.getMessageWithPrefix()));
+                var horseStats = this.converter.convertHorseStats(horse);
+                player.sendMessage(
+                        this.messages.translatable(
+                                Messages.Style.ERROR,
+                                player,
+                                "share.error.different_owner",
+                                TagResolver.builder()
+                                        .tag("owner", Tag.selfClosingInserting(horseStats.plainOwnerName()))
+                                        .build()));
                 return false;
             }
 
         } else {
-            player.sendMessage(MiniMessage.miniMessage().deserialize(Messages.UNSHAREABLE_ENTITY.getMessageWithPrefix()));
+            player.sendMessage(this.messages.translatable(Messages.Style.ERROR, player, "share.error.un_shareable_entity"));
             return false;
         }
     }
@@ -87,10 +95,17 @@ public final class Share {
                     this.commandInterval.put(uuid, System.currentTimeMillis());
                     return true;
                 } else {
-                    player.sendMessage(MiniMessage.miniMessage().deserialize(
-                            Messages.COMMAND_INTERVAL.getMessageWithPrefix(),
-                            Formatter.number("interval", ((intervalTime - (System.currentTimeMillis() - this.commandInterval.get(uuid))) / 1000))
-                    ));
+                    var interval = (intervalTime - (System.currentTimeMillis() - this.commandInterval.get(uuid))) / 1000;
+                    player.sendMessage(
+                            this.messages.translatable(
+                                    Messages.Style.ERROR,
+                                    player,
+                                    "command.error.command_interval",
+                                    TagResolver.builder()
+                                            .tag("interval", Tag.selfClosingInserting(
+                                                    Component.text(interval)))
+                                            .build()
+                            ));
                 }
             }
         } else {
@@ -112,30 +127,41 @@ public final class Share {
         @Nullable Entity targetEntity = sender.getTargetEntity(this.configFactory.primaryConfig().horse().targetRange(), false);
 
         if (targetEntity instanceof AbstractHorse horse) {
-            var horseStatsData = this.converter.convertHorseStats(horse);
-            var horseNamePrefix = this.configFactory.primaryConfig().share().horseNamePrefix();
-
-            Component broadcastMessage = MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE.get(),
-                    Placeholder.parsed("prefix", Messages.PREFIX.get()),
-                    Placeholder.styling("myhover", HoverEvent.showText(this.converter.horseStatsMessage(horseStatsData))),
-                    Placeholder.parsed("random_message", horseNamePrefix.get(ThreadLocalRandom.current().nextInt(horseNamePrefix.size()))),
-                    Placeholder.parsed("horse_name", horseStatsData.horseName()),
-                    TagResolver.resolver("rankcolor", Tag.styling(horseStatsData.rankData().textColor())),
-                    Placeholder.parsed("player", sender.getName()));
-
             //もしものため
             if (targets.getPlayers().isEmpty()) {
-                this.server.forEachAudience(receiver -> {
-                    if (receiver instanceof Player) {
-                        receiver.sendMessage(broadcastMessage);
-                        sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
+                this.server.forEachAudience(player -> {
+                    if (player instanceof Player receiver) {
+                        this.sendBroadCastMessage(sender, receiver, horse);
                     }
                 });
+                sender.sendActionBar(this.messages.translatable(Messages.Style.SUCCESS, sender, "share.success.broadcast_info"));
             } else {
-                targets.getPlayers().forEach(target -> target.sendMessage(broadcastMessage));
-                sender.sendMessage(MiniMessage.miniMessage().deserialize(Messages.BROADCAST_SHARE_SUCCESS.getMessageWithPrefix()));
+                targets.getPlayers().forEach(receiver -> this.sendBroadCastMessage(sender, receiver, horse));
+                sender.sendActionBar(this.messages.translatable(Messages.Style.SUCCESS, sender, "share.success.broadcast_info"));
             }
         }
+    }
+
+    private void sendBroadCastMessage(Player sender, Player receiver, AbstractHorse horse) {
+        var horseStats = this.converter.convertHorseStats(horse);
+        var horseNamePrefix = this.configFactory.primaryConfig().share().horseNamePrefix();
+
+        var broadcast = this.messages.translatable(
+                Messages.Style.INFO,
+                receiver,
+                "share.success.broadcast",
+                TagResolver.builder()
+                        .tag("hover", Tag.styling(style ->
+                                style.hoverEvent(HoverEvent.showText(this.converter.statsMessageResolver(horseStats, this.configFactory)))))
+                        .tag("random_prefix",
+                                Tag.selfClosingInserting(Component.text(horseNamePrefix.get(ThreadLocalRandom.current().nextInt(horseNamePrefix.size())))))
+                        .tag("horse_name", Tag.selfClosingInserting(horseStats.horseName()))
+                        .tag("rank_color", Tag.styling(style -> style.color(horseStats.rankData().textColor())))
+                        .tag("player", Tag.selfClosingInserting(sender.displayName()))
+                        .build()
+        );
+
+        receiver.sendMessage(broadcast);
     }
 
     private boolean ownerCheck(AbstractHorse horse, Player player) {
