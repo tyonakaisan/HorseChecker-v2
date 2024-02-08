@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
     // Paper
-    compileOnly("io.papermc.paper", "paper-api", "1.20.2-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper", "paper-api", "1.20.4-R0.1-SNAPSHOT")
 
     // ProtocolLib
     compileOnly("com.comphenix.protocol", "ProtocolLib", "5.2.0-SNAPSHOT")
@@ -38,16 +38,13 @@ dependencies {
     implementation("org.spongepowered", "configurate-hocon", "4.1.2")
     implementation("net.kyori", "adventure-serializer-configurate4", "4.14.0")
 
-    // Messages
-    paperLibrary("net.kyori.moonshine", "moonshine-standard", "2.0.4")
-
     // Utils
     paperLibrary("com.google.inject", "guice", "7.0.0")
     paperLibrary("co.aikar", "taskchain-bukkit", "3.7.2")
     implementation("com.github.tyonakaisan", "GlowLib", "0.2.0")
 }
 
-version = "1.2.2-SNAPSHOT"
+version = "1.3.0-SNAPSHOT"
 
 paper {
     val mainPackage = "github.tyonakaisan.horsechecker"
@@ -86,7 +83,7 @@ tasks {
     }
 
     runServer {
-        minecraftVersion("1.20.2")
+        minecraftVersion("1.20.4")
 
         downloadPlugins {
             downloadPlugins.from(paperPlugins)
