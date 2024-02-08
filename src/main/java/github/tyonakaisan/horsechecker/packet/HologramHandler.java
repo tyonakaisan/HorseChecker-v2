@@ -77,27 +77,27 @@ public final class HologramHandler {
     public void createHologram(Player player, AbstractHorse horse) {
         var playerUuid = player.getUniqueId();
         var horseUuid = horse.getUniqueId().toString();
-        var horseStatsData = this.converter.convertHorseStats(horse);
+        var horseStats = this.converter.convertHorseStats(horse);
         var vehicleId = horse.getEntityId();
 
         //ホログラム作成
-        this.hologramManager.createHologram(horseStatsData, this.converter.statsMessageResolver(horseStatsData, this.configFactory));
+        this.hologramManager.createHologram(horseStats, this.converter.statsMessageResolver(horseStats, this.configFactory));
         this.hologramManager.showHologram(horseUuid, player, vehicleId);
         this.targetedHorseMap.put(playerUuid, Optional.of(horse));
     }
 
     public void hideHologram(Player player, AbstractHorse horse) {
         var playerUuid = player.getUniqueId();
-        var horseStatsData = this.converter.convertHorseStats(horse);
-        this.hologramManager.hideHologram(horseStatsData, player);
+        var horseStats = this.converter.convertHorseStats(horse);
+        this.hologramManager.hideHologram(horseStats, player);
         this.targetedHorseMap.put(playerUuid, Optional.empty());
     }
 
     public void changeHologramText(AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
-        var horseStatsData = this.converter.convertHorseStats(horse);
+        var horseStats = this.converter.convertHorseStats(horse);
 
-        Component component = this.converter.statsMessageResolver(horseStatsData, this.configFactory);
+        Component component = this.converter.statsMessageResolver(horseStats, this.configFactory);
         this.hologramManager.changeHologramText(horseUUID, component);
     }
 

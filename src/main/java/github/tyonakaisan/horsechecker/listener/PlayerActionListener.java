@@ -7,10 +7,10 @@ import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDismountEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
-import org.spigotmc.event.entity.EntityDismountEvent;
 
 @DefaultQualifier(NonNull.class)
 public final class PlayerActionListener implements Listener {

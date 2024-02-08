@@ -57,8 +57,8 @@ public final class HorseFinder {
     }
 
     private void showing(AbstractHorse horse, Player player) {
-        var horseData = this.converter.convertHorseStats(horse);
-        Glow glow = Glow.glowing(horseData.rankData().glowColor(), horse.getUniqueId().toString());
+        var horseStats = this.converter.convertHorseStats(horse);
+        Glow glow = Glow.glowing(horseStats.rankData().glowColor(), horse.getUniqueId().toString());
         glow.addEntities(horse);
         glow.show(player);
 

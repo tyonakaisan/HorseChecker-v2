@@ -96,17 +96,17 @@ public final class HorseBreedListener implements Listener {
             if (!this.stateManager.state(player, "breed_notification")) return;
 
             AbstractHorse childrenHorse = (AbstractHorse) event.getEntity();
-            var horseData = this.converter.convertHorseStats(childrenHorse);
+            var horseStats = this.converter.convertHorseStats(childrenHorse);
 
             var locationMessage = this.messages.translatable(
                     Messages.Style.INFO,
                     player,
                     "breeding.notification.baby_horse_location",
                     TagResolver.builder()
-                            .tag("world", Tag.selfClosingInserting(Component.text(horseData.location().getWorld().getName())))
-                            .tag("x", Tag.selfClosingInserting(Component.text((int) horseData.location().getX())))
-                            .tag("y", Tag.selfClosingInserting(Component.text((int) horseData.location().getY())))
-                            .tag("z", Tag.selfClosingInserting(Component.text((int) horseData.location().getZ())))
+                            .tag("world", Tag.selfClosingInserting(Component.text(horseStats.location().getWorld().getName())))
+                            .tag("x", Tag.selfClosingInserting(Component.text((int) horseStats.location().getX())))
+                            .tag("y", Tag.selfClosingInserting(Component.text((int) horseStats.location().getY())))
+                            .tag("z", Tag.selfClosingInserting(Component.text((int) horseStats.location().getZ())))
                             .build());
 
             player.sendMessage(
@@ -123,7 +123,7 @@ public final class HorseBreedListener implements Listener {
                                             }, builder -> builder.uses(3)))))
                                     .tag("hover", Tag.styling(style ->
                                             style.hoverEvent(HoverEvent.showText(Component.text()
-                                                    .append(this.converter.statsMessageResolver(horseData, this.configFactory))
+                                                    .append(this.converter.statsMessageResolver(horseStats, this.configFactory))
                                                     .appendNewline()
                                                     .append(locationMessage)))))
                                     .build()));

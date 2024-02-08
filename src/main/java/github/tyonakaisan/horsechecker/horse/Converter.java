@@ -20,9 +20,7 @@ public final class Converter {
                 Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
                 Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue());
 
-        return new HorseStats(
-                horse,
-                rank);
+        return new HorseStats(horse, rank);
     }
 
     public Component statsMessageResolver(HorseStats horseStats, ConfigFactory configFactory) {
