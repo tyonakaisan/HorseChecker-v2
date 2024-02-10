@@ -29,8 +29,7 @@ public final class HorseChecker extends JavaPlugin {
             ReloadCommand.class,
             DebugCommand.class,
             ShareCommand.class,
-            ToggleCommand.class,
-            NotificationCommand.class
+            ToggleCommand.class
     );
     private final Injector injector;
 

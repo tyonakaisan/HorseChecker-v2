@@ -49,6 +49,12 @@ public final class ToggleCommand implements HorseCheckerCommand {
                 .senderType(CommandSender.class)
                 .handler(this::toggleBreed)
         );
+
+        this.commandManager.command(toggle.literal("notification")
+                .permission("horsechecker.command.notification")
+                .senderType(CommandSender.class)
+                .handler(this::toggleBreedNotification)
+        );
     }
 
     private void toggleStats(final @NonNull CommandContext<CommandSender> context) {
@@ -69,6 +75,16 @@ public final class ToggleCommand implements HorseCheckerCommand {
             sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.toggle.success.cancel_breed_enable"));
         } else {
             sender.sendMessage(this.messages.translatable(Messages.Style.ERROR, sender, "command.toggle.success.cancel_breed_disable"));
+        }
+    }
+
+    private void toggleBreedNotification(final @NonNull CommandContext<CommandSender> context) {
+        final var sender = (Player) context.getSender();
+
+        if (this.stateManager.toggleState(sender, "breed_notification")) {
+            sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.notification.success.breed_notification_enable"));
+        } else {
+            sender.sendMessage(this.messages.translatable(Messages.Style.ERROR, sender, "command.notification.success.breed_notification_disable"));
         }
     }
 }
