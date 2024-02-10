@@ -77,7 +77,6 @@ public final class HologramPacketManager {
 
         packet.getIntegers().write(0, this.hologramData.entityId());
         packet.getDataValueCollectionModifier().write(0, PacketDataBuilder.textDisplay()
-                .teleportInterpolationDuration(1)
                 .translation(new Vector(0, 1, 0))
                 .billboard(Display.Billboard.CENTER)
                 .brightness(15)
