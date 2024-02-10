@@ -25,6 +25,9 @@ public final class HorseSettings {
     private String jumpResultText = "Jump : <#ffa500><jump></#ffa500> blocks<newline>";
     private String healthResultText = "MaxHP: <#ffa500><health></#ffa500><red>♥</red><newline>";
     private String ownerResultText = "<owner>";
+    @Comment("""
+            ホログラムのステータス表示順
+            """)
     private String resultText = "<rank_score><speed><jump><health><owner>";
 
     public long glowingTime() {
