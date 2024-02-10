@@ -29,9 +29,11 @@ public record HorseStats(
     }
 
     public Component ownerName() {
-        return this.horse.getOwner() != null
+        if (this.horse.getOwner() == null) return Component.text("no owner");
+
+        return this.horse.getOwner().getName() != null
                 ? MiniMessage.miniMessage().deserialize("owned by <#ffa500>" + this.horse.getOwner().getName() + "</#ffa500>")
-                : Component.text("no owner");
+                : Component.text("unknown owner");
     }
 
     public Component plainOwnerName() {
