@@ -1,6 +1,6 @@
-package github.tyonakaisan.horsechecker.packet.util.data.display;
+package github.tyonakaisan.horsechecker.packet.util.entity.display;
 
-import github.tyonakaisan.horsechecker.packet.util.data.EntityData;
+import github.tyonakaisan.horsechecker.packet.util.entity.EntityData;
 import org.bukkit.entity.Display;
 import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;

@@ -1,4 +1,4 @@
-package github.tyonakaisan.horsechecker.packet.util.data;
+package github.tyonakaisan.horsechecker.packet.util.entity;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Pose;

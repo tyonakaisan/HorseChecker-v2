@@ -2,7 +2,7 @@ package github.tyonakaisan.horsechecker.listener;
 
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
-import github.tyonakaisan.horsechecker.packet.HologramHandler;
+import github.tyonakaisan.horsechecker.packet.hologram.HologramHandler;
 import org.bukkit.Server;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.event.EventHandler;

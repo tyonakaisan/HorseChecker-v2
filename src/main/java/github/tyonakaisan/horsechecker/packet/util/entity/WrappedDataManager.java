@@ -1,4 +1,4 @@
-package github.tyonakaisan.horsechecker.packet.util.data;
+package github.tyonakaisan.horsechecker.packet.util.entity;
 
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedDataValue;

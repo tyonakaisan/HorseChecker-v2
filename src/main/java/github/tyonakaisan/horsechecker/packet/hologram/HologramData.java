@@ -1,4 +1,4 @@
-package github.tyonakaisan.horsechecker.packet;
+package github.tyonakaisan.horsechecker.packet.hologram;
 
 import com.comphenix.protocol.events.PacketContainer;
 import com.google.inject.Singleton;

@@ -1,4 +1,4 @@
-package github.tyonakaisan.horsechecker.packet.util.data.display;
+package github.tyonakaisan.horsechecker.packet.util.entity.display;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import net.kyori.adventure.text.Component;

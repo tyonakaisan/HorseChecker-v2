@@ -1,11 +1,11 @@
-package github.tyonakaisan.horsechecker.packet;
+package github.tyonakaisan.horsechecker.packet.hologram;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
-import github.tyonakaisan.horsechecker.packet.util.PacketEntityDataBuilder;
+import github.tyonakaisan.horsechecker.packet.util.PacketDataBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
@@ -76,7 +76,7 @@ public final class HologramPacketManager {
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
         packet.getIntegers().write(0, this.hologramData.entityId());
-        packet.getDataValueCollectionModifier().write(0, PacketEntityDataBuilder.textDisplay()
+        packet.getDataValueCollectionModifier().write(0, PacketDataBuilder.textDisplay()
                 .teleportInterpolationDuration(1)
                 .translation(new Vector(0, 1, 0))
                 .billboard(Display.Billboard.CENTER)

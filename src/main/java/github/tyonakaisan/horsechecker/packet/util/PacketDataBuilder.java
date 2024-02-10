@@ -1,7 +1,7 @@
 package github.tyonakaisan.horsechecker.packet.util;
 
 import com.comphenix.protocol.wrappers.WrappedDataValue;
-import github.tyonakaisan.horsechecker.packet.util.data.display.TextDisplayData;
+import github.tyonakaisan.horsechecker.packet.util.entity.display.TextDisplayData;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 @DefaultQualifier(NonNull.class)
-public final class PacketEntityDataBuilder {
+public final class PacketDataBuilder {
 
-    private PacketEntityDataBuilder() {
+    private PacketDataBuilder() {
         throw new AssertionError();
     }
 
@@ -27,4 +27,5 @@ public final class PacketEntityDataBuilder {
             return Collections.unmodifiableList(this.getDataValues());
         }
     }
+
 }

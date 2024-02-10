@@ -134,11 +134,10 @@ public final class Share {
                         this.sendBroadCastMessage(sender, receiver, horse);
                     }
                 });
-                sender.sendActionBar(this.messages.translatable(Messages.Style.SUCCESS, sender, "share.success.broadcast_info"));
             } else {
                 targets.getPlayers().forEach(receiver -> this.sendBroadCastMessage(sender, receiver, horse));
-                sender.sendActionBar(this.messages.translatable(Messages.Style.SUCCESS, sender, "share.success.broadcast_info"));
             }
+            sender.sendActionBar(this.messages.translatable(Messages.Style.SUCCESS, sender, "share.success.broadcast_info"));
         }
     }
 

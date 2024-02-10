@@ -30,7 +30,6 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 @DefaultQualifier(NonNull.class)
-@SuppressWarnings("unused")
 public final class DebugCommand implements HorseCheckerCommand {
 
     private final HorseChecker horseChecker;

@@ -1,4 +1,4 @@
-package github.tyonakaisan.horsechecker.packet;
+package github.tyonakaisan.horsechecker.packet.hologram;
 
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
