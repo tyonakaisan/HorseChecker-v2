@@ -32,21 +32,18 @@ public final class HorseBreedListener implements Listener {
     private final ConfigFactory configFactory;
     private final Messages messages;
     private final HorseFinder horseFinder;
-    private final Converter converter;
 
     @Inject
     public HorseBreedListener(
             final StateManager stateManager,
             final Messages messages,
             final ConfigFactory configFactory,
-            final HorseFinder horseFinder,
-            final Converter converter
+            final HorseFinder horseFinder
     ) {
         this.stateManager = stateManager;
         this.messages = messages;
         this.configFactory = configFactory;
         this.horseFinder = horseFinder;
-        this.converter = converter;
     }
 
     @EventHandler
@@ -63,7 +60,7 @@ public final class HorseBreedListener implements Listener {
         int health = (int) horse.getHealth();
         int age = horse.getAge();
         int loveMode = horse.getLoveModeTicks();
-        var horseStats = this.converter.convertHorseStats(horse);
+        var horseStats = Converter.convertHorseStats(horse);
 
         //繫殖クールタイム中&体力がMAXであればイベントキャンセル
         if (age > 0 && health == maxHealth) {
@@ -96,7 +93,7 @@ public final class HorseBreedListener implements Listener {
             if (!this.stateManager.state(player, "breed_notification")) return;
 
             AbstractHorse childrenHorse = (AbstractHorse) event.getEntity();
-            var horseStats = this.converter.convertHorseStats(childrenHorse);
+            var horseStats = Converter.convertHorseStats(childrenHorse);
 
             var locationMessage = this.messages.translatable(
                     Messages.Style.INFO,
@@ -123,7 +120,7 @@ public final class HorseBreedListener implements Listener {
                                             }, builder -> builder.uses(3)))))
                                     .tag("hover", Tag.styling(style ->
                                             style.hoverEvent(HoverEvent.showText(Component.text()
-                                                    .append(this.converter.statsMessageResolver(horseStats, this.configFactory))
+                                                    .append(Converter.statsMessageResolver(horseStats, this.configFactory))
                                                     .appendNewline()
                                                     .append(locationMessage)))))
                                     .build()));

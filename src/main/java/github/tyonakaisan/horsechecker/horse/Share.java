@@ -27,17 +27,14 @@ public final class Share {
     private final ConfigFactory configFactory;
     private final Server server;
     private final Messages messages;
-    private final Converter converter;
 
     @Inject
     public Share(
             final ConfigFactory configFactory,
-            final Converter converter,
             final Messages messages,
             final Server server
     ) {
         this.configFactory = configFactory;
-        this.converter = converter;
         this.messages = messages;
         this.server = server;
     }
@@ -64,7 +61,7 @@ public final class Share {
             if (this.ownerCheck(horse, player)) {
                 return true;
             } else {
-                var horseStats = this.converter.convertHorseStats(horse);
+                var horseStats = Converter.convertHorseStats(horse);
                 player.sendMessage(
                         this.messages.translatable(
                                 Messages.Style.ERROR,
@@ -142,7 +139,7 @@ public final class Share {
     }
 
     private void sendBroadCastMessage(Player sender, Player receiver, AbstractHorse horse) {
-        var horseStats = this.converter.convertHorseStats(horse);
+        var horseStats = Converter.convertHorseStats(horse);
         var horseNamePrefix = this.configFactory.primaryConfig().share().horseNamePrefix();
 
         var broadcast = this.messages.translatable(
@@ -151,7 +148,7 @@ public final class Share {
                 "share.success.broadcast",
                 TagResolver.builder()
                         .tag("hover", Tag.styling(style ->
-                                style.hoverEvent(HoverEvent.showText(this.converter.statsMessageResolver(horseStats, this.configFactory)))))
+                                style.hoverEvent(HoverEvent.showText(Converter.statsMessageResolver(horseStats, this.configFactory)))))
                         .tag("random_prefix",
                                 Tag.selfClosingInserting(Component.text(horseNamePrefix.get(ThreadLocalRandom.current().nextInt(horseNamePrefix.size())))))
                         .tag("horse_name", Tag.selfClosingInserting(horseStats.horseName()))

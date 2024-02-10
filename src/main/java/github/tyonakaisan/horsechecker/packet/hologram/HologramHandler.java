@@ -5,7 +5,6 @@ import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.manager.StateManager;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,7 +23,6 @@ public final class HologramHandler {
     private final ConfigFactory configFactory;
     private final HologramManager hologramManager;
     private final StateManager stateManager;
-    private final Converter converter;
 
     private final Map<UUID, Optional<AbstractHorse>> targetedHorseMap = new HashMap<>();
 
@@ -33,14 +31,12 @@ public final class HologramHandler {
             final HorseChecker horseChecker,
             final ConfigFactory configFactory,
             final HologramManager hologramManager,
-            final StateManager stateManager,
-            final Converter converter
+            final StateManager stateManager
     ) {
         this.horseChecker = horseChecker;
         this.configFactory = configFactory;
         this.hologramManager = hologramManager;
         this.stateManager = stateManager;
-        this.converter = converter;
     }
 
     public void show(Player player) {
@@ -77,28 +73,27 @@ public final class HologramHandler {
     public void createHologram(Player player, AbstractHorse horse) {
         var playerUuid = player.getUniqueId();
         var horseUuid = horse.getUniqueId().toString();
-        var horseStats = this.converter.convertHorseStats(horse);
+        var horseStats = Converter.convertHorseStats(horse);
         var vehicleId = horse.getEntityId();
 
         //ホログラム作成
-        this.hologramManager.createHologram(horseStats, this.converter.statsMessageResolver(horseStats, this.configFactory));
+        this.hologramManager.createHologram(horseStats, Converter.statsMessageResolver(horseStats, this.configFactory));
         this.hologramManager.showHologram(horseUuid, player, vehicleId);
         this.targetedHorseMap.put(playerUuid, Optional.of(horse));
     }
 
     public void hideHologram(Player player, AbstractHorse horse) {
         var playerUuid = player.getUniqueId();
-        var horseStats = this.converter.convertHorseStats(horse);
+        var horseStats = Converter.convertHorseStats(horse);
         this.hologramManager.hideHologram(horseStats, player);
         this.targetedHorseMap.put(playerUuid, Optional.empty());
     }
 
-    public void changeHologramText(AbstractHorse horse) {
+    public void updateHorseStats(AbstractHorse horse) {
         var horseUUID = horse.getUniqueId().toString();
-        var horseStats = this.converter.convertHorseStats(horse);
+        var horseStats = Converter.convertHorseStats(horse);
 
-        Component component = this.converter.statsMessageResolver(horseStats, this.configFactory);
-        this.hologramManager.changeHologramText(horseUUID, component);
+        this.hologramManager.updateHologram(horseUUID, horseStats);
     }
 
     private boolean playerStateCheck(Player player) {

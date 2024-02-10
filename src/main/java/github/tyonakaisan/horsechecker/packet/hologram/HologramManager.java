@@ -2,6 +2,8 @@ package github.tyonakaisan.horsechecker.packet.hologram;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import github.tyonakaisan.horsechecker.config.ConfigFactory;
+import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.horse.HorseStats;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
@@ -19,12 +21,15 @@ public final class HologramManager {
     private final Map<String, HologramData> hologramMap = new HashMap<>();
 
     private final Server server;
+    private final ConfigFactory configFactory;
 
     @Inject
     public HologramManager(
-            final Server server
+            final Server server,
+            final ConfigFactory configFactory
     ) {
         this.server = server;
+        this.configFactory = configFactory;
     }
 
     public Set<String> getHologramNames() {
@@ -38,7 +43,7 @@ public final class HologramManager {
     public void createHologram(HorseStats horseStats, Component text) {
         var hologramId = horseStats.horse().getUniqueId().toString();
         if (this.hologramMap.containsKey(hologramId)) return;
-        var hologramData = new HologramData(hologramId, text, horseStats.location(), horseStats.rankData());
+        var hologramData = new HologramData(hologramId, text, horseStats.location(), horseStats);
 
         this.hologramMap.put(hologramId, hologramData);
     }
@@ -63,7 +68,11 @@ public final class HologramManager {
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.showFrom(player, vehicleId));
     }
 
-    public void changeHologramText(String hologramId, Component text) {
-        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.updateText(text));
+    public void updateHologram(String hologramId, HorseStats horseStats) {
+        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
+            var text = Converter.statsMessageResolver(horseStats, this.configFactory);
+            hologramData.updateHorseStats(horseStats);
+            hologramData.updateText(text);
+        });
     }
 }

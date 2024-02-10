@@ -23,19 +23,16 @@ public final class HorseFinder {
     private final HorseChecker horseChecker;
     private final ConfigFactory configFactory;
     private final Messages messages;
-    private final Converter converter;
 
     @Inject
     public HorseFinder(
             final HorseChecker horseChecker,
             final ConfigFactory configFactory,
-            final Messages messages,
-            final Converter converter
+            final Messages messages
     ) {
         this.horseChecker = horseChecker;
         this.configFactory = configFactory;
         this.messages = messages;
-        this.converter = converter;
     }
 
     public void fromUuid(UUID uuid, Player showPlayer) {
@@ -57,7 +54,7 @@ public final class HorseFinder {
     }
 
     private void showing(AbstractHorse horse, Player player) {
-        var horseStats = this.converter.convertHorseStats(horse);
+        var horseStats = Converter.convertHorseStats(horse);
         Glow glow = Glow.glowing(horseStats.rankData().glowColor(), horse.getUniqueId().toString());
         glow.addEntities(horse);
         glow.show(player);

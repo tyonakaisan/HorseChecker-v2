@@ -2,7 +2,7 @@ package github.tyonakaisan.horsechecker.packet.hologram;
 
 import com.comphenix.protocol.events.PacketContainer;
 import com.google.inject.Singleton;
-import github.tyonakaisan.horsechecker.horse.HorseRank;
+import github.tyonakaisan.horsechecker.horse.HorseStats;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ public final class HologramData {
     private final String hologramId;
     private Component text;
     private Location location;
-    private final HorseRank.HorseRankData horseRankData;
+    private HorseStats horseStats;
 
     private final UUID entityUid;
     private final int entityId;
@@ -30,12 +30,12 @@ public final class HologramData {
             String hologramId,
             Component text,
             Location location,
-            HorseRank.HorseRankData horseRankData
+            HorseStats horseStats
     ) {
         this.hologramId = hologramId;
         this.text = text;
         this.location = location;
-        this.horseRankData = horseRankData;
+        this.horseStats = horseStats;
 
         this.entityId = ThreadLocalRandom.current().nextInt();
         this.entityUid = UUID.randomUUID();
@@ -61,8 +61,8 @@ public final class HologramData {
         return this.location;
     }
 
-    public HorseRank.HorseRankData rankData() {
-        return this.horseRankData;
+    public HorseStats horseStats() {
+        return this.horseStats;
     }
 
     public void showFrom(Player player, int vehicleId) {
@@ -76,13 +76,19 @@ public final class HologramData {
         new HologramPacketManager(this).hide(player);
     }
 
-    public void updateText(Component text) {
-        this.text = text;
+    public void updateText(Component newText) {
+        this.text = newText;
         this.entityMetadataPacket = new HologramPacketManager(this).createEntityMetadataPacket();
         new HologramPacketManager(this).update();
     }
 
-    public void updateLocation(Location location) {
-        this.location = location;
+    public void updateHorseStats(HorseStats newHorseStats) {
+        this.horseStats = newHorseStats;
+        this.entityMetadataPacket = new HologramPacketManager(this).createEntityMetadataPacket();
+        new HologramPacketManager(this).update();
+    }
+
+    public void updateLocation(Location newLocation) {
+        this.location = newLocation;
     }
 }
