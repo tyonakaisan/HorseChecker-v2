@@ -4,7 +4,10 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.tyonakaisan.glowlib.GlowLib;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
-import github.tyonakaisan.horsechecker.command.commands.*;
+import github.tyonakaisan.horsechecker.command.commands.DebugCommand;
+import github.tyonakaisan.horsechecker.command.commands.ReloadCommand;
+import github.tyonakaisan.horsechecker.command.commands.ShareCommand;
+import github.tyonakaisan.horsechecker.command.commands.ToggleCommand;
 import github.tyonakaisan.horsechecker.listener.HorseBreedListener;
 import github.tyonakaisan.horsechecker.listener.HorsePotionEffectListener;
 import github.tyonakaisan.horsechecker.listener.PlayerActionListener;
@@ -43,8 +46,6 @@ public final class HorseChecker extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-
-        // Beta
         GlowLib.init(this);
 
         // Listeners
