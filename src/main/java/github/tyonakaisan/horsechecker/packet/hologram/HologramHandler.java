@@ -77,7 +77,7 @@ public final class HologramHandler {
         var vehicleId = horse.getEntityId();
 
         //ホログラム作成
-        this.hologramManager.createHologram(horseStats, Converter.statsMessageResolver(horseStats, this.configFactory));
+        this.hologramManager.createHologram(horseStats, Converter.statsMessageResolver(this.configFactory, horseStats));
         this.hologramManager.showHologram(horseUuid, player, vehicleId);
         this.targetedHorseMap.put(playerUuid, Optional.of(horse));
     }

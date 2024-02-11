@@ -24,6 +24,10 @@ public record HorseStats(
         return Double.parseDouble(new DecimalFormat("#.##").format(jump));
     }
 
+    public int getMaxHealth() {
+        return (int) Objects.requireNonNull(this.horse.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+    }
+
     public Location location() {
         return this.horse.isAdult() ? this.horse.getLocation() : this.horse.getLocation().subtract(0, 1, 0);
     }

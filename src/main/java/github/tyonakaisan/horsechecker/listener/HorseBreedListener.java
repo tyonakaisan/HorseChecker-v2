@@ -1,6 +1,7 @@
 package github.tyonakaisan.horsechecker.listener;
 
 import com.google.inject.Inject;
+import com.tyonakaisan.glowlib.glow.Glow;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.horse.HorseFinder;
@@ -92,19 +93,13 @@ public final class HorseBreedListener implements Listener {
         if (event.getBreeder() instanceof Player player) {
             if (!this.stateManager.state(player, "breed_notification")) return;
 
-            AbstractHorse childrenHorse = (AbstractHorse) event.getEntity();
-            var horseStats = Converter.convertHorseStats(childrenHorse);
+            var childrenHorse = (AbstractHorse) event.getEntity();
+            var motherHorse = (AbstractHorse) event.getMother();
+            var fatherHorse = (AbstractHorse) event.getFather();
 
-            var locationMessage = this.messages.translatable(
-                    Messages.Style.INFO,
-                    player,
-                    "breeding.notification.baby_horse_location",
-                    TagResolver.builder()
-                            .tag("world", Tag.selfClosingInserting(Component.text(horseStats.location().getWorld().getName())))
-                            .tag("x", Tag.selfClosingInserting(Component.text((int) horseStats.location().getX())))
-                            .tag("y", Tag.selfClosingInserting(Component.text((int) horseStats.location().getY())))
-                            .tag("z", Tag.selfClosingInserting(Component.text((int) horseStats.location().getZ())))
-                            .build());
+            var childrenStats = Converter.convertHorseStats(childrenHorse);
+            var motherStats = Converter.convertHorseStats(motherHorse);
+            var fatherStats = Converter.convertHorseStats(fatherHorse);
 
             player.sendMessage(
                     this.messages.translatable(
@@ -116,13 +111,13 @@ public final class HorseBreedListener implements Listener {
                                             style.clickEvent(ClickEvent.callback(audience -> {
                                                 if (audience instanceof Player callPlayer) {
                                                     this.horseFinder.fromUuid(childrenHorse.getUniqueId(), callPlayer);
+                                                    this.horseFinder.showing(motherHorse, callPlayer, Glow.Color.RED);
+                                                    this.horseFinder.showing(fatherHorse, callPlayer, Glow.Color.BLUE);
                                                 }
                                             }, builder -> builder.uses(3)))))
                                     .tag("hover", Tag.styling(style ->
                                             style.hoverEvent(HoverEvent.showText(Component.text()
-                                                    .append(Converter.statsMessageResolver(horseStats, this.configFactory))
-                                                    .appendNewline()
-                                                    .append(locationMessage)))))
+                                                    .append(Converter.withParentsStatsMessageResolver(this.configFactory, childrenStats, motherStats, fatherStats))))))
                                     .build()));
         }
     }

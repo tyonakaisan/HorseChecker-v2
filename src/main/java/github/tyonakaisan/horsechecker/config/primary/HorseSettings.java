@@ -20,15 +20,16 @@ public final class HorseSettings {
             """)
     private int targetRange = 20;
 
-    private String rankScoreResultText = "Score: <rank_color><rank></rank_color><newline>";
-    private String speedResultText = "Speed: <#ffa500><speed></#ffa500> blocks/s<newline>";
-    private String jumpResultText = "Jump : <#ffa500><jump></#ffa500> blocks<newline>";
-    private String healthResultText = "MaxHP: <#ffa500><health></#ffa500><red>♥</red><newline>";
+    private String rankScoreResultText = "Score: <rank_color><rank></rank_color>";
+    private String speedResultText = "Speed: <#ffa500><speed></#ffa500> blocks/s";
+    private String jumpResultText = "Jump : <#ffa500><jump></#ffa500> blocks";
+    private String healthResultText = "MaxHP: <#ffa500><health></#ffa500><red>♥</red>";
     private String ownerResultText = "<owner>";
+    private String parentResultText = "<dark_gray>(<color:#ff85f1><mother></color> / <color:#47b9ff><father></color>)";
     @Comment("""
             ホログラムのステータス表示順
             """)
-    private String resultText = "<rank_score><speed><jump><health><owner>";
+    private String resultText = "<rank_score><newline><speed><newline><jump><newline><health><newline><owner>";
 
     public long glowingTime() {
         return this.glowingTime;
@@ -56,6 +57,10 @@ public final class HorseSettings {
 
     public String ownerResultText() {
         return this.ownerResultText;
+    }
+
+    public String parentResultText() {
+        return this.parentResultText;
     }
 
     public String resultText() {

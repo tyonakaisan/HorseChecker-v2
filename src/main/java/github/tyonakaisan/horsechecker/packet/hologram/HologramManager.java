@@ -70,7 +70,7 @@ public final class HologramManager {
 
     public void updateHologram(String hologramId, HorseStats horseStats) {
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            var text = Converter.statsMessageResolver(horseStats, this.configFactory);
+            var text = Converter.statsMessageResolver(this.configFactory, horseStats);
             hologramData.updateHorseStats(horseStats);
             hologramData.updateText(text);
         });

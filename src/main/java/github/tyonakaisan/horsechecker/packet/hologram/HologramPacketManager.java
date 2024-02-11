@@ -77,12 +77,12 @@ public final class HologramPacketManager {
 
         packet.getIntegers().write(0, this.hologramData.entityId());
         packet.getDataValueCollectionModifier().write(0, PacketDataBuilder.textDisplay()
-                .translation(new Vector(0, 1, 0))
+                .translation(new Vector(0, 0.85, 0))
+                .scale(new Vector(1.2, 1.2, 1.2))
                 .billboard(Display.Billboard.CENTER)
                 .brightness(15)
                 .viewRange(2f)
                 .shadowRadius(0f)
-                .shadowStrength(0f)
                 .text(this.hologramData.text())
                 .backgroundColor(this.hologramData.horseStats().rankData().BackgroundColor())
                 .seeThrough()

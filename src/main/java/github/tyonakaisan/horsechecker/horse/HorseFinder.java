@@ -45,10 +45,6 @@ public final class HorseFinder {
         horseOptional.ifPresentOrElse(horse -> {
             if (horse instanceof AbstractHorse abstractHorse) {
                 this.showing(abstractHorse, showPlayer);
-                showPlayer.playSound(Sound.sound()
-                        .type(Key.key("minecraft:entity.experience_orb.pickup"))
-                        .pitch(1.5f)
-                        .build());
             }
         }, () -> showPlayer.sendMessage(this.messages.translatable(Messages.Style.ERROR, showPlayer, "breeding.notification.baby_horse_not_found")));
     }
@@ -58,6 +54,24 @@ public final class HorseFinder {
         Glow glow = Glow.glowing(horseStats.rankData().glowColor(), horse.getUniqueId().toString());
         glow.addEntities(horse);
         glow.show(player);
+
+        player.playSound(Sound.sound()
+                .type(Key.key("minecraft:entity.experience_orb.pickup"))
+                .pitch(1.5f)
+                .build());
+
+        Bukkit.getScheduler().runTaskLater(this.horseChecker, () -> glow.hide(player), this.configFactory.primaryConfig().horse().glowingTime());
+    }
+
+    public void showing(AbstractHorse horse, Player player, Glow.Color color) {
+        Glow glow = Glow.glowing(color, horse.getUniqueId().toString());
+        glow.addEntities(horse);
+        glow.show(player);
+
+        player.playSound(Sound.sound()
+                .type(Key.key("minecraft:entity.experience_orb.pickup"))
+                .pitch(1.5f)
+                .build());
 
         Bukkit.getScheduler().runTaskLater(this.horseChecker, () -> glow.hide(player), this.configFactory.primaryConfig().horse().glowingTime());
     }

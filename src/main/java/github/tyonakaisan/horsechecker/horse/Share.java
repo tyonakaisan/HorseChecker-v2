@@ -148,7 +148,7 @@ public final class Share {
                 "share.success.broadcast",
                 TagResolver.builder()
                         .tag("hover", Tag.styling(style ->
-                                style.hoverEvent(HoverEvent.showText(Converter.statsMessageResolver(horseStats, this.configFactory)))))
+                                style.hoverEvent(HoverEvent.showText(Converter.statsMessageResolver(this.configFactory, horseStats)))))
                         .tag("random_prefix",
                                 Tag.selfClosingInserting(Component.text(horseNamePrefix.get(ThreadLocalRandom.current().nextInt(horseNamePrefix.size())))))
                         .tag("horse_name", Tag.selfClosingInserting(horseStats.horseName()))
