@@ -15,12 +15,6 @@ repositories {
 
     //ProtocolLib
     maven("https://repo.dmulloy2.net/repository/public/")
-
-    // Inventory
-    // TaskChain
-    maven("https://repo.aikar.co/content/groups/aikar/")
-
-    // GlowLib
     maven("https://jitpack.io")
 }
 
@@ -40,11 +34,11 @@ dependencies {
 
     // Utils
     paperLibrary("com.google.inject", "guice", "7.0.0")
-    paperLibrary("co.aikar", "taskchain-bukkit", "3.7.2")
-    implementation("com.github.tyonakaisan", "GlowLib", "0.2.0")
+    paperLibrary("io.github.skytasul", "glowingentities", "1.3.2")
+    implementation("com.github.tyonakaisan", "GlowLib", "0.2.1")
 }
 
-version = "1.3.0-SNAPSHOT"
+version = "1.3.1-SNAPSHOT"
 
 paper {
     val mainPackage = "github.tyonakaisan.horsechecker"
