@@ -156,6 +156,9 @@ public final class DebugCommand implements HorseCheckerCommand {
         ZOMBIE_HORSE(EntityType.ZOMBIE_HORSE),
         DONKEY(EntityType.DONKEY),
         MULE(EntityType.MULE),
+        LLAMA(EntityType.LLAMA),
+        TRADER_LLAMA(EntityType.TRADER_LLAMA),
+        CAMEL(EntityType.CAMEL)
         ;
         private final EntityType type;
 

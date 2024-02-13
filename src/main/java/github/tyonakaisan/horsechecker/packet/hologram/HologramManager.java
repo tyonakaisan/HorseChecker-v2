@@ -64,8 +64,12 @@ public final class HologramManager {
         });
     }
 
-    public void showHologram(String hologramId, Player player, int vehicleId) {
-        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> hologramData.showFrom(player, vehicleId));
+    public void showHologram(HorseStats horseStats, Player player, int vehicleId) {
+        var hologramId = horseStats.horse().getUniqueId().toString();
+        Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
+            hologramData.updateLocation(horseStats.location());
+            hologramData.showFrom(player, vehicleId);
+        });
     }
 
     public void updateHologram(String hologramId, HorseStats horseStats) {
