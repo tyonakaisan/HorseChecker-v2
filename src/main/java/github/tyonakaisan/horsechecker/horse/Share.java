@@ -22,6 +22,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -45,7 +47,7 @@ public final class Share {
         this.server = server;
     }
 
-    private final HashMap<UUID, Long> commandInterval = new HashMap<>();
+    private final HashMap<UUID, Instant> intervalMap = new HashMap<>();
 
     private boolean isShareable(Player player) {
         var targetRange = this.configFactory.primaryConfig().horse().targetRange();
@@ -88,34 +90,26 @@ public final class Share {
     private boolean checkInterval(Player player) {
         int intervalTime = this.configFactory.primaryConfig().share().shareCommandIntervalTime();
         var uuid = player.getUniqueId();
+        var now = Instant.now();
 
-        if (this.commandInterval.containsKey(uuid)) {
-            if (this.commandInterval.get(uuid) == -1L) {
-                return true;
-            } else {
-                long timeElapsed = System.currentTimeMillis() - this.commandInterval.get(uuid);
-                if (timeElapsed >= intervalTime) {
-                    this.commandInterval.put(uuid, System.currentTimeMillis());
-                    return true;
-                } else {
-                    var interval = (intervalTime - (System.currentTimeMillis() - this.commandInterval.get(uuid))) / 1000;
-                    player.sendMessage(
-                            this.messages.translatable(
-                                    Messages.Style.ERROR,
-                                    player,
-                                    "command.error.command_interval",
-                                    TagResolver.builder()
-                                            .tag("interval", Tag.selfClosingInserting(
-                                                    Component.text(interval)))
-                                            .build()
-                            ));
-                }
-            }
+        var coolTime = this.intervalMap.getOrDefault(uuid, now);
+
+        if (now.isBefore(coolTime)) {
+            player.sendMessage(
+                    this.messages.translatable(
+                            Messages.Style.ERROR,
+                            player,
+                            "command.error.command_interval",
+                            TagResolver.builder()
+                                    .tag("interval", Tag.selfClosingInserting(
+                                            Component.text(Duration.between(now, coolTime).toSeconds() + 1)))
+                                    .build()
+                    ));
+            return false;
         } else {
-            this.commandInterval.put(uuid, System.currentTimeMillis());
+            this.intervalMap.put(uuid, now.plusSeconds(intervalTime));
             return true;
         }
-        return false;
     }
 
     public void broadcastShareMessage(Player sender, MultiplePlayerSelector targets) {
