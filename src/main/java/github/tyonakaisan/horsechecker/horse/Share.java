@@ -1,6 +1,8 @@
 package github.tyonakaisan.horsechecker.horse;
 
 import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
+import com.destroystokyo.paper.profile.ProfileProperty;
+import com.github.tyonakaisan.yummytoast.Toast;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
@@ -8,10 +10,14 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -134,7 +140,23 @@ public final class Share {
             } else {
                 targets.getPlayers().forEach(receiver -> this.sendBroadCastMessage(sender, receiver, horse));
             }
-            sender.sendActionBar(this.messages.translatable(Messages.Style.SUCCESS, sender, "share.success.broadcast_info"));
+
+            var icon = new ItemStack(Material.PLAYER_HEAD);
+
+            icon.editMeta(meta -> {
+                if (meta instanceof SkullMeta skullMeta) {
+                    var playerProfile = Bukkit.createProfile(UUID.randomUUID(), "commandItem");
+                    var playerProperty = new ProfileProperty("textures", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTc5YTVjOTVlZTE3YWJmZWY0NWM4ZGMyMjQxODk5NjQ5NDRkNTYwZjE5YTQ0ZjE5ZjhhNDZhZWYzZmVlNDc1NiJ9fX0=");
+                    playerProfile.setProperty(playerProperty);
+                    skullMeta.setPlayerProfile(playerProfile);
+                }
+            });
+
+            Toast.make()
+                    .icon(icon)
+                    .title(this.messages.translatable(Messages.Style.SUCCESS, sender, "share.success.broadcast_info"))
+                    .frameType(Toast.FrameType.GOAL)
+                    .sendTo(sender);
         }
     }
 

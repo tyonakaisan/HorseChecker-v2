@@ -12,6 +12,7 @@ import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.NamespacedKey;
@@ -35,6 +36,7 @@ public final class DebugCommand implements HorseCheckerCommand {
     private final HorseChecker horseChecker;
     private final ConfigFactory configFactory;
     private final Messages messages;
+    private final ComponentLogger logger;
     private final CommandManager<CommandSender> commandManager;
 
     @Inject
@@ -42,11 +44,13 @@ public final class DebugCommand implements HorseCheckerCommand {
             HorseChecker horseChecker,
             ConfigFactory configFactory,
             Messages messages,
+            ComponentLogger logger,
             CommandManager<CommandSender> commandManager
     ) {
         this.horseChecker = horseChecker;
         this.configFactory = configFactory;
         this.messages = messages;
+        this.logger = logger;
         this.commandManager = commandManager;
     }
 
