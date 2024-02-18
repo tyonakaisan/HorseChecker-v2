@@ -139,7 +139,7 @@ public final class Share {
 
             icon.editMeta(meta -> {
                 if (meta instanceof SkullMeta skullMeta) {
-                    var playerProfile = Bukkit.createProfile(UUID.randomUUID(), "commandItem");
+                    var playerProfile = Bukkit.createProfile(UUID.randomUUID(), "horsechecker");
                     var playerProperty = new ProfileProperty("textures", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTc5YTVjOTVlZTE3YWJmZWY0NWM4ZGMyMjQxODk5NjQ5NDRkNTYwZjE5YTQ0ZjE5ZjhhNDZhZWYzZmVlNDc1NiJ9fX0=");
                     playerProfile.setProperty(playerProperty);
                     skullMeta.setPlayerProfile(playerProfile);
