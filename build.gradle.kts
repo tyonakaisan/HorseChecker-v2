@@ -21,7 +21,6 @@ repositories {
 dependencies {
     // Paper
     compileOnly("io.papermc.paper", "paper-api", "1.20.4-R0.1-SNAPSHOT")
-
     // ProtocolLib
     compileOnly("com.comphenix.protocol", "ProtocolLib", "5.2.0-SNAPSHOT")
 
@@ -29,16 +28,17 @@ dependencies {
     paperLibrary("cloud.commandframework", "cloud-paper", "1.8.4")
 
     // Config
-    implementation("org.spongepowered", "configurate-hocon", "4.1.2")
-    implementation("net.kyori", "adventure-serializer-configurate4", "4.14.0")
+    paperLibrary("org.spongepowered", "configurate-hocon", "4.2.0-SNAPSHOT")
+    paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.14.0")
 
     // Utils
     paperLibrary("com.google.inject", "guice", "7.0.0")
     paperLibrary("io.github.skytasul", "glowingentities", "1.3.2")
     implementation("com.github.tyonakaisan", "GlowLib", "0.2.1")
+    implementation("com.github.tyonakaisan", "Toast", "0.1.1")
 }
 
-version = "1.4.1-SNAPSHOT"
+version = "1.4.2-SNAPSHOT"
 
 paper {
     val mainPackage = "github.tyonakaisan.horsechecker"
@@ -73,7 +73,6 @@ tasks {
 
     shadowJar {
         this.archiveClassifier.set(null as String?)
-        relocate("org.spongepowered.configurate", "github.tyonakaisan.horsechecker.configurate")
     }
 
     runServer {
