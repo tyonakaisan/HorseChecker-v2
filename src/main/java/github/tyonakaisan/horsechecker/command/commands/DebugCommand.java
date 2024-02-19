@@ -1,11 +1,5 @@
 package github.tyonakaisan.horsechecker.command.commands;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.arguments.standard.BooleanArgument;
-import cloud.commandframework.arguments.standard.DoubleArgument;
-import cloud.commandframework.arguments.standard.EnumArgument;
-import cloud.commandframework.arguments.standard.IntegerArgument;
-import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
@@ -25,6 +19,12 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.parser.standard.BooleanParser;
+import org.incendo.cloud.parser.standard.DoubleParser;
+import org.incendo.cloud.parser.standard.EnumParser;
+import org.incendo.cloud.parser.standard.IntegerParser;
 
 import java.text.DecimalFormat;
 import java.util.Objects;
@@ -61,11 +61,11 @@ public final class DebugCommand implements HorseCheckerCommand {
 
 
         this.commandManager.command(debug.literal("spawnRandomHorse")
-                .argument(IntegerArgument.optional("time"))
-                .argument(EnumArgument.optional(HorseType.class, "horseType"))
-                .argument(BooleanArgument.optional("tame"))
-                .argument(DoubleArgument.optional("addSpeed"))
-                .argument(DoubleArgument.optional("addJump"))
+                .optional("time", IntegerParser.integerParser())
+                .optional("type", EnumParser.enumParser(HorseType.class))
+                .optional("tame", BooleanParser.booleanParser())
+                .optional("spped", DoubleParser.doubleParser())
+                .optional("jump", DoubleParser.doubleParser())
                 .permission("horsechecker.command.spawnrandomhorse")
                 .senderType(CommandSender.class)
                 .handler(this::spawnRandomHorse)
@@ -79,13 +79,13 @@ public final class DebugCommand implements HorseCheckerCommand {
     }
 
     private void spawnRandomHorse(final @NonNull CommandContext<CommandSender> context) {
-        final var sender = (Player) context.getSender();
-        final int[] time = {(int) context.getOptional("time").orElse(1)};
+        final var sender = (Player) context.sender();
+        final int[] time = {context.getOrDefault("time", 1)};
         final int max = 100;
-        final var horseType = (HorseType) context.getOptional("horseType").orElse(HorseType.HORSE);
-        final var tame = (boolean) context.getOptional("tame").orElse(false);
-        final double addSpeed = (double) context.getOptional("addSpeed").orElse(0.0);
-        final double addJump = (double) context.getOptional("addJump").orElse(0.0);
+        final var horseType = context.getOrDefault("type", HorseType.HORSE);
+        final var tame = (boolean) context.getOrDefault("tame", false);
+        final double addSpeed = context.getOrDefault("speed", 0.0);
+        final double addJump = context.getOrDefault("jump", 0.0);
 
         if (time[0] > 100) {
             sender.sendMessage(
@@ -131,7 +131,7 @@ public final class DebugCommand implements HorseCheckerCommand {
     }
 
     private void removeAllDebugHorse(final @NonNull CommandContext<CommandSender> context) {
-        final var sender = (Player) context.getSender();
+        final var sender = (Player) context.sender();
         final int[] counts = {0};
 
         sender.getServer().getWorlds().forEach(world ->

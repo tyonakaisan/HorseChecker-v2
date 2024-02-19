@@ -1,8 +1,5 @@
 package github.tyonakaisan.horsechecker.command.commands;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
-import cloud.commandframework.bukkit.parsers.selector.MultiplePlayerSelectorArgument;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.horse.Share;
@@ -10,6 +7,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.bukkit.data.Selector;
+import org.incendo.cloud.bukkit.parser.selector.MultiplePlayerSelectorParser;
 
 @DefaultQualifier(NonNull.class)
 public final class ShareCommand implements HorseCheckerCommand {
@@ -27,13 +27,13 @@ public final class ShareCommand implements HorseCheckerCommand {
     public void init() {
         final var command = this.commandManager.commandBuilder("horsechecker", "hc")
                 .literal("share")
-                .argument(MultiplePlayerSelectorArgument.of("player"))
+                .required("player", MultiplePlayerSelectorParser.multiplePlayerSelectorParser())
                 .permission("horsechecker.command.share")
                 .senderType(CommandSender.class)
                 .handler(handler -> {
-            final var sender = (Player) handler.getSender();
-            final MultiplePlayerSelector target = handler.get("player");
-            this.share.broadcastShareMessage(sender, target);
+            final var sender = (Player) handler.sender();
+            final Selector<Player> target = handler.get("player");
+            this.share.broadcastShareMessage(sender, target.values());
         }).build();
 
         this.commandManager.command(command);

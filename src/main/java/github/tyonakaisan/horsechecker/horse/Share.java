@@ -1,6 +1,5 @@
 package github.tyonakaisan.horsechecker.horse;
 
-import cloud.commandframework.bukkit.arguments.selector.MultiplePlayerSelector;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.tyonakaisan.yummytoast.Toast;
 import com.google.inject.Inject;
@@ -24,6 +23,7 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -111,7 +111,7 @@ public final class Share {
         }
     }
 
-    public void broadcastShareMessage(Player sender, MultiplePlayerSelector targets) {
+    public void broadcastShareMessage(Player sender, Collection<Player> targets) {
         if (!this.isShareable(sender)) {
             return;
         }
@@ -124,14 +124,14 @@ public final class Share {
 
         if (targetEntity instanceof AbstractHorse horse) {
             //もしものため
-            if (targets.getPlayers().isEmpty()) {
+            if (targets.isEmpty()) {
                 this.server.forEachAudience(player -> {
                     if (player instanceof Player receiver) {
                         this.sendBroadCastMessage(sender, receiver, horse);
                     }
                 });
             } else {
-                targets.getPlayers().forEach(receiver -> this.sendBroadCastMessage(sender, receiver, horse));
+                targets.forEach(receiver -> this.sendBroadCastMessage(sender, receiver, horse));
             }
 
             var icon = new ItemStack(Material.PLAYER_HEAD);

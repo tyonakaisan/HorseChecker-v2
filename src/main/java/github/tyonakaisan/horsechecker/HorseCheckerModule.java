@@ -1,8 +1,6 @@
 package github.tyonakaisan.horsechecker;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.execution.CommandExecutionCoordinator;
-import cloud.commandframework.paper.PaperCommandManager;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -11,9 +9,12 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.SenderMapper;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.paper.PaperCommandManager;
 
 import java.nio.file.Path;
-import java.util.function.Function;
 
 @DefaultQualifier(NonNull.class)
 public final class HorseCheckerModule extends AbstractModule {
@@ -39,9 +40,8 @@ public final class HorseCheckerModule extends AbstractModule {
         try {
             commandManager = new PaperCommandManager<>(
                     this.horseChecker,
-                    CommandExecutionCoordinator.simpleCoordinator(),
-                    Function.identity(),
-                    Function.identity()
+                    ExecutionCoordinator.simpleCoordinator(),
+                    SenderMapper.identity()
             );
         } catch (final Exception exception) {
             throw new RuntimeException("Failed to initialize command manager.", exception);

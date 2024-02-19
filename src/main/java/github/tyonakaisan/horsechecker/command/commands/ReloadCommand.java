@@ -1,6 +1,5 @@
 package github.tyonakaisan.horsechecker.command.commands;
 
-import cloud.commandframework.CommandManager;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
@@ -9,6 +8,7 @@ import github.tyonakaisan.horsechecker.packet.hologram.HologramManager;
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.incendo.cloud.CommandManager;
 
 @DefaultQualifier(NonNull.class)
 public final class ReloadCommand implements HorseCheckerCommand {
@@ -38,7 +38,7 @@ public final class ReloadCommand implements HorseCheckerCommand {
                 .permission("horsechecker.command.reload")
                 .senderType(CommandSender.class)
                 .handler(handler -> {
-                    var sender = handler.getSender();
+                    var sender = handler.sender();
                     this.configFactory.reloadPrimaryConfig();
                     this.messages.reloadMessage();
                     this.hologramManager.destroyAllHologram();

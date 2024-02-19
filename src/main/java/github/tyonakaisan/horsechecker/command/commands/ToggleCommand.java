@@ -1,7 +1,5 @@
 package github.tyonakaisan.horsechecker.command.commands;
 
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.manager.StateManager;
@@ -11,6 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.context.CommandContext;
 
 @DefaultQualifier(NonNull.class)
 public final class ToggleCommand implements HorseCheckerCommand {
@@ -58,7 +58,7 @@ public final class ToggleCommand implements HorseCheckerCommand {
     }
 
     private void toggleStats(final @NonNull CommandContext<CommandSender> context) {
-        final var sender = (Player) context.getSender();
+        final var sender = (Player) context.sender();
 
         if (this.stateManager.toggleState(sender, "stats")) {
             sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.toggle.success.show_stats_enable"));
@@ -70,7 +70,7 @@ public final class ToggleCommand implements HorseCheckerCommand {
     }
 
     private void toggleBreed(final @NonNull CommandContext<CommandSender> context) {
-        final var sender = (Player) context.getSender();
+        final var sender = (Player) context.sender();
 
         if (this.stateManager.toggleState(sender, "breed")) {
             sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.toggle.success.cancel_breed_enable"));
@@ -80,7 +80,7 @@ public final class ToggleCommand implements HorseCheckerCommand {
     }
 
     private void toggleBreedNotification(final @NonNull CommandContext<CommandSender> context) {
-        final var sender = (Player) context.getSender();
+        final var sender = (Player) context.sender();
 
         if (this.stateManager.toggleState(sender, "breed_notification")) {
             sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.notification.success.breed_notification_enable"));

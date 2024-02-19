@@ -25,7 +25,7 @@ dependencies {
     compileOnly("com.comphenix.protocol", "ProtocolLib", "5.2.0-SNAPSHOT")
 
     // Command
-    paperLibrary("cloud.commandframework", "cloud-paper", "1.8.4")
+    implementation("org.incendo", "cloud-paper", "2.0.0-beta.2")
 
     // Config
     paperLibrary("org.spongepowered", "configurate-hocon", "4.2.0-SNAPSHOT")
