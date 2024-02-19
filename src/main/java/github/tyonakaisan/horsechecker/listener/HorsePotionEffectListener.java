@@ -35,7 +35,7 @@ public final class HorsePotionEffectListener implements Listener {
             this.server.getScheduler()
                     .runTaskLater(
                             this.horseChecker,
-                            () -> this.hologramHandler.updateHorseStats(horse),
+                            () -> this.hologramHandler.update(horse),
                             1L);
         }
     }

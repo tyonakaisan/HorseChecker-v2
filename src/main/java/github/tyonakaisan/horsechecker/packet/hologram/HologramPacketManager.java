@@ -84,7 +84,7 @@ public final class HologramPacketManager {
                 .viewRange(2f)
                 .shadowRadius(0f)
                 .text(this.hologramData.text())
-                .backgroundColor(this.hologramData.horseStats().rankData().BackgroundColor())
+                .backgroundColor(this.hologramData.backgroundColor())
                 .seeThrough()
                 .alignment(TextDisplay.TextAlignment.LEFT)
                 .build());

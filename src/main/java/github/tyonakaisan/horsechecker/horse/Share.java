@@ -69,14 +69,13 @@ public final class Share {
             if (this.ownerCheck(horse, player)) {
                 return true;
             } else {
-                var horseStats = Converter.convertHorseStats(horse);
                 player.sendMessage(
                         this.messages.translatable(
                                 Messages.Style.ERROR,
                                 player,
                                 "share.error.different_owner",
                                 TagResolver.builder()
-                                        .tag("owner", Tag.selfClosingInserting(horseStats.plainOwnerName()))
+                                        .tag("owner", Tag.selfClosingInserting(new WrappedHorse(horse).plainOwnerName()))
                                         .build()));
                 return false;
             }
@@ -155,7 +154,7 @@ public final class Share {
     }
 
     private void sendBroadCastMessage(Player sender, Player receiver, AbstractHorse horse) {
-        var horseStats = Converter.convertHorseStats(horse);
+        var wrappedHorse = new WrappedHorse(horse);
         var horseNamePrefix = this.configFactory.primaryConfig().share().horseNamePrefix();
 
         var broadcast = this.messages.translatable(
@@ -164,11 +163,11 @@ public final class Share {
                 "share.success.broadcast",
                 TagResolver.builder()
                         .tag("hover", Tag.styling(style ->
-                                style.hoverEvent(HoverEvent.showText(Converter.statsMessageResolver(this.configFactory, horseStats)))))
+                                style.hoverEvent(HoverEvent.showText(Converter.statsMessageResolver(this.configFactory, wrappedHorse)))))
                         .tag("random_prefix",
                                 Tag.selfClosingInserting(Component.text(horseNamePrefix.get(ThreadLocalRandom.current().nextInt(horseNamePrefix.size())))))
-                        .tag("horse_name", Tag.selfClosingInserting(horseStats.horseName()))
-                        .tag("rank_color", Tag.styling(style -> style.color(horseStats.rankData().textColor())))
+                        .tag("horse_name", Tag.selfClosingInserting(wrappedHorse.horseName()))
+                        .tag("rank_color", Tag.styling(style -> style.color(wrappedHorse.getRank().textColor())))
                         .tag("player", Tag.selfClosingInserting(sender.displayName()))
                         .build()
         );

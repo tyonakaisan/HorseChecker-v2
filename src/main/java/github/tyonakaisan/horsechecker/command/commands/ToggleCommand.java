@@ -65,6 +65,7 @@ public final class ToggleCommand implements HorseCheckerCommand {
             this.hologramHandler.show(sender);
         } else {
             sender.sendMessage(this.messages.translatable(Messages.Style.ERROR, sender, "command.toggle.success.show_stats_disable"));
+            this.hologramHandler.cancel(sender);
         }
     }
 

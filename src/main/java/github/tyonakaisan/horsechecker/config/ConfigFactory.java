@@ -3,7 +3,7 @@ package github.tyonakaisan.horsechecker.config;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.config.primary.PrimaryConfig;
-import github.tyonakaisan.horsechecker.config.serialisation.LocaleSerializerConfigurate;
+import github.tyonakaisan.horsechecker.config.serialisation.LocaleSerializer;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -27,7 +27,7 @@ public final class ConfigFactory {
     private static final String PRIMARY_CONFIG_FILE_NAME = "config.conf";
 
     private final Path dataDirectory;
-    private final LocaleSerializerConfigurate localeSerializer;
+    private final LocaleSerializer localeSerializer;
     private final ComponentLogger logger;
 
     private @MonotonicNonNull PrimaryConfig primaryConfig;
@@ -35,7 +35,7 @@ public final class ConfigFactory {
     @Inject
     public ConfigFactory(
             final Path dataDirectory,
-            final LocaleSerializerConfigurate localeSerializer,
+            final LocaleSerializer localeSerializer,
             final ComponentLogger logger
     ) {
         this.dataDirectory = dataDirectory;

@@ -111,7 +111,7 @@ public final class HorseRank {
     public record HorseRankData(
             String rank,
             TextColor textColor,
-            int BackgroundColor,
+            int backgroundColor,
             Glow.Color glowColor
     ) {
     }

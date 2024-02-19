@@ -9,10 +9,16 @@ import org.bukkit.entity.AbstractHorse;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-public record HorseStats(
-        AbstractHorse horse,
-        HorseRank.HorseRankData rankData
+public record WrappedHorse(
+        AbstractHorse horse
 ) {
+
+    public HorseRank.HorseRankData getRank() {
+        return HorseRank.calcEvaluateRankData(
+                Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
+                Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue());
+    }
+
     public double genericSpeedToBlocPerSec() {
         var speed = 42.162962963 * Objects.requireNonNull(this.horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue();
         return Double.parseDouble(new DecimalFormat("#.###").format(speed));
@@ -43,12 +49,12 @@ public record HorseStats(
     public Component plainOwnerName() {
         return this.horse.getOwner() != null
                 ? MiniMessage.miniMessage().deserialize(Objects.requireNonNull(this.horse.getOwner().getName()))
-                : Component.text("no owner");
+                : Component.empty();
     }
 
     public Component horseName() {
         return this.horse.getName().equals("Horse")
-                ? MiniMessage.miniMessage().deserialize("<lang:entity.minecraft.horse>")
+                ? MiniMessage.miniMessage().deserialize("<lang:" + this.horse.getType().translationKey() + ">")
                 : Component.text(this.horse.getName());
     }
 

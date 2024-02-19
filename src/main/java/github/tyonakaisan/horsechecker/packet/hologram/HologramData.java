@@ -2,7 +2,6 @@ package github.tyonakaisan.horsechecker.packet.hologram;
 
 import com.comphenix.protocol.events.PacketContainer;
 import com.google.inject.Singleton;
-import github.tyonakaisan.horsechecker.horse.HorseStats;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -20,7 +19,7 @@ public final class HologramData {
     private final String hologramId;
     private Component text;
     private Location location;
-    private HorseStats horseStats;
+    private int backgroundColor;
 
     private final UUID entityUid;
     private final int entityId;
@@ -30,12 +29,12 @@ public final class HologramData {
             String hologramId,
             Component text,
             Location location,
-            HorseStats horseStats
+            int backgroundColor
     ) {
         this.hologramId = hologramId;
         this.text = text;
         this.location = location;
-        this.horseStats = horseStats;
+        this.backgroundColor = backgroundColor;
 
         this.entityId = ThreadLocalRandom.current().nextInt();
         this.entityUid = UUID.randomUUID();
@@ -61,8 +60,8 @@ public final class HologramData {
         return this.location;
     }
 
-    public HorseStats horseStats() {
-        return this.horseStats;
+    public int backgroundColor() {
+        return this.backgroundColor;
     }
 
     public void showFrom(Player player, int vehicleId) {
@@ -76,16 +75,17 @@ public final class HologramData {
         new HologramPacketManager(this).hide(player);
     }
 
-    public void updateText(Component newText) {
-        this.text = newText;
+    public void updateHologram() {
         this.entityMetadataPacket = new HologramPacketManager(this).createEntityMetadataPacket();
         new HologramPacketManager(this).update();
     }
 
-    public void updateHorseStats(HorseStats newHorseStats) {
-        this.horseStats = newHorseStats;
-        this.entityMetadataPacket = new HologramPacketManager(this).createEntityMetadataPacket();
-        new HologramPacketManager(this).update();
+    public void updateText(Component newText) {
+        this.text = newText;
+    }
+
+    public void updateBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 
     public void updateLocation(Location newLocation) {

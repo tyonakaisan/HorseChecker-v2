@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
+import github.tyonakaisan.horsechecker.packet.hologram.HologramManager;
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -14,16 +15,19 @@ public final class ReloadCommand implements HorseCheckerCommand {
 
     private final ConfigFactory configFactory;
     private final Messages messages;
+    private final HologramManager hologramManager;
     private final CommandManager<CommandSender> commandManager;
 
     @Inject
     public ReloadCommand(
             ConfigFactory configFactory,
             Messages messages,
+            HologramManager hologramManager,
             CommandManager<CommandSender> commandManager
     ) {
         this.configFactory = configFactory;
         this.messages = messages;
+        this.hologramManager = hologramManager;
         this.commandManager = commandManager;
     }
 
@@ -37,6 +41,7 @@ public final class ReloadCommand implements HorseCheckerCommand {
                     var sender = handler.getSender();
                     this.configFactory.reloadPrimaryConfig();
                     this.messages.reloadMessage();
+                    this.hologramManager.destroyAllHologram();
                     sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.reload.success"));
                 })
                 .build();

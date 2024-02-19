@@ -9,8 +9,13 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @SuppressWarnings("FieldMayBeFinal")
 public final class PrimaryConfig {
 
+    private HologramSettings hologram = new HologramSettings();
     private HorseSettings horse = new HorseSettings();
     private ShareSettings share = new ShareSettings();
+
+    public HologramSettings hologram() {
+        return this.hologram;
+    }
 
     public HorseSettings horse() {
         return this.horse;

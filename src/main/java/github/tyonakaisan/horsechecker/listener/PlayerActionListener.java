@@ -3,12 +3,13 @@ package github.tyonakaisan.horsechecker.listener;
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.packet.hologram.HologramHandler;
-import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDismountEvent;
+import org.bukkit.event.entity.EntityMountEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -28,17 +29,27 @@ public final class PlayerActionListener implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        showHologram(event.getPlayer());
+    public void onMount(EntityMountEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            this.hologramHandler.cancel(player);
+        }
     }
 
     @EventHandler
     public void onDismount(EntityDismountEvent event) {
-        if (event.getDismounted() instanceof AbstractHorse horse) {
-            horse.getPassengers().forEach(passenger -> {
-                if (passenger instanceof Player player) showHologram(player);
-            });
+        if (event.getEntity() instanceof Player player) {
+            this.hologramHandler.show(player);
         }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        this.hologramHandler.show(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        this.hologramHandler.cancel(event.getPlayer());
     }
 
     private void showHologram(Player player) {

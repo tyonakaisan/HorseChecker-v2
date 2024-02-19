@@ -5,6 +5,7 @@ import com.tyonakaisan.glowlib.glow.Glow;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.horse.HorseFinder;
+import github.tyonakaisan.horsechecker.horse.WrappedHorse;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.message.Messages;
 import net.kyori.adventure.text.Component;
@@ -61,7 +62,7 @@ public final class HorseBreedListener implements Listener {
         int health = (int) horse.getHealth();
         int age = horse.getAge();
         int loveMode = horse.getLoveModeTicks();
-        var horseStats = Converter.convertHorseStats(horse);
+        var wrappedHorse = new WrappedHorse(horse);
 
         //繫殖クールタイム中&体力がMAXであればイベントキャンセル
         if (age > 0 && health == maxHealth) {
@@ -71,7 +72,7 @@ public final class HorseBreedListener implements Listener {
                             player,
                             "breeding.normal_cool_time",
                             TagResolver.builder()
-                                    .tag("cool_time", Tag.selfClosingInserting(Component.text(horseStats.breedingCoolTime())))
+                                    .tag("cool_time", Tag.selfClosingInserting(Component.text(wrappedHorse.breedingCoolTime())))
                                     .build()));
             event.setCancelled(true);
             //繫殖モード中(ハートが出てる時)&体力がMAXであればイベントキャンセル
@@ -82,7 +83,7 @@ public final class HorseBreedListener implements Listener {
                             player,
                             "breeding.current_love_mode_time",
                             TagResolver.builder()
-                                    .tag("cool_time", Tag.selfClosingInserting(Component.text(horseStats.loveModeTime())))
+                                    .tag("cool_time", Tag.selfClosingInserting(Component.text(wrappedHorse.loveModeTime())))
                                     .build()));
             event.setCancelled(true);
         }
@@ -97,9 +98,9 @@ public final class HorseBreedListener implements Listener {
             var motherHorse = (AbstractHorse) event.getMother();
             var fatherHorse = (AbstractHorse) event.getFather();
 
-            var childrenStats = Converter.convertHorseStats(childrenHorse);
-            var motherStats = Converter.convertHorseStats(motherHorse);
-            var fatherStats = Converter.convertHorseStats(fatherHorse);
+            var wrappedChildren = new WrappedHorse(childrenHorse);
+            var wrappedMother = new WrappedHorse(motherHorse);
+            var wrappedFather = new WrappedHorse(fatherHorse);
 
             player.sendMessage(
                     this.messages.translatable(
@@ -117,7 +118,7 @@ public final class HorseBreedListener implements Listener {
                                             }, builder -> builder.uses(3)))))
                                     .tag("hover", Tag.styling(style ->
                                             style.hoverEvent(HoverEvent.showText(Component.text()
-                                                    .append(Converter.withParentsStatsMessageResolver(this.configFactory, childrenStats, motherStats, fatherStats))))))
+                                                    .append(Converter.withParentsStatsMessageResolver(this.configFactory, wrappedChildren, wrappedMother, wrappedFather))))))
                                     .build()));
         }
     }

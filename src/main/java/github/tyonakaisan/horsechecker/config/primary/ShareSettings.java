@@ -20,7 +20,7 @@ public final class ShareSettings {
     @Comment("""
             shareコマンドのクールダウン(秒)
             """)
-    private int shareCommandIntervalTime = 60;
+    private int shareCommandIntervalTime = 30;
 
     @Comment("""
             所有者関係なくShareコマンドを使えるかどうか

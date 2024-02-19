@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.Converter;
-import github.tyonakaisan.horsechecker.horse.HorseStats;
-import net.kyori.adventure.text.Component;
+import github.tyonakaisan.horsechecker.horse.WrappedHorse;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -21,14 +21,17 @@ public final class HologramManager {
     private final Map<String, HologramData> hologramMap = new HashMap<>();
 
     private final Server server;
+    private final ComponentLogger logger;
     private final ConfigFactory configFactory;
 
     @Inject
     public HologramManager(
             final Server server,
+            final ComponentLogger logger,
             final ConfigFactory configFactory
     ) {
         this.server = server;
+        this.logger = logger;
         this.configFactory = configFactory;
     }
 
@@ -40,43 +43,59 @@ public final class HologramManager {
         return this.hologramMap.get(hologramId);
     }
 
-    public void createHologram(HorseStats horseStats, Component text) {
-        var hologramId = horseStats.horse().getUniqueId().toString();
-        if (this.hologramMap.containsKey(hologramId)) return;
-        var hologramData = new HologramData(hologramId, text, horseStats.location(), horseStats);
+    public void createHologram(WrappedHorse wrappedHorse) {
+        var hologramId = wrappedHorse.horse().getUniqueId().toString();
+        if (this.hologramMap.containsKey(hologramId)) {
+            return;
+        }
+        var text = Converter.statsMessageResolver(this.configFactory, wrappedHorse);
+        var hologramData = new HologramData(hologramId, text, wrappedHorse.location(), wrappedHorse.getRank().backgroundColor());
 
         this.hologramMap.put(hologramId, hologramData);
     }
 
-    public void deleteHologram(HorseStats horseStats) {
+    public void deleteHologram(WrappedHorse wrappedHorse) {
         this.server.forEachAudience(audience -> {
-            if (audience instanceof Player player) this.hideHologram(horseStats, player);
+            if (audience instanceof Player player) this.hideHologram(wrappedHorse, player);
         });
-        var horseUuid = horseStats.horse().getUniqueId().toString();
+        var horseUuid = wrappedHorse.horse().getUniqueId().toString();
         this.hologramMap.remove(horseUuid);
     }
 
-    public void hideHologram(HorseStats horseStats, Player player) {
-        var hologramId = horseStats.horse().getUniqueId().toString();
+    public void destroyAllHologram() {
+        this.logger.info("Destroy all holograms...");
+        this.hologramMap.values().forEach(hologramData ->
+                this.server.forEachAudience(audience -> {
+                    if (audience instanceof Player player) {
+                        hologramData.hideFrom(player);
+                    }
+                }));
+        this.hologramMap.clear();
+        this.logger.info("All holograms were destroyed!");
+    }
+
+    public void hideHologram(WrappedHorse wrappedHorse, Player player) {
+        var hologramId = wrappedHorse.horse().getUniqueId().toString();
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            hologramData.updateLocation(horseStats.location());
+            hologramData.updateLocation(wrappedHorse.location());
             hologramData.hideFrom(player);
         });
     }
 
-    public void showHologram(HorseStats horseStats, Player player, int vehicleId) {
-        var hologramId = horseStats.horse().getUniqueId().toString();
+    public void showHologram(WrappedHorse wrappedHorse, Player player, int vehicleId) {
+        var hologramId = wrappedHorse.horse().getUniqueId().toString();
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            hologramData.updateLocation(horseStats.location());
+            hologramData.updateLocation(wrappedHorse.location());
             hologramData.showFrom(player, vehicleId);
         });
     }
 
-    public void updateHologram(String hologramId, HorseStats horseStats) {
+    public void updateHologram(String hologramId, WrappedHorse wrappedHorse) {
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            var text = Converter.statsMessageResolver(this.configFactory, horseStats);
-            hologramData.updateHorseStats(horseStats);
+            var text = Converter.statsMessageResolver(this.configFactory, wrappedHorse);
+            hologramData.updateBackgroundColor(wrappedHorse.getRank().backgroundColor());
             hologramData.updateText(text);
+            hologramData.updateHologram();
         });
     }
 }

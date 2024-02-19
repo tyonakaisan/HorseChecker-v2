@@ -12,26 +12,23 @@ public final class HorseSettings {
 
     @Comment("""
             発光エフェクトの効果時間
+            1秒 = 20
             """)
-    private long glowingTime = 400L;
+    private int glowingTime = 400;
 
     @Comment("""
             検知可能距離
             """)
     private int targetRange = 20;
 
-    private String rankScoreResultText = "Score: <rank_color><rank></rank_color>";
-    private String speedResultText = "Speed: <#ffa500><speed></#ffa500> blocks/s";
-    private String jumpResultText = "Jump : <#ffa500><jump></#ffa500> blocks";
-    private String healthResultText = "MaxHP: <#ffa500><health></#ffa500><red>♥</red>";
-    private String ownerResultText = "<owner>";
-    private String parentResultText = "<dark_gray>(<color:#ff85f1><mother></color> / <color:#47b9ff><father></color>)";
     @Comment("""
-            ホログラムのステータス表示順
+            ホログラムを表示するタスクの処理頻度
+            数字を大きくするほど処理は軽くなります
             """)
-    private String resultText = "<rank_score><newline><speed><newline><jump><newline><health><newline><owner>";
+    private int displayHologramTaskInterval = 2;
 
-    public long glowingTime() {
+
+    public int glowingTime() {
         return this.glowingTime;
     }
 
@@ -39,31 +36,7 @@ public final class HorseSettings {
         return this.targetRange;
     }
 
-    public String rankScoreResultText() {
-        return this.rankScoreResultText;
-    }
-
-    public String speedResultText() {
-        return this.speedResultText;
-    }
-
-    public String jumpResultText() {
-        return this.jumpResultText;
-    }
-
-    public String healthResultText() {
-        return this.healthResultText;
-    }
-
-    public String ownerResultText() {
-        return this.ownerResultText;
-    }
-
-    public String parentResultText() {
-        return this.parentResultText;
-    }
-
-    public String resultText() {
-        return this.resultText;
+    public int displayHologramTaskInterval() {
+        return this.displayHologramTaskInterval;
     }
 }

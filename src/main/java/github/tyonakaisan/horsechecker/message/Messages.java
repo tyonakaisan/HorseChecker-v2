@@ -59,30 +59,19 @@ public final class Messages {
     public void reloadMessage() {
         this.locales.clear();
         this.logger.info("Reloading locales...");
-        try {
-            this.loadMessageFile();
-        } catch (IOException e) {
-            this.logger.error("Failed to reload locales.", e);
-        }
+        this.loadMessageFile();
     }
 
-    public void loadMessageFile() throws IOException {
+    public void loadMessageFile() {
         var path = this.dataDirectory.resolve("locale");
 
         if (!Files.exists(path)) {
-            Files.createDirectories(path);
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                this.logger.error(String.format("Failed to create directory %s", path), e);
+            }
         }
-
-        // Load default locale
-        var defaultLocalePath = path.resolve("messages.properties");
-        if (!Files.exists(defaultLocalePath)) {
-            ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE, Locale.US, UTF8ResourceBundleControl.get());
-
-            // Create default locale
-            this.createProperties(defaultLocalePath, bundle, "This is a sample file. Create a new locale or rewrite an existing file.");
-        }
-
-        this.load(Locale.US, defaultLocalePath);
 
         // Create supported locales
         this.createSupportedLocales(path);
@@ -106,12 +95,12 @@ public final class Messages {
 
             if (!Files.exists(localePath)) {
                 ResourceBundle bundle = ResourceBundle.getBundle("locale." + fileName, locale, UTF8ResourceBundleControl.get());
-                this.createProperties(localePath, bundle, null);
+                this.createProperties(localePath, bundle);
             }
         }
     }
 
-    private void createProperties(final Path path, final ResourceBundle bundle, @Nullable final String comment) {
+    private void createProperties(final Path path, final ResourceBundle bundle) {
         var properties = new Properties() {
             @Override
             public synchronized Set<Map.Entry<Object, Object>> entrySet() {
@@ -128,7 +117,7 @@ public final class Messages {
                             key -> key,
                             bundle::getString
                     )));
-            properties.store(outputStream, comment);
+            properties.store(outputStream, null);
             this.logger.info("successfully '{}' created!", path.getFileName());
         } catch (IOException e) {
             this.logger.error("Failed to create '{}' locales.", bundle.getLocale(), e);
