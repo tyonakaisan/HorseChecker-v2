@@ -29,16 +29,15 @@ dependencies {
 
     // Config
     paperLibrary("org.spongepowered", "configurate-hocon", "4.2.0-SNAPSHOT")
-    paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.14.0")
+    paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.15.0")
 
     // Utils
     paperLibrary("com.google.inject", "guice", "7.0.0")
-    paperLibrary("io.github.skytasul", "glowingentities", "1.3.2")
     implementation("com.github.tyonakaisan", "GlowLib", "0.2.1")
     implementation("com.github.tyonakaisan", "Toast", "0.1.1")
 }
 
-version = "1.4.2-SNAPSHOT"
+version = "1.4.3-SNAPSHOT"
 
 paper {
     val mainPackage = "github.tyonakaisan.horsechecker"
