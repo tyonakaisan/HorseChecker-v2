@@ -43,7 +43,7 @@ public final class HologramHandler {
     public void show(Player player) {
         if (this.stateManager.state(player, "stats") && !player.isInsideVehicle()) {
             this.hologramTask.putIfAbsent(player.getUniqueId(), new HologramTask(player, this.configFactory.primaryConfig().horse().targetRange(), this.hologramManager));
-            this.hologramTask.get(player.getUniqueId()).runTask(this.horseChecker, 0, this.configFactory.primaryConfig().horse().displayHologramTaskInterval());
+            this.hologramTask.get(player.getUniqueId()).runTask(this.horseChecker, 0, this.configFactory.primaryConfig().hologram().displayHologramTaskInterval());
         }
     }
 

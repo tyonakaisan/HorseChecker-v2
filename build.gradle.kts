@@ -25,7 +25,7 @@ dependencies {
     compileOnly("com.comphenix.protocol", "ProtocolLib", "5.2.0-SNAPSHOT")
 
     // Command
-    implementation("org.incendo", "cloud-paper", "2.0.0-beta.2")
+    paperLibrary("org.incendo", "cloud-paper", "2.0.0-beta.2")
 
     // Config
     paperLibrary("org.spongepowered", "configurate-hocon", "4.2.0-SNAPSHOT")
@@ -37,7 +37,7 @@ dependencies {
     implementation("com.github.tyonakaisan", "Toast", "0.1.1")
 }
 
-version = "1.4.3-SNAPSHOT"
+version = "1.4.4-SNAPSHOT"
 
 paper {
     val mainPackage = "github.tyonakaisan.horsechecker"

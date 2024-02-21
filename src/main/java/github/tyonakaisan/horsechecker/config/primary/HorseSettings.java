@@ -21,22 +21,11 @@ public final class HorseSettings {
             """)
     private int targetRange = 20;
 
-    @Comment("""
-            ホログラムを表示するタスクの処理頻度
-            数字を大きくするほど処理は軽くなります
-            """)
-    private int displayHologramTaskInterval = 2;
-
-
     public int glowingTime() {
         return this.glowingTime;
     }
 
     public int targetRange() {
         return this.targetRange;
-    }
-
-    public int displayHologramTaskInterval() {
-        return this.displayHologramTaskInterval;
     }
 }

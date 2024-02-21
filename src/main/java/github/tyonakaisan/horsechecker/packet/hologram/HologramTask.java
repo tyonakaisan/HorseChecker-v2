@@ -30,12 +30,17 @@ public final class HologramTask extends BukkitRunnable {
     @Override
     public void run() {
         this.getTargetHorse().ifPresentOrElse(newTargetedHorse -> {
+            if (!newTargetedHorse.getPassengers().isEmpty()) {
+                return;
+            }
+
             if (this.targetedHorse == null) {
                 this.targetedHorse = newTargetedHorse;
                 var newWrappedHorse = new WrappedHorse(newTargetedHorse);
 
                 this.hologramManager.createHologram(newWrappedHorse);
                 this.hologramManager.showHologram(newWrappedHorse, this.player, newTargetedHorse.getEntityId());
+                return;
             }
 
             if (!this.targetedHorse.equals(newTargetedHorse)) {
@@ -63,9 +68,13 @@ public final class HologramTask extends BukkitRunnable {
         this.cancel();
     }
 
+    // 条件に合う馬が居無かった場合はempty
     private Optional<AbstractHorse> getTargetHorse() {
-        return this.player.getTargetEntity(this.targetRange, false) instanceof AbstractHorse horse
-                ? Optional.of(horse)
-                : Optional.empty();
+        if (this.player.getTargetEntity(this.targetRange, false) instanceof AbstractHorse horse) {
+            return horse.getPassengers().isEmpty()
+                    ? Optional.of(horse)
+                    : Optional.empty();
+        }
+        return Optional.empty();
     }
 }

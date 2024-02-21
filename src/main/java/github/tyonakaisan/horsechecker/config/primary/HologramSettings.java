@@ -21,6 +21,12 @@ public class HologramSettings {
             """)
     private String resultText = "<rank_score><newline><speed><newline><jump><newline><health><newline><owner>";
 
+    @Comment("""
+            ホログラムを表示するタスクの処理頻度
+            数字を大きくするほど処理は軽くなります
+            """)
+    private int displayHologramTaskInterval = 2;
+
     public String rankScoreResultText() {
         return this.rankScoreResultText;
     }
@@ -47,5 +53,9 @@ public class HologramSettings {
 
     public String resultText() {
         return this.resultText;
+    }
+
+    public int displayHologramTaskInterval() {
+        return this.displayHologramTaskInterval;
     }
 }
