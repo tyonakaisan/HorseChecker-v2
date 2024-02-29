@@ -2,6 +2,7 @@ package github.tyonakaisan.horsechecker.manager;
 
 import com.google.inject.Inject;
 import github.tyonakaisan.horsechecker.HorseChecker;
+import github.tyonakaisan.horsechecker.LegacyUpdater;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
@@ -24,32 +25,32 @@ public final class StateManager {
         this.horseChecker = horseChecker;
     }
 
-    public boolean toggleState(Player player, String stateKey) {
-        var pdc = player.getPersistentDataContainer();
-        NamespacedKey namespacedKey = new NamespacedKey(this.horseChecker, stateKey);
+    public boolean toggleState(final Player player, final String stateKey) {
+        final var pdc = player.getPersistentDataContainer();
+        final var namespacedKey = new NamespacedKey(this.horseChecker, stateKey);
+        LegacyUpdater.playerPDCUpdateIfNeeded(player, namespacedKey);
 
         if (!pdc.has(namespacedKey)) {
-            pdc.set(namespacedKey, PersistentDataType.STRING, "false");
+            pdc.set(namespacedKey, PersistentDataType.BOOLEAN, false);
             return false;
         }
 
-        if (Objects.requireNonNull(pdc.get(namespacedKey, PersistentDataType.STRING)).equalsIgnoreCase("true")) {
-            pdc.remove(namespacedKey);
-            pdc.set(namespacedKey, PersistentDataType.STRING, "false");
+        if (Boolean.TRUE.equals(Objects.requireNonNull(pdc.get(namespacedKey, PersistentDataType.BOOLEAN)))) {
+            pdc.set(namespacedKey, PersistentDataType.BOOLEAN, false);
             return false;
         } else {
-            pdc.remove(namespacedKey);
-            pdc.set(namespacedKey, PersistentDataType.STRING, "true");
+            pdc.set(namespacedKey, PersistentDataType.BOOLEAN, true);
             return true;
         }
     }
 
-    public boolean state(Player player, String stateKey) {
-        var pdc = player.getPersistentDataContainer();
-        NamespacedKey namespacedKey = new NamespacedKey(this.horseChecker, stateKey);
+    public boolean state(final Player player, final String stateKey) {
+        final var pdc = player.getPersistentDataContainer();
+        final var namespacedKey = new NamespacedKey(this.horseChecker, stateKey);
+        LegacyUpdater.playerPDCUpdateIfNeeded(player, namespacedKey);
 
         if (!pdc.has(namespacedKey)) return false;
 
-        return Objects.requireNonNull(pdc.get(namespacedKey, PersistentDataType.STRING)).equalsIgnoreCase("true");
+        return Boolean.TRUE.equals(Objects.requireNonNull(pdc.get(namespacedKey, PersistentDataType.BOOLEAN)));
     }
 }

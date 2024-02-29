@@ -26,10 +26,10 @@ public final class HologramData {
     private @Nullable PacketContainer entityMetadataPacket;
 
     public HologramData(
-            String hologramId,
-            Component text,
-            Location location,
-            int backgroundColor
+            final String hologramId,
+            final Component text,
+            final Location location,
+            final int backgroundColor
     ) {
         this.hologramId = hologramId;
         this.text = text;
@@ -64,14 +64,14 @@ public final class HologramData {
         return this.backgroundColor;
     }
 
-    public void showFrom(Player player, int vehicleId) {
+    public void showFrom(final Player player, final int vehicleId) {
         if (this.entityMetadataPacket == null) {
             this.entityMetadataPacket = new HologramPacketManager(this).createEntityMetadataPacket();
         }
         new HologramPacketManager(this).show(player, vehicleId, this.entityMetadataPacket);
     }
 
-    public void hideFrom(Player player) {
+    public void hideFrom(final Player player) {
         new HologramPacketManager(this).hide(player);
     }
 
@@ -80,15 +80,15 @@ public final class HologramData {
         new HologramPacketManager(this).update();
     }
 
-    public void updateText(Component newText) {
+    public void updateText(final Component newText) {
         this.text = newText;
     }
 
-    public void updateBackgroundColor(int backgroundColor) {
+    public void updateBackgroundColor(final int backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
-    public void updateLocation(Location newLocation) {
+    public void updateLocation(final Location newLocation) {
         this.location = newLocation;
     }
 }

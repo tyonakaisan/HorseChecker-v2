@@ -53,38 +53,38 @@ public abstract class EntityData<B> extends WrappedDataManager {
         return (B) this;
     }
 
-    public B airTick(int ticks) {
+    public B airTick(final int ticks) {
         this.addIntData(1, ticks);
         return (B) this;
     }
 
-    public B name(Component name) {
+    public B name(final Component name) {
         this.addChatData(2, name);
         return (B) this;
     }
 
-    public B name(Component name, boolean visible) {
+    public B name(final Component name, final boolean visible) {
         this.addChatData(2, name);
         this.addBooleanData(3, visible);
         return (B) this;
     }
 
-    public B silent(boolean silent) {
+    public B silent(final boolean silent) {
         this.addBooleanData(4, silent);
         return (B) this;
     }
 
-    public B gravity(boolean gravity) {
+    public B gravity(final boolean gravity) {
         this.addBooleanData(5, gravity);
         return (B) this;
     }
 
-    public B pose(Pose pose) {
+    public B pose(final Pose pose) {
         this.addPoseData(6, pose);
         return (B) this;
     }
 
-    public B frozenTicks(int ticks) {
+    public B frozenTicks(final int ticks) {
         this.addIntData(7, ticks);
         return (B) this;
     }

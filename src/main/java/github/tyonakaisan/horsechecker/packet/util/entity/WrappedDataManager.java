@@ -27,38 +27,38 @@ public abstract class WrappedDataManager {
     private final WrappedDataWatcher.Serializer poseSerializer = WrappedDataWatcher.Registry.get(EnumWrappers.getEntityPoseClass());
     private final WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer();
 
-    protected void addByteData(int index, Object object) {
+    protected void addByteData(final int index, final Object object) {
         this.dataValues.add(new WrappedDataValue(index, this.byteSerializer, object));
     }
 
-    protected void addIntData(int index, Object object) {
+    protected void addIntData(final int index, final Object object) {
         this.dataValues.add(new WrappedDataValue(index, this.intSerializer, object));
     }
 
-    protected void addFloatData(int index, Object object) {
+    protected void addFloatData(final int index, final Object object) {
         this.dataValues.add(new WrappedDataValue(index, this.floatSerializer, object));
     }
 
-    protected void addBooleanData(int index, Object object) {
+    protected void addBooleanData(final int index, final Object object) {
         this.dataValues.add(new WrappedDataValue(index, this.booleanSerializer, object));
     }
 
-    protected void addVectorData(int index, Vector vector) {
-        WrappedDataValue value = new WrappedDataValue(index, this.vectorSerializer, null);
+    protected void addVectorData(final int index, final Vector vector) {
+        final WrappedDataValue value = new WrappedDataValue(index, this.vectorSerializer, null);
         value.setValue(vector.toVector3f());
 
         this.dataValues.add(value);
     }
 
-    protected void addQuaternionData(int index, Object object) {
+    protected void addQuaternionData(final int index, final Object object) {
         this.dataValues.add(new WrappedDataValue(index, this.quaternionSerializer, object));
     }
 
-    protected void addPoseData(int index, Object object) {
+    protected void addPoseData(final int index, final Object object) {
         this.dataValues.add(new WrappedDataValue(index, this.poseSerializer, object));
     }
 
-    protected void addChatData(int index, Object object) {
+    protected void addChatData(final int index, final Object object) {
         this.dataValues.add(new WrappedDataValue(index, this.chatSerializer, object));
     }
 

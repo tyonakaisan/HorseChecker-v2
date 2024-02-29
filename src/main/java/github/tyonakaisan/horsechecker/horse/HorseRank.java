@@ -16,18 +16,18 @@ public final class HorseRank {
     }
 
     public static double calcEvaluateValue(double paramSpeed, double jumpHeight) {
-        double jumpRating = Math.floor(Math.pow(jumpHeight, 1.7) * 5.293 * 2.0D) / (2.0D * 5.0D);
+        final double jumpRating = Math.floor(Math.pow(jumpHeight, 1.7) * 5.293 * 2.0D) / (2.0D * 5.0D);
 
         final double speedHeavy = 10.0D;
         final double heightHeavy = 1.0D;
 
         final double valueMax = 0.3375D * speedHeavy + heightHeavy;
-        double value = (paramSpeed * speedHeavy) + jumpRating * heightHeavy;
+        final double value = (paramSpeed * speedHeavy) + jumpRating * heightHeavy;
         return value / valueMax;
     }
 
     public static HorseRankData calcEvaluateRankData(double paramSpeed, double jumpHeight) {
-        double horseEvaluate = calcEvaluateValue(paramSpeed, jumpHeight);
+        final double horseEvaluate = calcEvaluateValue(paramSpeed, jumpHeight);
         String rank;
         TextColor textColor;
         Glow.Color glowColor;
@@ -45,8 +45,8 @@ public final class HorseRank {
                 "LEGEND"
         };
 
-        double rate = horseEvaluate * 2.0D - 1.0;
-        int pt = (int) (rate * ratingStage.length);
+        final double rate = horseEvaluate * 2.0D - 1.0;
+        final int pt = (int) (rate * ratingStage.length);
 
         if (pt >= ratingStage.length) {
             rank = ratingStage[ratingStage.length - 1];

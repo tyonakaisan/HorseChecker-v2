@@ -11,43 +11,43 @@ import org.joml.Quaterniond;
 @DefaultQualifier(NonNull.class)
 public abstract class DisplayData<B> extends EntityData<B> {
 
-    public B interpolationDelay(int delay) {
+    public B interpolationDelay(final int delay) {
         this.addIntData(8, delay);
         return (B) this;
     }
 
-    public B interpolationDuration(int duration) {
+    public B interpolationDuration(final int duration) {
         this.addIntData(9, duration);
         return (B) this;
     }
 
     //仮
-    public B teleportInterpolationDuration(int duration) {
+    public B teleportInterpolationDuration(final int duration) {
         this.addIntData(10, duration);
         return (B) this;
     }
 
-    public B translation(Vector vector) {
+    public B translation(final Vector vector) {
         this.addVectorData(11, vector);
         return (B) this;
     }
 
-    public B scale(Vector vector) {
+    public B scale(final Vector vector) {
         this.addVectorData(12, vector);
         return (B) this;
     }
 
-    public B rotationLeft(Quaterniond quaterniond) {
+    public B rotationLeft(final Quaterniond quaterniond) {
         this.addQuaternionData(13, quaterniond);
         return (B) this;
     }
 
-    public B rotationRight(Quaterniond quaterniond) {
+    public B rotationRight(final Quaterniond quaterniond) {
         this.addQuaternionData(14, quaterniond);
         return (B) this;
     }
 
-    public B billboard(Display.Billboard billboard) {
+    public B billboard(final Display.Billboard billboard) {
         switch (billboard) {
             case FIXED -> this.addByteData(15, (byte) 0);
             case VERTICAL -> this.addByteData(15, (byte) 1);
@@ -57,37 +57,37 @@ public abstract class DisplayData<B> extends EntityData<B> {
         return (B) this;
     }
 
-    public B brightness(int lightLevel) {
+    public B brightness(final int lightLevel) {
         this.addIntData(16, lightLevel);
         return (B) this;
     }
 
-    public B viewRange(float range) {
+    public B viewRange(final float range) {
         this.addFloatData(17, range);
         return (B) this;
     }
 
-    public B shadowRadius(float radius) {
+    public B shadowRadius(final float radius) {
         this.addFloatData(18, radius);
         return (B) this;
     }
 
-    public B shadowStrength(float strength) {
+    public B shadowStrength(final float strength) {
         this.addFloatData(19, strength);
         return (B) this;
     }
 
-    public B width(float width) {
+    public B width(final float width) {
         this.addFloatData(20, width);
         return (B) this;
     }
 
-    public B height(float height) {
+    public B height(final float height) {
         this.addFloatData(21, height);
         return (B) this;
     }
 
-    public B glowColor(int color) {
+    public B glowColor(final int color) {
         this.addIntData(22, color);
         return (B) this;
     }

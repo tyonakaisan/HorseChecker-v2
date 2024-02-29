@@ -49,8 +49,8 @@ public final class Share {
 
     private final HashMap<UUID, Instant> intervalMap = new HashMap<>();
 
-    private boolean isShareable(Player player) {
-        var targetRange = this.configFactory.primaryConfig().horse().targetRange();
+    private boolean isShareable(final Player player) {
+        final var targetRange = this.configFactory.primaryConfig().horse().targetRange();
         //ターゲットしてるエンティティがnullの場合
         if (player.getTargetEntity(targetRange, false) == null) {
             player.sendMessage(this.messages.translatable(Messages.Style.ERROR, player, "share.error.targeted_horse_is_null"));
@@ -66,7 +66,7 @@ public final class Share {
         //ターゲットしてる馬チェック
         if (player.getTargetEntity(targetRange, false) instanceof AbstractHorse horse) {
             //オーナーチェック
-            if (this.ownerCheck(horse, player)) {
+            if (this.checkOwner(horse, player)) {
                 return true;
             } else {
                 player.sendMessage(
@@ -86,12 +86,12 @@ public final class Share {
         }
     }
 
-    private boolean checkInterval(Player player) {
-        int intervalTime = this.configFactory.primaryConfig().share().shareCommandIntervalTime();
-        var uuid = player.getUniqueId();
-        var now = Instant.now();
+    private boolean checkInterval(final Player player) {
+        final int intervalTime = this.configFactory.primaryConfig().share().shareCommandIntervalTime();
+        final var uuid = player.getUniqueId();
+        final var now = Instant.now();
 
-        var coolTime = this.intervalMap.getOrDefault(uuid, now);
+        final var coolTime = this.intervalMap.getOrDefault(uuid, now);
 
         if (now.isBefore(coolTime)) {
             player.sendMessage(
@@ -111,7 +111,7 @@ public final class Share {
         }
     }
 
-    public void broadcastShareMessage(Player sender, Collection<Player> targets) {
+    public void broadcastShareMessage(final Player sender, final Collection<Player> targets) {
         if (!this.isShareable(sender)) {
             return;
         }
@@ -120,26 +120,22 @@ public final class Share {
             return;
         }
 
-        @Nullable Entity targetEntity = sender.getTargetEntity(this.configFactory.primaryConfig().horse().targetRange(), false);
+        final @Nullable Entity targetEntity = sender.getTargetEntity(this.configFactory.primaryConfig().horse().targetRange(), false);
 
-        if (targetEntity instanceof AbstractHorse horse) {
+        if (targetEntity instanceof final AbstractHorse horse) {
             //もしものため
             if (targets.isEmpty()) {
-                this.server.forEachAudience(player -> {
-                    if (player instanceof Player receiver) {
-                        this.sendBroadCastMessage(sender, receiver, horse);
-                    }
-                });
+                this.server.getOnlinePlayers().forEach(receiver -> this.sendBroadCastMessage(sender, receiver, horse));
             } else {
                 targets.forEach(receiver -> this.sendBroadCastMessage(sender, receiver, horse));
             }
 
-            var icon = new ItemStack(Material.PLAYER_HEAD);
+            final var icon = new ItemStack(Material.PLAYER_HEAD);
 
             icon.editMeta(meta -> {
-                if (meta instanceof SkullMeta skullMeta) {
-                    var playerProfile = Bukkit.createProfile(UUID.randomUUID(), "horsechecker");
-                    var playerProperty = new ProfileProperty("textures", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTc5YTVjOTVlZTE3YWJmZWY0NWM4ZGMyMjQxODk5NjQ5NDRkNTYwZjE5YTQ0ZjE5ZjhhNDZhZWYzZmVlNDc1NiJ9fX0=");
+                if (meta instanceof final SkullMeta skullMeta) {
+                    final var playerProfile = Bukkit.createProfile(UUID.randomUUID(), "horsechecker");
+                    final var playerProperty = new ProfileProperty("textures", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTc5YTVjOTVlZTE3YWJmZWY0NWM4ZGMyMjQxODk5NjQ5NDRkNTYwZjE5YTQ0ZjE5ZjhhNDZhZWYzZmVlNDc1NiJ9fX0=");
                     playerProfile.setProperty(playerProperty);
                     skullMeta.setPlayerProfile(playerProfile);
                 }
@@ -153,11 +149,11 @@ public final class Share {
         }
     }
 
-    private void sendBroadCastMessage(Player sender, Player receiver, AbstractHorse horse) {
-        var wrappedHorse = new WrappedHorse(horse);
-        var horseNamePrefix = this.configFactory.primaryConfig().share().horseNamePrefix();
+    private void sendBroadCastMessage(final Player sender, final Player receiver, final AbstractHorse horse) {
+        final var wrappedHorse = new WrappedHorse(horse);
+        final var horseNamePrefix = this.configFactory.primaryConfig().share().horseNamePrefix();
 
-        var broadcast = this.messages.translatable(
+        final var broadcast = this.messages.translatable(
                 Messages.Style.INFO,
                 receiver,
                 "share.success.broadcast",
@@ -175,7 +171,7 @@ public final class Share {
         receiver.sendMessage(broadcast);
     }
 
-    private boolean ownerCheck(AbstractHorse horse, Player player) {
+    private boolean checkOwner(final AbstractHorse horse, final Player player) {
         if (horse.getOwner() == null) {
             return true;
         }

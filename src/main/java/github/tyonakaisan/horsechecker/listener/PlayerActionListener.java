@@ -29,30 +29,30 @@ public final class PlayerActionListener implements Listener {
     }
 
     @EventHandler
-    public void onMount(EntityMountEvent event) {
-        if (event.getEntity() instanceof Player player) {
+    public void onMount(final EntityMountEvent event) {
+        if (event.getEntity() instanceof final Player player) {
             this.hologramHandler.cancel(player);
         }
     }
 
     @EventHandler
-    public void onDismount(EntityDismountEvent event) {
-        if (event.getEntity() instanceof Player player) {
+    public void onDismount(final EntityDismountEvent event) {
+        if (event.getEntity() instanceof final Player player) {
             this.hologramHandler.show(player);
         }
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
+    public void onJoin(final PlayerJoinEvent event) {
         this.hologramHandler.show(event.getPlayer());
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
+    public void onQuit(final PlayerQuitEvent event) {
         this.hologramHandler.cancel(event.getPlayer());
     }
 
-    private void showHologram(Player player) {
+    private void showHologram(final Player player) {
         if (this.stateManager.state(player, "stats")) {
             this.hologramHandler.show(player);
         }

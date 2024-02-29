@@ -13,13 +13,13 @@ public abstract class TextDisplayData<B> extends DisplayData<B> {
 
     private byte bitmask = 0x00;
 
-    public B text(Component text) {
-        WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(text));
+    public B text(final Component text) {
+        final WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(text));
         this.addChatData(23, wrappedChatComponent.getHandle());
         return (B) this;
     }
 
-    public B lineWidth(int width) {
+    public B lineWidth(final int width) {
         this.addIntData(24, width);
         return (B) this;
     }
@@ -30,12 +30,12 @@ public abstract class TextDisplayData<B> extends DisplayData<B> {
         return (B) this;
     }
 
-    public B backgroundColor(int color) {
+    public B backgroundColor(final int color) {
         this.addIntData(25, color);
         return (B) this;
     }
 
-    public B textOpacity(int opacity) {
+    public B textOpacity(final int opacity) {
         this.addByteData(26, (byte) opacity);
         return (B) this;
     }
@@ -52,7 +52,7 @@ public abstract class TextDisplayData<B> extends DisplayData<B> {
         return (B) this;
     }
 
-    public B alignment(TextDisplay.TextAlignment alignment) {
+    public B alignment(final TextDisplay.TextAlignment alignment) {
         switch (alignment) {
             case CENTER -> this.bitmask |= 0x08;
             case LEFT -> this.bitmask |= 0x18;

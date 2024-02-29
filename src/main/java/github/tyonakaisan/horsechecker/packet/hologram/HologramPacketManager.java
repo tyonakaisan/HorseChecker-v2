@@ -22,7 +22,7 @@ public final class HologramPacketManager {
 
     private final HologramData hologramData;
 
-    public HologramPacketManager(HologramData hologramData) {
+    public HologramPacketManager(final HologramData hologramData) {
         this.hologramData = hologramData;
     }
 
@@ -30,14 +30,14 @@ public final class HologramPacketManager {
         return this.createDataPacket();
     }
 
-    public void show(Player player, int vehicleId, PacketContainer entityMetadataPacket) {
+    public void show(final Player player, final int vehicleId, final PacketContainer entityMetadataPacket) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.sendServerPacket(player, this.createAddPacket());
         protocolManager.sendServerPacket(player, this.createSetPassengerPacket(vehicleId));
         protocolManager.sendServerPacket(player, entityMetadataPacket);
     }
 
-    public void hide(Player player) {
+    public void hide(final Player player) {
         ProtocolLibrary.getProtocolManager().sendServerPacket(player, this.createRemovePacket());
     }
 
@@ -72,8 +72,8 @@ public final class HologramPacketManager {
     }
 
     private PacketContainer createDataPacket() {
-        PacketType type = PacketType.Play.Server.ENTITY_METADATA;
-        PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
+        final PacketType type = PacketType.Play.Server.ENTITY_METADATA;
+        final PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
         packet.getIntegers().write(0, this.hologramData.entityId());
         packet.getDataValueCollectionModifier().write(0, PacketDataBuilder.textDisplay()
@@ -92,9 +92,9 @@ public final class HologramPacketManager {
         return packet;
     }
 
-    private PacketContainer createSetPassengerPacket(int vehicleId) {
-        PacketType type = PacketType.Play.Server.MOUNT;
-        PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
+    private PacketContainer createSetPassengerPacket(final int vehicleId) {
+        final PacketType type = PacketType.Play.Server.MOUNT;
+        final PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
         packet.getIntegers().write(0, vehicleId);
         packet.getIntegerArrays().write(0, new int[]{this.hologramData.entityId()});
@@ -103,8 +103,8 @@ public final class HologramPacketManager {
     }
 
     private PacketContainer createRemovePacket() {
-        PacketType type = PacketType.Play.Server.ENTITY_DESTROY;
-        PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
+        final PacketType type = PacketType.Play.Server.ENTITY_DESTROY;
+        final PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
         packet.getIntLists().write(0, IntList.of(this.hologramData.entityId()));
 

@@ -18,7 +18,7 @@ public final class ShareCommand implements HorseCheckerCommand {
     private final Share share;
 
     @Inject
-    public ShareCommand(CommandManager<CommandSender> commandManager, Share share) {
+    public ShareCommand(final CommandManager<CommandSender> commandManager, final Share share) {
         this.commandManager = commandManager;
         this.share = share;
     }
@@ -31,10 +31,13 @@ public final class ShareCommand implements HorseCheckerCommand {
                 .permission("horsechecker.command.share")
                 .senderType(CommandSender.class)
                 .handler(handler -> {
-            final var sender = (Player) handler.sender();
-            final Selector<Player> target = handler.get("player");
-            this.share.broadcastShareMessage(sender, target.values());
-        }).build();
+                    if (handler.sender() instanceof final Player player) {
+                        final Selector<Player> target = handler.get("player");
+                        this.share.broadcastShareMessage(player, target.values());
+                    } else {
+                        //TODO: Error message
+                    }
+                }).build();
 
         this.commandManager.command(command);
     }
