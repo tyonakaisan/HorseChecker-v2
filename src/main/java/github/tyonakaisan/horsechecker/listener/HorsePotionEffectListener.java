@@ -30,8 +30,8 @@ public final class HorsePotionEffectListener implements Listener {
     }
 
     @EventHandler
-    public void onPotionEffect(EntityPotionEffectEvent event) {
-        if (event.getEntity() instanceof AbstractHorse horse) {
+    public void onPotionEffect(final EntityPotionEffectEvent event) {
+        if (event.getEntity() instanceof final AbstractHorse horse) {
             this.server.getScheduler()
                     .runTaskLater(
                             this.horseChecker,

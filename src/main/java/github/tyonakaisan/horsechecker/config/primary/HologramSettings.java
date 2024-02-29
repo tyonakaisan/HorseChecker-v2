@@ -7,7 +7,7 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 @ConfigSerializable
 @DefaultQualifier(NonNull.class)
-@SuppressWarnings({"FieldMayBeFinal","FieldCanBeLocal"})
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public class HologramSettings {
 
     private String rankScoreResultText = "Score: <rank_color><rank></rank_color>";

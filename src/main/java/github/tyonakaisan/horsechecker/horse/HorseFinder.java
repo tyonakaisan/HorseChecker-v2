@@ -35,22 +35,22 @@ public final class HorseFinder {
         this.messages = messages;
     }
 
-    public void fromUuid(UUID uuid, Player showPlayer) {
-        List<Entity> entities = showPlayer.getWorld().getEntities();
+    public void fromUuid(final UUID uuid, final Player showPlayer) {
+        final List<Entity> entities = showPlayer.getWorld().getEntities();
 
-        var horseOptional = entities.stream()
+        final var horseOptional = entities.stream()
                 .filter(entity -> entity.getUniqueId().equals(uuid))
                 .findFirst();
 
-        horseOptional.ifPresentOrElse(horse -> {
-            if (horse instanceof AbstractHorse abstractHorse) {
-                this.showing(abstractHorse, showPlayer);
+        horseOptional.ifPresentOrElse(entity -> {
+            if (entity instanceof AbstractHorse horse) {
+                this.showing(horse, showPlayer);
             }
         }, () -> showPlayer.sendMessage(this.messages.translatable(Messages.Style.ERROR, showPlayer, "breeding.notification.baby_horse_not_found")));
     }
 
-    private void showing(AbstractHorse horse, Player player) {
-        Glow glow = Glow.glowing(new WrappedHorse(horse).getRank().glowColor(), horse.getUniqueId().toString());
+    private void showing(final AbstractHorse horse, final Player player) {
+        final Glow glow = Glow.glowing(new WrappedHorse(horse).getRank().glowColor(), horse.getUniqueId().toString());
         glow.addEntities(horse);
         glow.show(player);
 
@@ -63,7 +63,7 @@ public final class HorseFinder {
     }
 
     public void showing(AbstractHorse horse, Player player, Glow.Color color) {
-        Glow glow = Glow.glowing(color, horse.getUniqueId().toString());
+        final Glow glow = Glow.glowing(color, horse.getUniqueId().toString());
         glow.addEntities(horse);
         glow.show(player);
 

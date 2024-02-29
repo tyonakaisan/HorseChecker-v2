@@ -14,7 +14,6 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,8 +23,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
-
-import java.util.Objects;
 
 @DefaultQualifier(NonNull.class)
 public final class HorseBreedListener implements Listener {
@@ -49,23 +46,19 @@ public final class HorseBreedListener implements Listener {
     }
 
     @EventHandler
-    public void onCanceledBreed(PlayerInteractEntityEvent event) {
-        Player player = event.getPlayer();
-        ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
+    public void onCanceledBreed(final PlayerInteractEntityEvent event) {
+        final Player player = event.getPlayer();
+        final ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
 
         //toggleチェック
         //繫殖させるためのアイテムか
         if (!this.stateManager.state(player, "breed") || !this.isBreedItem(itemStack)) return;
+        if (!(event.getRightClicked() instanceof final AbstractHorse horse)) return;
 
-        AbstractHorse horse = (AbstractHorse) event.getRightClicked();
-        int maxHealth = (int) Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
-        int health = (int) horse.getHealth();
-        int age = horse.getAge();
-        int loveMode = horse.getLoveModeTicks();
-        var wrappedHorse = new WrappedHorse(horse);
+        final var wrappedHorse = new WrappedHorse(horse);
 
         //繫殖クールタイム中&体力がMAXであればイベントキャンセル
-        if (age > 0 && health == maxHealth) {
+        if (wrappedHorse.age() > 0 && wrappedHorse.health() == wrappedHorse.getMaxHealth()) {
             player.sendActionBar(
                     this.messages.translatable(
                             Messages.Style.ERROR,
@@ -74,9 +67,8 @@ public final class HorseBreedListener implements Listener {
                             TagResolver.builder()
                                     .tag("cool_time", Tag.selfClosingInserting(Component.text(wrappedHorse.breedingCoolTime())))
                                     .build()));
-            event.setCancelled(true);
             //繫殖モード中(ハートが出てる時)&体力がMAXであればイベントキャンセル
-        } else if (loveMode > 0 && health == maxHealth) {
+        } else if (wrappedHorse.loveModeTicks() > 0 && wrappedHorse.health() == wrappedHorse.getMaxHealth()) {
             player.sendActionBar(
                     this.messages.translatable(
                             Messages.Style.ERROR,
@@ -85,22 +77,22 @@ public final class HorseBreedListener implements Listener {
                             TagResolver.builder()
                                     .tag("cool_time", Tag.selfClosingInserting(Component.text(wrappedHorse.loveModeTime())))
                                     .build()));
-            event.setCancelled(true);
         }
+        event.setCancelled(true);
     }
 
     @EventHandler
-    public void onBreeding(EntityBreedEvent event) {
+    public void onBreeding(final EntityBreedEvent event) {
         if (event.getBreeder() instanceof Player player) {
             if (!this.stateManager.state(player, "breed_notification")) return;
 
-            var childrenHorse = (AbstractHorse) event.getEntity();
-            var motherHorse = (AbstractHorse) event.getMother();
-            var fatherHorse = (AbstractHorse) event.getFather();
+            final var childrenHorse = (AbstractHorse) event.getEntity();
+            final var motherHorse = (AbstractHorse) event.getMother();
+            final var fatherHorse = (AbstractHorse) event.getFather();
 
-            var wrappedChildren = new WrappedHorse(childrenHorse);
-            var wrappedMother = new WrappedHorse(motherHorse);
-            var wrappedFather = new WrappedHorse(fatherHorse);
+            final var wrappedChildren = new WrappedHorse(childrenHorse);
+            final var wrappedMother = new WrappedHorse(motherHorse);
+            final var wrappedFather = new WrappedHorse(fatherHorse);
 
             player.sendMessage(
                     this.messages.translatable(
@@ -123,7 +115,7 @@ public final class HorseBreedListener implements Listener {
         }
     }
 
-    private boolean isBreedItem(ItemStack itemStack) {
+    private boolean isBreedItem(final ItemStack itemStack) {
         return itemStack.getType() == Material.GOLDEN_CARROT ||
                 itemStack.getType() == Material.GOLDEN_APPLE ||
                 itemStack.getType() == Material.ENCHANTED_GOLDEN_APPLE ||

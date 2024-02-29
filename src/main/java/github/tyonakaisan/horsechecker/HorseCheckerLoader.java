@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
 import io.papermc.paper.plugin.loader.PluginLoader;
 import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.eclipse.aether.artifact.DefaultArtifact;
@@ -23,19 +24,19 @@ import java.util.stream.Stream;
 public final class HorseCheckerLoader implements PluginLoader {
 
     @Override
-    public void classloader(PluginClasspathBuilder classpathBuilder) {
-        MavenLibraryResolver resolver = new MavenLibraryResolver();
-        PluginLibraries pluginLibraries = load();
+    public void classloader(final PluginClasspathBuilder classpathBuilder) {
+        final MavenLibraryResolver resolver = new MavenLibraryResolver();
+        final PluginLibraries pluginLibraries = load();
         pluginLibraries.asDependencies().forEach(resolver::addDependency);
         pluginLibraries.asRepositories().forEach(resolver::addRepository);
         classpathBuilder.addLibrary(resolver);
     }
 
     private PluginLibraries load() {
-        try (var in = Objects.requireNonNull(getClass().getResourceAsStream("/paper-libraries.json"))) {
+        try (final var in = Objects.requireNonNull(getClass().getResourceAsStream("/paper-libraries.json"))) {
             return new Gson().fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), PluginLibraries.class);
         } catch (IOException exception) {
-            throw new RuntimeException(exception);
+            throw new IllegalStateException("Failed to load plugin libraries.", exception);
         }
     }
 

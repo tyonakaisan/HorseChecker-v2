@@ -48,15 +48,11 @@ public final class HorseCheckerModule extends AbstractModule {
     @Singleton
     public CommandManager<CommandSender> commandManager() {
         final PaperCommandManager<CommandSender> commandManager;
-        try {
-            commandManager = new PaperCommandManager<>(
-                    this.horseChecker,
-                    ExecutionCoordinator.simpleCoordinator(),
-                    SenderMapper.identity()
-            );
-        } catch (final Exception exception) {
-            throw new RuntimeException("Failed to initialize command manager.", exception);
-        }
+        commandManager = new PaperCommandManager<>(
+                this.horseChecker,
+                ExecutionCoordinator.simpleCoordinator(),
+                SenderMapper.identity()
+        );
         commandManager.registerAsynchronousCompletions();
         return commandManager;
     }

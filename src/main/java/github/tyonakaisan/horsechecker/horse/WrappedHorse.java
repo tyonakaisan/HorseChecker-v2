@@ -65,4 +65,17 @@ public record WrappedHorse(
     public int loveModeTime() {
         return this.horse.getLoveModeTicks() / 20;
     }
+
+    public int age() {
+        return this.horse.getAge();
+    }
+
+
+    public int health() {
+        return (int) this.horse.getHealth();
+    }
+
+    public int loveModeTicks() {
+        return this.horse.getLoveModeTicks();
+    }
 }

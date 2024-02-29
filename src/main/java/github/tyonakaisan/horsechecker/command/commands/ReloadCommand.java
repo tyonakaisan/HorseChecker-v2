@@ -20,10 +20,10 @@ public final class ReloadCommand implements HorseCheckerCommand {
 
     @Inject
     public ReloadCommand(
-            ConfigFactory configFactory,
-            Messages messages,
-            HologramManager hologramManager,
-            CommandManager<CommandSender> commandManager
+            final ConfigFactory configFactory,
+            final Messages messages,
+            final HologramManager hologramManager,
+            final CommandManager<CommandSender> commandManager
     ) {
         this.configFactory = configFactory;
         this.messages = messages;
@@ -38,7 +38,7 @@ public final class ReloadCommand implements HorseCheckerCommand {
                 .permission("horsechecker.command.reload")
                 .senderType(CommandSender.class)
                 .handler(handler -> {
-                    var sender = handler.sender();
+                    final var sender = handler.sender();
                     this.configFactory.reloadPrimaryConfig();
                     this.messages.reloadMessage();
                     this.hologramManager.destroyAllHologram();

@@ -22,10 +22,10 @@ public final class ToggleCommand implements HorseCheckerCommand {
 
     @Inject
     public ToggleCommand(
-            CommandManager<CommandSender> commandManager,
-            Messages messages,
-            StateManager stateManager,
-            HologramHandler hologramHandler
+            final CommandManager<CommandSender> commandManager,
+            final Messages messages,
+            final StateManager stateManager,
+            final HologramHandler hologramHandler
     ) {
         this.commandManager = commandManager;
         this.messages = messages;

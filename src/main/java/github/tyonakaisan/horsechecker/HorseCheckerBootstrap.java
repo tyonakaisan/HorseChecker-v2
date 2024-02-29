@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
 public final class HorseCheckerBootstrap implements PluginBootstrap {
 
     @Override
-    public void bootstrap(BootstrapContext context) {
+    public void bootstrap(final BootstrapContext context) {
         // メソッド実装なし
     }
 
     @Override
-    public @NotNull JavaPlugin createPlugin(PluginProviderContext context) {
+    public @NotNull JavaPlugin createPlugin(final PluginProviderContext context) {
         return new HorseChecker(context.getDataDirectory(), context.getLogger());
     }
 }

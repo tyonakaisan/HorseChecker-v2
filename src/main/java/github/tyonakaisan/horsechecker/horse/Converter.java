@@ -18,12 +18,12 @@ public final class Converter {
     // めっちゃ汚い
     private Converter() {}
 
-    public static Component statsMessageResolver(ConfigFactory configFactory, WrappedHorse wrappedHorse) {
-        var rank = rankMessageResolver(configFactory, wrappedHorse);
-        var speed = speedMessageResolver(configFactory, wrappedHorse);
-        var jump = jumpMessageResolver(configFactory, wrappedHorse);
-        var health = healthMessageResolver(configFactory, wrappedHorse);
-        var owner = ownerMessageResolver(configFactory, wrappedHorse);
+    public static Component statsMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
+        final var rank = rankMessageResolver(configFactory, wrappedHorse);
+        final var speed = speedMessageResolver(configFactory, wrappedHorse);
+        final var jump = jumpMessageResolver(configFactory, wrappedHorse);
+        final var health = healthMessageResolver(configFactory, wrappedHorse);
+        final var owner = ownerMessageResolver(configFactory, wrappedHorse);
 
         return MiniMessage.miniMessage().deserialize(configFactory.primaryConfig().hologram().resultText(),
                 TagResolver.builder()
@@ -36,12 +36,12 @@ public final class Converter {
         );
     }
 
-    public static Component withParentsStatsMessageResolver(ConfigFactory configFactory, WrappedHorse childrenStats, WrappedHorse motherStats, WrappedHorse fatherStats) {
-        var rank = rankMessageResolver(configFactory, childrenStats, motherStats, fatherStats);
-        var speed = speedMessageResolver(configFactory, childrenStats, motherStats, fatherStats);
-        var jump = jumpMessageResolver(configFactory, childrenStats, motherStats, fatherStats);
-        var health = healthMessageResolver(configFactory, childrenStats, motherStats, fatherStats);
-        var owner = ownerMessageResolver(configFactory, childrenStats);
+    public static Component withParentsStatsMessageResolver(final ConfigFactory configFactory, final WrappedHorse childrenStats, final WrappedHorse motherStats, final WrappedHorse fatherStats) {
+        final var rank = rankMessageResolver(configFactory, childrenStats, motherStats, fatherStats);
+        final var speed = speedMessageResolver(configFactory, childrenStats, motherStats, fatherStats);
+        final var jump = jumpMessageResolver(configFactory, childrenStats, motherStats, fatherStats);
+        final var health = healthMessageResolver(configFactory, childrenStats, motherStats, fatherStats);
+        final var owner = ownerMessageResolver(configFactory, childrenStats);
 
         return MiniMessage.miniMessage().deserialize(configFactory.primaryConfig().hologram().resultText(),
                 TagResolver.builder()
@@ -54,7 +54,7 @@ public final class Converter {
         );
     }
 
-    private static Component rankMessageResolver(ConfigFactory configFactory, WrappedHorse wrappedHorse) {
+    private static Component rankMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
                 configFactory.primaryConfig().hologram().rankScoreResultText(),
                 TagResolver.builder()
@@ -63,12 +63,12 @@ public final class Converter {
                         .build());
     }
 
-    private static Component rankMessageResolver(ConfigFactory configFactory, WrappedHorse... wrappedHorseStats) {
-        var children = Arrays.asList(wrappedHorseStats).get(0);
-        var mother = Arrays.asList(wrappedHorseStats).get(1);
-        var father = Arrays.asList(wrappedHorseStats).get(2);
+    private static Component rankMessageResolver(final ConfigFactory configFactory, final WrappedHorse... wrappedHorseStats) {
+        final var children = Arrays.asList(wrappedHorseStats).get(0);
+        final var mother = Arrays.asList(wrappedHorseStats).get(1);
+        final var father = Arrays.asList(wrappedHorseStats).get(2);
 
-        var parentMessage = MiniMessage.miniMessage().deserialize(
+        final var parentMessage = MiniMessage.miniMessage().deserialize(
                 configFactory.primaryConfig().hologram().parentResultText(),
                 TagResolver.builder()
                         .tag("mother", Tag.selfClosingInserting(
@@ -80,7 +80,7 @@ public final class Converter {
         return rankMessageResolver(configFactory, children).appendSpace().append(parentMessage);
     }
 
-    private static Component speedMessageResolver(ConfigFactory configFactory, WrappedHorse wrappedHorse) {
+    private static Component speedMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
                 configFactory.primaryConfig().hologram().speedResultText(),
                 TagResolver.builder()
@@ -88,7 +88,7 @@ public final class Converter {
                         .build());
     }
 
-    private static Component speedMessageResolver(ConfigFactory configFactory, WrappedHorse... wrappedHorseStats) {
+    private static Component speedMessageResolver(final ConfigFactory configFactory, final WrappedHorse... wrappedHorseStats) {
         var children = Arrays.asList(wrappedHorseStats).get(0);
         var mother = Arrays.asList(wrappedHorseStats).get(1);
         var father = Arrays.asList(wrappedHorseStats).get(2);
@@ -107,7 +107,7 @@ public final class Converter {
         return speedMessageResolver(configFactory, children).appendSpace().append(parentMessage);
     }
 
-    private static Component jumpMessageResolver(ConfigFactory configFactory, WrappedHorse wrappedHorse) {
+    private static Component jumpMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
                 configFactory.primaryConfig().hologram().jumpResultText(),
                 TagResolver.builder()
@@ -115,12 +115,12 @@ public final class Converter {
                         .build());
     }
 
-    private static Component jumpMessageResolver(ConfigFactory configFactory, WrappedHorse... wrappedHorseStats) {
-        var children = Arrays.asList(wrappedHorseStats).get(0);
-        var mother = Arrays.asList(wrappedHorseStats).get(1);
-        var father = Arrays.asList(wrappedHorseStats).get(2);
+    private static Component jumpMessageResolver(final ConfigFactory configFactory, final WrappedHorse... wrappedHorseStats) {
+        final var children = Arrays.asList(wrappedHorseStats).get(0);
+        final var mother = Arrays.asList(wrappedHorseStats).get(1);
+        final var father = Arrays.asList(wrappedHorseStats).get(2);
 
-        var parentMessage = MiniMessage.miniMessage().deserialize(
+        final var parentMessage = MiniMessage.miniMessage().deserialize(
                 configFactory.primaryConfig().hologram().parentResultText(),
                 TagResolver.builder()
                         .tag("mother", Tag.selfClosingInserting(
@@ -134,7 +134,7 @@ public final class Converter {
         return jumpMessageResolver(configFactory, children).appendSpace().append(parentMessage);
     }
 
-    private static Component healthMessageResolver(ConfigFactory configFactory, WrappedHorse wrappedHorse) {
+    private static Component healthMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
                 configFactory.primaryConfig().hologram().healthResultText(),
                 TagResolver.builder()
@@ -142,12 +142,12 @@ public final class Converter {
                         .build());
     }
 
-    private static Component healthMessageResolver(ConfigFactory configFactory, WrappedHorse... wrappedHorseStats) {
-        var children = Arrays.asList(wrappedHorseStats).get(0);
-        var mother = Arrays.asList(wrappedHorseStats).get(1);
-        var father = Arrays.asList(wrappedHorseStats).get(2);
+    private static Component healthMessageResolver(final ConfigFactory configFactory, final WrappedHorse... wrappedHorseStats) {
+        final var children = Arrays.asList(wrappedHorseStats).get(0);
+        final var mother = Arrays.asList(wrappedHorseStats).get(1);
+        final var father = Arrays.asList(wrappedHorseStats).get(2);
 
-        var parentMessage = MiniMessage.miniMessage().deserialize(
+        final var parentMessage = MiniMessage.miniMessage().deserialize(
                 configFactory.primaryConfig().hologram().parentResultText(),
                 TagResolver.builder()
                         .tag("mother", Tag.selfClosingInserting(
@@ -161,7 +161,7 @@ public final class Converter {
         return healthMessageResolver(configFactory, children).appendSpace().append(parentMessage);
     }
 
-    private static Component ownerMessageResolver(ConfigFactory configFactory, WrappedHorse wrappedHorse) {
+    private static Component ownerMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
                 configFactory.primaryConfig().hologram().ownerResultText(),
                 TagResolver.builder()
@@ -169,7 +169,7 @@ public final class Converter {
                         .build());
     }
 
-    private static Component comparisonStats(double base, double comparison) {
+    private static Component comparisonStats(final double base, final double comparison) {
         if (base > comparison) {
             return Component.text("↑", NamedTextColor.RED).decorate(TextDecoration.BOLD);
         } else if (base == comparison) {

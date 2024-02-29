@@ -40,22 +40,22 @@ public final class HologramHandler {
         this.stateManager = stateManager;
     }
 
-    public void show(Player player) {
+    public void show(final Player player) {
         if (this.stateManager.state(player, "stats") && !player.isInsideVehicle()) {
             this.hologramTask.putIfAbsent(player.getUniqueId(), new HologramTask(player, this.configFactory.primaryConfig().horse().targetRange(), this.hologramManager));
             this.hologramTask.get(player.getUniqueId()).runTask(this.horseChecker, 0, this.configFactory.primaryConfig().hologram().displayHologramTaskInterval());
         }
     }
 
-    public void cancel(Player player) {
+    public void cancel(final Player player) {
         Optional.ofNullable(this.hologramTask.get(player.getUniqueId())).ifPresent(task -> {
             task.cancelTask();
             this.hologramTask.remove(player.getUniqueId());
         });
     }
 
-    public void update(AbstractHorse horse) {
-        var wrappedHorse = new WrappedHorse(horse);
+    public void update(final AbstractHorse horse) {
+        final var wrappedHorse = new WrappedHorse(horse);
 
         this.hologramManager.updateHologram(wrappedHorse.horse().getUniqueId().toString(), wrappedHorse);
     }

@@ -21,7 +21,7 @@ public final class HologramTask extends BukkitRunnable {
             final Player player,
             final int targetRange,
             final HologramManager hologramManager
-            ) {
+    ) {
         this.player = player;
         this.targetRange = targetRange;
         this.hologramManager = hologramManager;
@@ -57,7 +57,7 @@ public final class HologramTask extends BukkitRunnable {
         });
     }
 
-    public void runTask(Plugin plugin, int delay, int period) {
+    public void runTask(final Plugin plugin, final int delay, final int period) {
          this.runTaskTimer(plugin, delay, period);
     }
 
@@ -70,7 +70,7 @@ public final class HologramTask extends BukkitRunnable {
 
     // 条件に合う馬が居無かった場合はempty
     private Optional<AbstractHorse> getTargetHorse() {
-        if (this.player.getTargetEntity(this.targetRange, false) instanceof AbstractHorse horse) {
+        if (this.player.getTargetEntity(this.targetRange, false) instanceof final AbstractHorse horse) {
             return horse.getPassengers().isEmpty()
                     ? Optional.of(horse)
                     : Optional.empty();

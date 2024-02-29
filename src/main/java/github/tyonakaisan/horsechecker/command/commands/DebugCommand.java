@@ -41,11 +41,11 @@ public final class DebugCommand implements HorseCheckerCommand {
 
     @Inject
     public DebugCommand(
-            HorseChecker horseChecker,
-            ConfigFactory configFactory,
-            Messages messages,
-            ComponentLogger logger,
-            CommandManager<CommandSender> commandManager
+            final HorseChecker horseChecker,
+            final ConfigFactory configFactory,
+            final Messages messages,
+            final ComponentLogger logger,
+            final CommandManager<CommandSender> commandManager
     ) {
         this.horseChecker = horseChecker;
         this.configFactory = configFactory;
@@ -139,7 +139,7 @@ public final class DebugCommand implements HorseCheckerCommand {
                     if (entity instanceof AbstractHorse horse
                             && horse.getPersistentDataContainer().has(new NamespacedKey(horseChecker, "debug"), PersistentDataType.BOOLEAN)) {
                         horse.remove();
-                        counts[0] ++;
+                        counts[0]++;
                     }
                 })
         );
@@ -162,8 +162,7 @@ public final class DebugCommand implements HorseCheckerCommand {
         MULE(EntityType.MULE),
         LLAMA(EntityType.LLAMA),
         TRADER_LLAMA(EntityType.TRADER_LLAMA),
-        CAMEL(EntityType.CAMEL)
-        ;
+        CAMEL(EntityType.CAMEL);
         private final EntityType type;
 
         HorseType(
