@@ -37,13 +37,11 @@ dependencies {
     implementation("com.github.tyonakaisan", "Toast", "0.1.1")
 }
 
-version = "1.4.4-SNAPSHOT"
-
 paper {
     val mainPackage = "github.tyonakaisan.horsechecker"
     generateLibrariesJson = true
     name = rootProject.name
-    version = project.version as String
+    version = "1.4.4-SNAPSHOT"
     main = "$mainPackage.HorseChecker"
     loader = "$mainPackage.HorseCheckerLoader"
     bootstrapper = "$mainPackage.HorseCheckerBootstrap"
@@ -63,15 +61,18 @@ tasks {
         url("https://cdn.modrinth.com/data/cUhi3iB2/versions/QmxLremu/tabtps-spigot-1.3.21.jar")
         // spark
         url("https://ci.lucko.me/job/spark/396/artifact/spark-bukkit/build/libs/spark-1.10.55-bukkit.jar")
+        // ProtocolLib
+        url("https://ci.dmulloy2.net/job/ProtocolLib/679/artifact/build/libs/ProtocolLib.jar")
     }
 
     compileJava {
-        this.options.encoding = Charsets.UTF_8.name()
+        options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
     }
 
     shadowJar {
-        this.archiveClassifier.set(null as String?)
+        archiveClassifier.set(null as String?)
+        archiveVersion.set(paper.version)
     }
 
     runServer {
