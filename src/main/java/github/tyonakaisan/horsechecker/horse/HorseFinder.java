@@ -5,8 +5,6 @@ import com.tyonakaisan.glowlib.glow.Glow;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
@@ -50,27 +48,15 @@ public final class HorseFinder {
     }
 
     private void showing(final AbstractHorse horse, final Player player) {
-        final Glow glow = Glow.glowing(new WrappedHorse(horse).getRank().glowColor(), horse.getUniqueId().toString());
-        glow.addEntities(horse);
-        glow.show(player);
-
-        player.playSound(Sound.sound()
-                .type(Key.key("minecraft:entity.experience_orb.pickup"))
-                .pitch(1.5f)
-                .build());
-
-        Bukkit.getScheduler().runTaskLater(this.horseChecker, () -> glow.hide(player), this.configFactory.primaryConfig().horse().glowingTime());
+        this.showing(horse, player, new WrappedHorse(horse).getRank().glowColor());
     }
 
-    public void showing(AbstractHorse horse, Player player, Glow.Color color) {
+    public void showing(final AbstractHorse horse, final  Player player, final Glow.Color color) {
         final Glow glow = Glow.glowing(color, horse.getUniqueId().toString());
         glow.addEntities(horse);
         glow.show(player);
 
-        player.playSound(Sound.sound()
-                .type(Key.key("minecraft:entity.experience_orb.pickup"))
-                .pitch(1.5f)
-                .build());
+        player.playSound(this.configFactory.primaryConfig().horse().findSound());
 
         Bukkit.getScheduler().runTaskLater(this.horseChecker, () -> glow.hide(player), this.configFactory.primaryConfig().horse().glowingTime());
     }

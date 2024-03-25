@@ -1,5 +1,6 @@
 package github.tyonakaisan.horsechecker.config.primary;
 
+import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -24,6 +25,11 @@ public final class HologramSettings {
             ホログラムを表示するタスクの処理頻度
             数字を大きくするほど処理は軽くなります""")
     private int displayHologramTaskInterval = 2;
+
+    @Comment("表示されるホログラムの大きさ")
+    private Vector hologramScale = new Vector(1, 1, 1);
+    @Comment("表示されるホログラムの位置")
+    private Vector hologramTranslation = new Vector(0, 0.7, 0);
 
     public String nameResultText() {
         return this.nameResultText;
@@ -59,5 +65,13 @@ public final class HologramSettings {
 
     public int displayHologramTaskInterval() {
         return this.displayHologramTaskInterval;
+    }
+
+    public Vector hologramScale() {
+        return this.hologramScale;
+    }
+
+    public Vector hologramTranslation() {
+        return this.hologramTranslation;
     }
 }

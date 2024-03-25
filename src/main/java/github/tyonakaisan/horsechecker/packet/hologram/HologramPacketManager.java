@@ -11,7 +11,6 @@ import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
-import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -77,8 +76,8 @@ public final class HologramPacketManager {
 
         packet.getIntegers().write(0, this.hologramData.entityId());
         packet.getDataValueCollectionModifier().write(0, PacketDataBuilder.textDisplay()
-                .translation(new Vector(0, 0.85, 0))
-                .scale(new Vector(1.2, 1.2, 1.2))
+                .translation(this.hologramData.translation())
+                .scale(this.hologramData.scale())
                 .billboard(Display.Billboard.CENTER)
                 .brightness(15)
                 .viewRange(2f)

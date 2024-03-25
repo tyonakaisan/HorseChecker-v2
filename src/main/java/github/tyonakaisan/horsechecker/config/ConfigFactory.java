@@ -4,9 +4,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import github.tyonakaisan.horsechecker.config.primary.PrimaryConfig;
 import github.tyonakaisan.horsechecker.config.serialisation.LocaleSerializer;
+import github.tyonakaisan.horsechecker.config.serialisation.VectorSerializer;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -28,6 +30,7 @@ public final class ConfigFactory {
 
     private final Path dataDirectory;
     private final LocaleSerializer localeSerializer;
+    private final VectorSerializer vectorSerializer;
     private final ComponentLogger logger;
 
     private @MonotonicNonNull PrimaryConfig primaryConfig;
@@ -36,10 +39,12 @@ public final class ConfigFactory {
     public ConfigFactory(
             final Path dataDirectory,
             final LocaleSerializer localeSerializer,
+            final VectorSerializer vectorSerializer,
             final ComponentLogger logger
     ) {
         this.dataDirectory = dataDirectory;
         this.localeSerializer = localeSerializer;
+        this.vectorSerializer = vectorSerializer;
         this.logger = logger;
 
         this.reloadPrimaryConfig();
@@ -78,6 +83,7 @@ public final class ConfigFactory {
                                     .registerAll(miniMessageSerializer.serializers())
                                     .registerAll(componentSerializer.serializers())
                                     .register(Locale.class, this.localeSerializer)
+                                    .register(Vector.class, this.vectorSerializer)
                     );
                 })
                 .path(file)

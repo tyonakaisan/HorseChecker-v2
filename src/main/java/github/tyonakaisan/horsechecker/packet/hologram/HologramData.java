@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -20,6 +21,8 @@ public final class HologramData {
     private Component text;
     private Location location;
     private int backgroundColor;
+    private final Vector scale;
+    private final Vector translation;
 
     private final UUID entityUid;
     private final int entityId;
@@ -29,12 +32,16 @@ public final class HologramData {
             final String hologramId,
             final Component text,
             final Location location,
-            final int backgroundColor
+            final int backgroundColor,
+            final Vector scale,
+            final Vector translation
     ) {
         this.hologramId = hologramId;
         this.text = text;
         this.location = location;
         this.backgroundColor = backgroundColor;
+        this.scale = scale;
+        this.translation = translation;
 
         this.entityId = ThreadLocalRandom.current().nextInt();
         this.entityUid = UUID.randomUUID();
@@ -62,6 +69,14 @@ public final class HologramData {
 
     public int backgroundColor() {
         return this.backgroundColor;
+    }
+
+    public Vector scale() {
+        return this.scale;
+    }
+
+    public Vector translation() {
+        return this.translation;
     }
 
     public void showFrom(final Player player, final int vehicleId) {
