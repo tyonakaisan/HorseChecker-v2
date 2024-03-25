@@ -24,6 +24,8 @@ import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
+import java.util.List;
+
 @DefaultQualifier(NonNull.class)
 public final class HorseBreedListener implements Listener {
 
@@ -85,41 +87,39 @@ public final class HorseBreedListener implements Listener {
     @EventHandler
     public void onBreeding(final EntityBreedEvent event) {
         if (event.getBreeder() instanceof Player player) {
-            if (!this.stateManager.state(player, "breed_notification")) return;
+            if (!this.stateManager.state(player, "breed_notification")) {
+                return;
+            }
 
-            final var childrenHorse = (AbstractHorse) event.getEntity();
-            final var motherHorse = (AbstractHorse) event.getMother();
-            final var fatherHorse = (AbstractHorse) event.getFather();
+            if (event.getEntity() instanceof AbstractHorse childrenHorse
+                    && event.getMother() instanceof AbstractHorse motherHorse
+                    && event.getFather() instanceof AbstractHorse fatherHorse) {
 
-            final var wrappedChildren = new WrappedHorse(childrenHorse);
-            final var wrappedMother = new WrappedHorse(motherHorse);
-            final var wrappedFather = new WrappedHorse(fatherHorse);
+                final var wrappedChildren = new WrappedHorse(childrenHorse);
+                final var wrappedMother = new WrappedHorse(motherHorse);
+                final var wrappedFather = new WrappedHorse(fatherHorse);
 
-            player.sendMessage(
-                    this.messages.translatable(
-                            Messages.Style.SUCCESS,
-                            player,
-                            "breeding.notification",
-                            TagResolver.builder()
-                                    .tag("call", Tag.styling(style ->
-                                            style.clickEvent(ClickEvent.callback(audience -> {
-                                                if (audience instanceof Player callPlayer) {
-                                                    this.horseFinder.fromUuid(childrenHorse.getUniqueId(), callPlayer);
-                                                    this.horseFinder.showing(motherHorse, callPlayer, Glow.Color.RED);
-                                                    this.horseFinder.showing(fatherHorse, callPlayer, Glow.Color.BLUE);
-                                                }
-                                            }, builder -> builder.uses(3)))))
-                                    .tag("hover", Tag.styling(style ->
-                                            style.hoverEvent(HoverEvent.showText(Component.text()
-                                                    .append(Converter.withParentsStatsMessageResolver(this.configFactory, wrappedChildren, wrappedMother, wrappedFather))))))
-                                    .build()));
+                player.sendMessage(
+                        this.messages.translatable(Messages.Style.SUCCESS, player, "breeding.notification",
+                                TagResolver.builder()
+                                        .tag("call", Tag.styling(style ->
+                                                style.clickEvent(ClickEvent.callback(audience -> {
+                                                    if (audience instanceof Player callPlayer) {
+                                                        this.horseFinder.fromUuid(childrenHorse.getUniqueId(), callPlayer);
+                                                        this.horseFinder.showing(motherHorse, callPlayer, Glow.Color.RED);
+                                                        this.horseFinder.showing(fatherHorse, callPlayer, Glow.Color.BLUE);
+                                                    }
+                                                }, builder -> builder.uses(3)))))
+                                        .tag("hover", Tag.styling(style ->
+                                                style.hoverEvent(HoverEvent.showText(Component.text()
+                                                        .append(Converter.withParentsStatsMessageResolver(this.configFactory, wrappedChildren, wrappedMother, wrappedFather))))))
+                                        .build()));
+            }
         }
     }
 
     private boolean isBreedItem(final ItemStack itemStack) {
-        return itemStack.getType() == Material.GOLDEN_CARROT ||
-                itemStack.getType() == Material.GOLDEN_APPLE ||
-                itemStack.getType() == Material.ENCHANTED_GOLDEN_APPLE ||
-                itemStack.getType() == Material.HAY_BLOCK;
+        List<Material> breedItems = List.of(Material.GOLDEN_CARROT, Material.GOLDEN_APPLE, Material.ENCHANTED_GOLDEN_APPLE, Material.HAY_BLOCK);
+        return breedItems.contains(itemStack.getType());
     }
 }
