@@ -8,24 +8,26 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 @ConfigSerializable
 @DefaultQualifier(NonNull.class)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
-public class HologramSettings {
+public final class HologramSettings {
 
+    private String nameResultText = "Name: <name>";
     private String rankScoreResultText = "Score: <rank_color><rank></rank_color>";
     private String speedResultText = "Speed: <#ffa500><speed></#ffa500> blocks/s";
     private String jumpResultText = "Jump : <#ffa500><jump></#ffa500> blocks";
     private String healthResultText = "MaxHP: <#ffa500><health></#ffa500><red>♥</red>";
     private String ownerResultText = "<owner>";
     private String parentResultText = "<dark_gray>(<color:#ff85f1><mother></color> / <color:#47b9ff><father></color>)";
-    @Comment("""
-            ホログラムのステータス表示順
-            """)
-    private String resultText = "<rank_score><newline><speed><newline><jump><newline><health><newline><owner>";
+    @Comment("ホログラムのステータス表示順")
+    private String resultText = "<rank_score><newline><speed><newline><jump><newline><health><newline><owner><newline><name>";
 
     @Comment("""
             ホログラムを表示するタスクの処理頻度
-            数字を大きくするほど処理は軽くなります
-            """)
+            数字を大きくするほど処理は軽くなります""")
     private int displayHologramTaskInterval = 2;
+
+    public String nameResultText() {
+        return this.nameResultText;
+    }
 
     public String rankScoreResultText() {
         return this.rankScoreResultText;

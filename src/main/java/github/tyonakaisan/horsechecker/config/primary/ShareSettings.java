@@ -12,27 +12,20 @@ import java.util.List;
 @SuppressWarnings({"FieldMayBeFinal","FieldCanBeLocal"})
 public final class ShareSettings {
 
-    @Comment("""
-            馬のステータスの共有メッセージを使用可能にするか
-            """)
+    @Comment("馬のステータスの共有メッセージを使用可能にするか")
     private boolean allowedHorseShare = true;
 
-    @Comment("""
-            shareコマンドのクールダウン(秒)
-            """)
+    @Comment("shareコマンドのクールダウン(秒)")
     private int shareCommandIntervalTime = 30;
 
     @Comment("""
             所有者関係なくShareコマンドを使えるかどうか
             所有者が居ない場合はこの設定は関係ありません
             true: 自分の所有してる馬のみ使用可能
-            false: 所有者が違っても使用可能
-            """)
+            false: 所有者が違っても使用可能""")
     private boolean ownerOnly = false;
 
-    @Comment("""
-            shareメッセージを送った際に出る、馬の名前の前に付いてるメッセージの設定
-            """)
+    @Comment("shareメッセージを送った際に出る、馬の名前の前に付いてるメッセージの設定")
     private List<String> horseNamePrefix = List.of(
             "イケイケな",
             "イマドキな",

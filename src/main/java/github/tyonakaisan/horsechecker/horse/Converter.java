@@ -19,6 +19,7 @@ public final class Converter {
     private Converter() {}
 
     public static Component statsMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
+        final var name = nameMessageResolver(configFactory, wrappedHorse);
         final var rank = rankMessageResolver(configFactory, wrappedHorse);
         final var speed = speedMessageResolver(configFactory, wrappedHorse);
         final var jump = jumpMessageResolver(configFactory, wrappedHorse);
@@ -27,6 +28,7 @@ public final class Converter {
 
         return MiniMessage.miniMessage().deserialize(configFactory.primaryConfig().hologram().resultText(),
                 TagResolver.builder()
+                        .tag("name", Tag.selfClosingInserting(name))
                         .tag("rank_score", Tag.selfClosingInserting(rank))
                         .tag("speed", Tag.selfClosingInserting(speed))
                         .tag("jump", Tag.selfClosingInserting(jump))
@@ -161,11 +163,19 @@ public final class Converter {
         return healthMessageResolver(configFactory, children).appendSpace().append(parentMessage);
     }
 
+    private static Component nameMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
+        return MiniMessage.miniMessage().deserialize(
+                configFactory.primaryConfig().hologram().nameResultText(),
+                TagResolver.builder()
+                        .tag("name", Tag.selfClosingInserting(wrappedHorse.getName()))
+                        .build());
+    }
+
     private static Component ownerMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
                 configFactory.primaryConfig().hologram().ownerResultText(),
                 TagResolver.builder()
-                        .tag("owner", Tag.selfClosingInserting(wrappedHorse.ownerName()))
+                        .tag("owner", Tag.selfClosingInserting(wrappedHorse.getOwnerName()))
                         .build());
     }
 

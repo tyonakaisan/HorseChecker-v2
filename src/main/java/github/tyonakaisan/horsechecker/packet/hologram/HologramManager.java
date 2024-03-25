@@ -49,7 +49,7 @@ public final class HologramManager {
             return;
         }
         final var text = Converter.statsMessageResolver(this.configFactory, wrappedHorse);
-        final var hologramData = new HologramData(hologramId, text, wrappedHorse.location(), wrappedHorse.getRank().backgroundColor());
+        final var hologramData = new HologramData(hologramId, text, wrappedHorse.getLocation(), wrappedHorse.getRank().backgroundColor());
 
         this.hologramMap.put(hologramId, hologramData);
     }
@@ -76,7 +76,7 @@ public final class HologramManager {
     public void hideHologram(final WrappedHorse wrappedHorse, final Player player) {
         final var hologramId = wrappedHorse.horse().getUniqueId().toString();
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            hologramData.updateLocation(wrappedHorse.location());
+            hologramData.updateLocation(wrappedHorse.getLocation());
             hologramData.hideFrom(player);
         });
     }
@@ -84,7 +84,7 @@ public final class HologramManager {
     public void showHologram(final WrappedHorse wrappedHorse, Player player, int vehicleId) {
         var hologramId = wrappedHorse.horse().getUniqueId().toString();
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            hologramData.updateLocation(wrappedHorse.location());
+            hologramData.updateLocation(wrappedHorse.getLocation());
             hologramData.showFrom(player, vehicleId);
         });
     }

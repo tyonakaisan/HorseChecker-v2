@@ -58,27 +58,28 @@ public final class HorseBreedListener implements Listener {
         final var wrappedHorse = new WrappedHorse(horse);
 
         //繫殖クールタイム中&体力がMAXであればイベントキャンセル
-        if (wrappedHorse.age() > 0 && wrappedHorse.health() == wrappedHorse.getMaxHealth()) {
+        if (wrappedHorse.getAge() > 0 && wrappedHorse.getHealth() == wrappedHorse.getMaxHealth()) {
             player.sendActionBar(
                     this.messages.translatable(
                             Messages.Style.ERROR,
                             player,
                             "breeding.normal_cool_time",
                             TagResolver.builder()
-                                    .tag("cool_time", Tag.selfClosingInserting(Component.text(wrappedHorse.breedingCoolTime())))
+                                    .tag("cool_time", Tag.selfClosingInserting(Component.text(wrappedHorse.getBreedingCoolTime())))
                                     .build()));
+            event.setCancelled(true);
             //繫殖モード中(ハートが出てる時)&体力がMAXであればイベントキャンセル
-        } else if (wrappedHorse.loveModeTicks() > 0 && wrappedHorse.health() == wrappedHorse.getMaxHealth()) {
+        } else if (wrappedHorse.getLoveModeTicks() > 0 && wrappedHorse.getHealth() == wrappedHorse.getMaxHealth()) {
             player.sendActionBar(
                     this.messages.translatable(
                             Messages.Style.ERROR,
                             player,
                             "breeding.current_love_mode_time",
                             TagResolver.builder()
-                                    .tag("cool_time", Tag.selfClosingInserting(Component.text(wrappedHorse.loveModeTime())))
+                                    .tag("cool_time", Tag.selfClosingInserting(Component.text(wrappedHorse.getLoveModeTime())))
                                     .build()));
+            event.setCancelled(true);
         }
-        event.setCancelled(true);
     }
 
     @EventHandler

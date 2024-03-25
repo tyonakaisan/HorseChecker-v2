@@ -12,6 +12,7 @@ import github.tyonakaisan.horsechecker.command.commands.ReloadCommand;
 import github.tyonakaisan.horsechecker.command.commands.ShareCommand;
 import github.tyonakaisan.horsechecker.command.commands.ToggleCommand;
 import github.tyonakaisan.horsechecker.listener.HorseBreedListener;
+import github.tyonakaisan.horsechecker.listener.HorseNameChangeListener;
 import github.tyonakaisan.horsechecker.listener.HorsePotionEffectListener;
 import github.tyonakaisan.horsechecker.listener.PlayerActionListener;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -71,6 +72,7 @@ public final class HorseCheckerModule extends AbstractModule {
         final Multibinder<Listener> listeners = Multibinder.newSetBinder(this.binder(), Listener.class);
         listeners.addBinding().to(HorseBreedListener.class).in(Scopes.SINGLETON);
         listeners.addBinding().to(HorsePotionEffectListener.class).in(Scopes.SINGLETON);
+        listeners.addBinding().to(HorseNameChangeListener.class).in(Scopes.SINGLETON);
         listeners.addBinding().to(PlayerActionListener.class).in(Scopes.SINGLETON);
     }
 

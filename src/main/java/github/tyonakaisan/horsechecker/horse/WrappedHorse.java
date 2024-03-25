@@ -34,11 +34,11 @@ public record WrappedHorse(
         return (int) Objects.requireNonNull(this.horse.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
     }
 
-    public Location location() {
+    public Location getLocation() {
         return this.horse.isAdult() ? this.horse.getLocation() : this.horse.getLocation().subtract(0, 1, 0);
     }
 
-    public Component ownerName() {
+    public Component getOwnerName() {
         if (this.horse.getOwner() == null) return Component.text("no owner");
 
         return this.horse.getOwner().getName() != null
@@ -46,36 +46,36 @@ public record WrappedHorse(
                 : Component.text("unknown owner");
     }
 
-    public Component plainOwnerName() {
+    public Component getPlainOwnerName() {
         return this.horse.getOwner() != null
                 ? MiniMessage.miniMessage().deserialize(Objects.requireNonNull(this.horse.getOwner().getName()))
                 : Component.empty();
     }
 
-    public Component horseName() {
+    public Component getName() {
         return this.horse.getName().equals("Horse")
                 ? MiniMessage.miniMessage().deserialize("<lang:" + this.horse.getType().translationKey() + ">")
                 : Component.text(this.horse.getName());
     }
 
-    public int breedingCoolTime() {
+    public int getBreedingCoolTime() {
         return this.horse.getAge() / 20;
     }
 
-    public int loveModeTime() {
+    public int getLoveModeTime() {
         return this.horse.getLoveModeTicks() / 20;
     }
 
-    public int age() {
+    public int getAge() {
         return this.horse.getAge();
     }
 
 
-    public int health() {
+    public int getHealth() {
         return (int) this.horse.getHealth();
     }
 
-    public int loveModeTicks() {
+    public int getLoveModeTicks() {
         return this.horse.getLoveModeTicks();
     }
 }

@@ -1,7 +1,6 @@
 package github.tyonakaisan.horsechecker.listener;
 
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.packet.hologram.HologramHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,16 +14,12 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 
 @DefaultQualifier(NonNull.class)
 public final class PlayerActionListener implements Listener {
-
-    private final StateManager stateManager;
     private final HologramHandler hologramHandler;
 
     @Inject
     public PlayerActionListener(
-            final StateManager stateManager,
             final HologramHandler hologramHandler
     ) {
-        this.stateManager = stateManager;
         this.hologramHandler = hologramHandler;
     }
 
@@ -50,11 +45,5 @@ public final class PlayerActionListener implements Listener {
     @EventHandler
     public void onQuit(final PlayerQuitEvent event) {
         this.hologramHandler.cancel(event.getPlayer());
-    }
-
-    private void showHologram(final Player player) {
-        if (this.stateManager.state(player, "stats")) {
-            this.hologramHandler.show(player);
-        }
     }
 }

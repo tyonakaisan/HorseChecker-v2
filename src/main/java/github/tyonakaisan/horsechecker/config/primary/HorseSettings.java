@@ -12,13 +12,10 @@ public final class HorseSettings {
 
     @Comment("""
             発光エフェクトの効果時間
-            1秒 = 20
-            """)
+            1秒 = 20""")
     private int glowingTime = 400;
 
-    @Comment("""
-            検知可能距離
-            """)
+    @Comment("検知可能距離")
     private int targetRange = 20;
 
     public int glowingTime() {

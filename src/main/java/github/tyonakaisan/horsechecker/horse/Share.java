@@ -75,7 +75,7 @@ public final class Share {
                                 player,
                                 "share.error.different_owner",
                                 TagResolver.builder()
-                                        .tag("owner", Tag.selfClosingInserting(new WrappedHorse(horse).plainOwnerName()))
+                                        .tag("owner", Tag.selfClosingInserting(new WrappedHorse(horse).getPlainOwnerName()))
                                         .build()));
                 return false;
             }
@@ -162,7 +162,7 @@ public final class Share {
                                 style.hoverEvent(HoverEvent.showText(Converter.statsMessageResolver(this.configFactory, wrappedHorse)))))
                         .tag("random_prefix",
                                 Tag.selfClosingInserting(Component.text(horseNamePrefix.get(ThreadLocalRandom.current().nextInt(horseNamePrefix.size())))))
-                        .tag("horse_name", Tag.selfClosingInserting(wrappedHorse.horseName()))
+                        .tag("horse_name", Tag.selfClosingInserting(wrappedHorse.getName()))
                         .tag("rank_color", Tag.styling(style -> style.color(wrappedHorse.getRank().textColor())))
                         .tag("player", Tag.selfClosingInserting(sender.displayName()))
                         .build()
