@@ -1,5 +1,7 @@
 package github.tyonakaisan.horsechecker.config.primary;
 
+import org.bukkit.entity.Display;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -10,68 +12,70 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 @DefaultQualifier(NonNull.class)
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public final class HologramSettings {
-
-    private String nameResultText = "Name: <name>";
-    private String rankScoreResultText = "Score: <rank_color><rank></rank_color>";
-    private String speedResultText = "Speed: <#ffa500><speed></#ffa500> blocks/s";
-    private String jumpResultText = "Jump : <#ffa500><jump></#ffa500> blocks";
-    private String healthResultText = "MaxHP: <#ffa500><health></#ffa500><red>♥</red>";
-    private String ownerResultText = "<owner>";
-    private String parentResultText = "<dark_gray>(<color:#ff85f1><mother></color> / <color:#47b9ff><father></color>)";
-    @Comment("ホログラムのステータス表示順")
-    private String resultText = "<rank_score><newline><speed><newline><jump><newline><health><newline><owner><newline><name>";
-
     @Comment("""
             ホログラムを表示するタスクの処理頻度
             数字を大きくするほど処理は軽くなります""")
-    private int displayHologramTaskInterval = 2;
+    private int taskInterval = 2;
 
-    @Comment("表示されるホログラムの大きさ")
-    private Vector hologramScale = new Vector(1, 1, 1);
-    @Comment("表示されるホログラムの位置")
-    private Vector hologramTranslation = new Vector(0, 0.7, 0);
+    @Comment("ホログラムの大きさ")
+    private Vector scale = new Vector(1, 1, 1);
+    @Comment("ホログラムの位置")
+    private Vector translation = new Vector(0, 0.7, 0);
+    @Comment("ホログラムの表示範囲")
+    private float viewRange = 2f;
+    @Comment("""
+            ホログラムのテキストの配置方向
+            LEFT,CENTER,RIGHT のどれか""")
+    private String alignment = "LEFT";
+    @Comment("""
+            ホログラムの回転方向
+            FIXED,VERTICAL,HORIZONTAL,CENTER のどれか""")
+    private String billboard = "LEFT";
 
-    public String nameResultText() {
-        return this.nameResultText;
+    public int taskInterval() {
+        return this.taskInterval;
     }
 
-    public String rankScoreResultText() {
-        return this.rankScoreResultText;
+    public Vector scale() {
+        return this.scale;
     }
 
-    public String speedResultText() {
-        return this.speedResultText;
+    public Vector translation() {
+        return this.translation;
     }
 
-    public String jumpResultText() {
-        return this.jumpResultText;
+    public float viewRange() {
+        return this.viewRange;
     }
 
-    public String healthResultText() {
-        return this.healthResultText;
+    public TextDisplay.TextAlignment alignment() {
+        switch (this.alignment) {
+            case "LEFT" -> {
+                return TextDisplay.TextAlignment.LEFT;
+            }
+            case "RIGHT" -> {
+                return TextDisplay.TextAlignment.RIGHT;
+            }
+            default -> {
+                return TextDisplay.TextAlignment.CENTER;
+            }
+        }
     }
 
-    public String ownerResultText() {
-        return this.ownerResultText;
-    }
-
-    public String parentResultText() {
-        return this.parentResultText;
-    }
-
-    public String resultText() {
-        return this.resultText;
-    }
-
-    public int displayHologramTaskInterval() {
-        return this.displayHologramTaskInterval;
-    }
-
-    public Vector hologramScale() {
-        return this.hologramScale;
-    }
-
-    public Vector hologramTranslation() {
-        return this.hologramTranslation;
+    public Display.Billboard billboard() {
+        switch (this.billboard) {
+            case "VERTICAL" -> {
+                return Display.Billboard.VERTICAL;
+            }
+            case "HORIZONTAL" -> {
+                return Display.Billboard.HORIZONTAL;
+            }
+            case "CENTER" -> {
+                return Display.Billboard.CENTER;
+            }
+            default -> {
+                return Display.Billboard.FIXED;
+            }
+        }
     }
 }

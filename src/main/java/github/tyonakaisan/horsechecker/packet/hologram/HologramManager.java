@@ -49,13 +49,7 @@ public final class HologramManager {
             return;
         }
         final var text = Converter.statsMessageResolver(this.configFactory, wrappedHorse);
-        final var hologramData = new HologramData(
-                hologramId,
-                text,
-                wrappedHorse.getLocation(),
-                wrappedHorse.getRank().backgroundColor(),
-                this.configFactory.primaryConfig().hologram().hologramScale(),
-                this.configFactory.primaryConfig().hologram().hologramTranslation());
+        final var hologramData = new HologramData(hologramId, text, wrappedHorse.getLocation(), wrappedHorse.getRank().backgroundColor(), this.configFactory.primaryConfig().hologram());
 
         this.hologramMap.put(hologramId, hologramData);
     }

@@ -87,6 +87,7 @@ public final class HorseBreedListener implements Listener {
     @EventHandler
     public void onBreeding(final EntityBreedEvent event) {
         if (event.getBreeder() instanceof Player player) {
+
             if (!this.stateManager.state(player, "breed_notification")) {
                 return;
             }
@@ -119,7 +120,7 @@ public final class HorseBreedListener implements Listener {
     }
 
     private boolean isBreedItem(final ItemStack itemStack) {
-        List<Material> breedItems = List.of(Material.GOLDEN_CARROT, Material.GOLDEN_APPLE, Material.ENCHANTED_GOLDEN_APPLE, Material.HAY_BLOCK);
+        List<Material> breedItems = this.configFactory.primaryConfig().horse().nonRepeatableItems();
         return breedItems.contains(itemStack.getType());
     }
 }

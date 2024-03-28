@@ -7,10 +7,8 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
 import github.tyonakaisan.horsechecker.packet.util.PacketDataBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
-import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TextDisplay;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -76,16 +74,16 @@ public final class HologramPacketManager {
 
         packet.getIntegers().write(0, this.hologramData.entityId());
         packet.getDataValueCollectionModifier().write(0, PacketDataBuilder.textDisplay()
-                .translation(this.hologramData.translation())
-                .scale(this.hologramData.scale())
-                .billboard(Display.Billboard.CENTER)
+                .translation(this.hologramData.hologramSettings().translation())
+                .scale(this.hologramData.hologramSettings().scale())
+                .billboard(this.hologramData.hologramSettings().billboard())
                 .brightness(15)
-                .viewRange(2f)
+                .viewRange(this.hologramData.hologramSettings().viewRange())
                 .shadowRadius(0f)
                 .text(this.hologramData.text())
                 .backgroundColor(this.hologramData.backgroundColor())
                 .seeThrough()
-                .alignment(TextDisplay.TextAlignment.LEFT)
+                .alignment(this.hologramData.hologramSettings().alignment())
                 .build());
 
         return packet;

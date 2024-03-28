@@ -2,10 +2,10 @@ package github.tyonakaisan.horsechecker.packet.hologram;
 
 import com.comphenix.protocol.events.PacketContainer;
 import com.google.inject.Singleton;
+import github.tyonakaisan.horsechecker.config.primary.HologramSettings;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -21,8 +21,7 @@ public final class HologramData {
     private Component text;
     private Location location;
     private int backgroundColor;
-    private final Vector scale;
-    private final Vector translation;
+    private final HologramSettings hologramSettings;
 
     private final UUID entityUid;
     private final int entityId;
@@ -33,15 +32,13 @@ public final class HologramData {
             final Component text,
             final Location location,
             final int backgroundColor,
-            final Vector scale,
-            final Vector translation
+            final HologramSettings hologramSettings
     ) {
         this.hologramId = hologramId;
         this.text = text;
         this.location = location;
         this.backgroundColor = backgroundColor;
-        this.scale = scale;
-        this.translation = translation;
+        this.hologramSettings = hologramSettings;
 
         this.entityId = ThreadLocalRandom.current().nextInt();
         this.entityUid = UUID.randomUUID();
@@ -71,12 +68,8 @@ public final class HologramData {
         return this.backgroundColor;
     }
 
-    public Vector scale() {
-        return this.scale;
-    }
-
-    public Vector translation() {
-        return this.translation;
+    public HologramSettings hologramSettings() {
+        return this.hologramSettings;
     }
 
     public void showFrom(final Player player, final int vehicleId) {

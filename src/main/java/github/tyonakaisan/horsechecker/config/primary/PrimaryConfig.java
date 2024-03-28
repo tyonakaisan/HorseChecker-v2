@@ -12,6 +12,7 @@ public final class PrimaryConfig {
     private HologramSettings hologram = new HologramSettings();
     private HorseSettings horse = new HorseSettings();
     private ShareSettings share = new ShareSettings();
+    private StatsSettings stats = new StatsSettings();
 
     public HologramSettings hologram() {
         return this.hologram;
@@ -23,5 +24,9 @@ public final class PrimaryConfig {
 
     public ShareSettings share() {
         return this.share;
+    }
+
+    public StatsSettings stats() {
+        return this.stats;
     }
 }

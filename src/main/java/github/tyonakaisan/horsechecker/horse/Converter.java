@@ -14,7 +14,6 @@ import java.util.Arrays;
 
 @DefaultQualifier(NonNull.class)
 public final class Converter {
-
     // めっちゃ汚い
     private Converter() {}
 
@@ -26,7 +25,7 @@ public final class Converter {
         final var health = healthMessageResolver(configFactory, wrappedHorse);
         final var owner = ownerMessageResolver(configFactory, wrappedHorse);
 
-        return MiniMessage.miniMessage().deserialize(configFactory.primaryConfig().hologram().resultText(),
+        return MiniMessage.miniMessage().deserialize(configFactory.primaryConfig().stats().resultText(),
                 TagResolver.builder()
                         .tag("name", Tag.selfClosingInserting(name))
                         .tag("rank_score", Tag.selfClosingInserting(rank))
@@ -45,7 +44,7 @@ public final class Converter {
         final var health = healthMessageResolver(configFactory, childrenStats, motherStats, fatherStats);
         final var owner = ownerMessageResolver(configFactory, childrenStats);
 
-        return MiniMessage.miniMessage().deserialize(configFactory.primaryConfig().hologram().resultText(),
+        return MiniMessage.miniMessage().deserialize(configFactory.primaryConfig().stats().resultText(),
                 TagResolver.builder()
                         .tag("rank_score", Tag.selfClosingInserting(rank))
                         .tag("speed", Tag.selfClosingInserting(speed))
@@ -58,7 +57,7 @@ public final class Converter {
 
     private static Component rankMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
-                configFactory.primaryConfig().hologram().rankScoreResultText(),
+                configFactory.primaryConfig().stats().rankScoreText(),
                 TagResolver.builder()
                         .tag("rank", Tag.selfClosingInserting(Component.text(wrappedHorse.getRank().rank())))
                         .tag("rank_color", Tag.styling(style -> style.color(wrappedHorse.getRank().textColor())))
@@ -71,7 +70,7 @@ public final class Converter {
         final var father = Arrays.asList(wrappedHorseStats).get(2);
 
         final var parentMessage = MiniMessage.miniMessage().deserialize(
-                configFactory.primaryConfig().hologram().parentResultText(),
+                configFactory.primaryConfig().stats().parentText(),
                 TagResolver.builder()
                         .tag("mother", Tag.selfClosingInserting(
                                 Component.text(mother.getRank().rank(), mother.getRank().textColor())))
@@ -84,7 +83,7 @@ public final class Converter {
 
     private static Component speedMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
-                configFactory.primaryConfig().hologram().speedResultText(),
+                configFactory.primaryConfig().stats().speedText(),
                 TagResolver.builder()
                         .tag("speed", Tag.selfClosingInserting(Component.text(wrappedHorse.genericSpeedToBlocPerSec())))
                         .build());
@@ -96,7 +95,7 @@ public final class Converter {
         var father = Arrays.asList(wrappedHorseStats).get(2);
 
         var parentMessage = MiniMessage.miniMessage().deserialize(
-                configFactory.primaryConfig().hologram().parentResultText(),
+                configFactory.primaryConfig().stats().parentText(),
                 TagResolver.builder()
                         .tag("mother", Tag.selfClosingInserting(
                                 Component.text(mother.genericSpeedToBlocPerSec())
@@ -111,7 +110,7 @@ public final class Converter {
 
     private static Component jumpMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
-                configFactory.primaryConfig().hologram().jumpResultText(),
+                configFactory.primaryConfig().stats().jumpText(),
                 TagResolver.builder()
                         .tag("jump", Tag.selfClosingInserting(Component.text(wrappedHorse.jumpStrengthToJumpHeight())))
                         .build());
@@ -123,7 +122,7 @@ public final class Converter {
         final var father = Arrays.asList(wrappedHorseStats).get(2);
 
         final var parentMessage = MiniMessage.miniMessage().deserialize(
-                configFactory.primaryConfig().hologram().parentResultText(),
+                configFactory.primaryConfig().stats().parentText(),
                 TagResolver.builder()
                         .tag("mother", Tag.selfClosingInserting(
                                 Component.text(mother.jumpStrengthToJumpHeight())
@@ -138,7 +137,7 @@ public final class Converter {
 
     private static Component healthMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
-                configFactory.primaryConfig().hologram().healthResultText(),
+                configFactory.primaryConfig().stats().healthText(),
                 TagResolver.builder()
                         .tag("health", Tag.selfClosingInserting(Component.text(wrappedHorse.getMaxHealth())))
                         .build());
@@ -150,7 +149,7 @@ public final class Converter {
         final var father = Arrays.asList(wrappedHorseStats).get(2);
 
         final var parentMessage = MiniMessage.miniMessage().deserialize(
-                configFactory.primaryConfig().hologram().parentResultText(),
+                configFactory.primaryConfig().stats().parentText(),
                 TagResolver.builder()
                         .tag("mother", Tag.selfClosingInserting(
                                 Component.text(mother.getMaxHealth())
@@ -165,7 +164,7 @@ public final class Converter {
 
     private static Component nameMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
-                configFactory.primaryConfig().hologram().nameResultText(),
+                configFactory.primaryConfig().stats().nameText(),
                 TagResolver.builder()
                         .tag("name", Tag.selfClosingInserting(wrappedHorse.getName()))
                         .build());
@@ -173,7 +172,7 @@ public final class Converter {
 
     private static Component ownerMessageResolver(final ConfigFactory configFactory, final WrappedHorse wrappedHorse) {
         return MiniMessage.miniMessage().deserialize(
-                configFactory.primaryConfig().hologram().ownerResultText(),
+                configFactory.primaryConfig().stats().ownerText(),
                 TagResolver.builder()
                         .tag("owner", Tag.selfClosingInserting(wrappedHorse.getOwnerName()))
                         .build());
