@@ -68,7 +68,7 @@ public final class Messages {
         if (!Files.exists(path)) {
             try {
                 Files.createDirectories(path);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 this.logger.error(String.format("Failed to create directory %s", path), e);
             }
         }
@@ -80,7 +80,7 @@ public final class Messages {
         try (final Stream<Path> paths = Files.list(path)) {
             paths.filter(Files::isRegularFile)
                     .forEach(this::loadMatchFile);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             this.logger.error("Failed to load locales.", e);
         }
 
@@ -119,7 +119,7 @@ public final class Messages {
                     )));
             properties.store(outputStream, null);
             this.logger.info("successfully '{}' created!", path.getFileName());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             this.logger.error("Failed to create '{}' locales.", bundle.getLocale(), e);
         }
     }
@@ -140,7 +140,7 @@ public final class Messages {
     private void load(final Locale locale, final Path path) {
         try (final BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             this.locales.put(locale, new PropertyResourceBundle(reader));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             this.logger.error(String.format("Failed to load %s", path.getFileName()), e);
         }
     }
@@ -151,8 +151,8 @@ public final class Messages {
 
     public Component translatable(final Style style, final Audience audience, @PropertyKey(resourceBundle = BUNDLE) final String key, final TagResolver tagResolver) {
         var addPrefixTagResolver = TagResolver.builder()
-                .resolver(tagResolver)
                 .tag("prefix", Tag.selfClosingInserting(MiniMessage.miniMessage().deserialize(PREFIX)))
+                .resolver(tagResolver)
                 .build();
 
         return audience instanceof final Player player
