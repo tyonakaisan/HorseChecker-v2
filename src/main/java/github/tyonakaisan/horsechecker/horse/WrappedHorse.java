@@ -5,7 +5,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
-import org.checkerframework.checker.units.qual.C;
 
 import java.text.DecimalFormat;
 import java.util.Objects;

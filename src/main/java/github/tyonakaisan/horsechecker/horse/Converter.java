@@ -9,8 +9,6 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
-import java.util.Arrays;
-
 @DefaultQualifier(NonNull.class)
 public final class Converter {
 
