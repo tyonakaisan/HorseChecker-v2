@@ -29,6 +29,7 @@ import java.util.List;
 @DefaultQualifier(NonNull.class)
 public final class HorseBreedListener implements Listener {
 
+    private final Converter converter;
     private final StateManager stateManager;
     private final ConfigFactory configFactory;
     private final Messages messages;
@@ -36,11 +37,13 @@ public final class HorseBreedListener implements Listener {
 
     @Inject
     public HorseBreedListener(
+            final Converter converter,
             final StateManager stateManager,
             final Messages messages,
             final ConfigFactory configFactory,
             final HorseFinder horseFinder
     ) {
+        this.converter = converter;
         this.stateManager = stateManager;
         this.messages = messages;
         this.configFactory = configFactory;
@@ -113,7 +116,7 @@ public final class HorseBreedListener implements Listener {
                                                 }, builder -> builder.uses(3)))))
                                         .tag("hover", Tag.styling(style ->
                                                 style.hoverEvent(HoverEvent.showText(Component.text()
-                                                        .append(Converter.withParentsStatsMessageResolver(this.configFactory, wrappedChildren, wrappedMother, wrappedFather))))))
+                                                        .append(this.converter.withParentsStatsMessageResolver(wrappedChildren, wrappedMother, wrappedFather))))))
                                         .build()));
             }
         }

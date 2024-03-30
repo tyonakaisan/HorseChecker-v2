@@ -32,16 +32,19 @@ import java.util.concurrent.ThreadLocalRandom;
 @DefaultQualifier(NonNull.class)
 public final class Share {
 
+    private final Converter converter;
     private final ConfigFactory configFactory;
     private final Server server;
     private final Messages messages;
 
     @Inject
     public Share(
+            final Converter converter,
             final ConfigFactory configFactory,
             final Messages messages,
             final Server server
     ) {
+        this.converter = converter;
         this.configFactory = configFactory;
         this.messages = messages;
         this.server = server;
@@ -75,7 +78,7 @@ public final class Share {
                                 player,
                                 "share.error.different_owner",
                                 TagResolver.builder()
-                                        .tag("owner", Tag.selfClosingInserting(new WrappedHorse(horse).getPlainOwnerName()))
+                                        .tag("owner", Tag.selfClosingInserting(new WrappedHorse(horse).getOwnerName()))
                                         .build()));
                 return false;
             }
@@ -159,7 +162,7 @@ public final class Share {
                 "share.success.broadcast",
                 TagResolver.builder()
                         .tag("hover", Tag.styling(style ->
-                                style.hoverEvent(HoverEvent.showText(Converter.statsMessageResolver(this.configFactory, wrappedHorse)))))
+                                style.hoverEvent(HoverEvent.showText(this.converter.statsMessageResolver(wrappedHorse)))))
                         .tag("random_prefix",
                                 Tag.selfClosingInserting(Component.text(horseNamePrefix.get(ThreadLocalRandom.current().nextInt(horseNamePrefix.size())))))
                         .tag("horse_name", Tag.selfClosingInserting(wrappedHorse.getName()))

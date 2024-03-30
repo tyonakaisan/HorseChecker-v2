@@ -30,7 +30,7 @@ public final class HologramSettings {
     @Comment("""
             ホログラムの回転方向
             FIXED,VERTICAL,HORIZONTAL,CENTER のどれか""")
-    private String billboard = "LEFT";
+    private String billboard = "CENTER";
 
     public int taskInterval() {
         return this.taskInterval;

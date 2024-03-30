@@ -20,16 +20,19 @@ public final class HologramManager {
 
     private final Map<String, HologramData> hologramMap = new HashMap<>();
 
+    private final Converter converter;
     private final Server server;
     private final ComponentLogger logger;
     private final ConfigFactory configFactory;
 
     @Inject
     public HologramManager(
+            final Converter converter,
             final Server server,
             final ComponentLogger logger,
             final ConfigFactory configFactory
     ) {
+        this.converter = converter;
         this.server = server;
         this.logger = logger;
         this.configFactory = configFactory;
@@ -48,7 +51,7 @@ public final class HologramManager {
         if (this.hologramMap.containsKey(hologramId)) {
             return;
         }
-        final var text = Converter.statsMessageResolver(this.configFactory, wrappedHorse);
+        final var text = this.converter.statsMessageResolver(wrappedHorse);
         final var hologramData = new HologramData(hologramId, text, wrappedHorse.getLocation(), wrappedHorse.getRank().backgroundColor(), this.configFactory.primaryConfig().hologram());
 
         this.hologramMap.put(hologramId, hologramData);
@@ -91,7 +94,7 @@ public final class HologramManager {
 
     public void updateHologram(final String hologramId, final WrappedHorse wrappedHorse) {
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            var text = Converter.statsMessageResolver(this.configFactory, wrappedHorse);
+            var text = this.converter.statsMessageResolver(wrappedHorse);
             hologramData.updateBackgroundColor(wrappedHorse.getRank().backgroundColor());
             hologramData.updateText(text);
             hologramData.updateHologram();
