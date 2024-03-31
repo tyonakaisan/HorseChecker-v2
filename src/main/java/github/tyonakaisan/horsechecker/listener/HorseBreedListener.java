@@ -57,8 +57,12 @@ public final class HorseBreedListener implements Listener {
 
         //toggleチェック
         //繫殖させるためのアイテムか
-        if (!this.stateManager.state(player, "breed") || !this.isBreedItem(itemStack)) return;
-        if (!(event.getRightClicked() instanceof final AbstractHorse horse)) return;
+        if (!this.stateManager.state(player, "breed") || !this.isBreedItem(itemStack)) {
+            return;
+        }
+        if (!(event.getRightClicked() instanceof final AbstractHorse horse)) {
+            return;
+        }
 
         final var wrappedHorse = new WrappedHorse(horse);
 

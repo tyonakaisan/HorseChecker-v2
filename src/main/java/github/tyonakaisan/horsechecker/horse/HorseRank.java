@@ -11,11 +11,9 @@ import java.awt.*;
 @DefaultQualifier(NonNull.class)
 public final class HorseRank {
 
-    private HorseRank() {
-        throw new AssertionError();
-    }
+    private HorseRank() {}
 
-    public static double calcEvaluateValue(double paramSpeed, double jumpHeight) {
+    public static double calcEvaluateValue(final double paramSpeed, final double jumpHeight) {
         final double jumpRating = Math.floor(Math.pow(jumpHeight, 1.7) * 5.293 * 2.0D) / (2.0D * 5.0D);
 
         final double speedHeavy = 10.0D;
@@ -26,12 +24,13 @@ public final class HorseRank {
         return value / valueMax;
     }
 
-    public static HorseRankData calcEvaluateRankData(double paramSpeed, double jumpHeight) {
+    public static HorseRankData calcEvaluateRankData(final double paramSpeed, final double jumpHeight) {
         final double horseEvaluate = calcEvaluateValue(paramSpeed, jumpHeight);
+        int alpha = 32;
+
         String rank;
         TextColor textColor;
         Glow.Color glowColor;
-        int alpha = 32;
 
         final String[] ratingStage = {
                 "G", "G", "G",

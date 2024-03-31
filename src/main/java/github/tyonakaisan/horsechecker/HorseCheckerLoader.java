@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
 import io.papermc.paper.plugin.loader.PluginLoader;
 import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.eclipse.aether.artifact.DefaultArtifact;
@@ -35,7 +34,7 @@ public final class HorseCheckerLoader implements PluginLoader {
     private PluginLibraries load() {
         try (final var in = Objects.requireNonNull(getClass().getResourceAsStream("/paper-libraries.json"))) {
             return new Gson().fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), PluginLibraries.class);
-        } catch (IOException exception) {
+        } catch (final IOException exception) {
             throw new IllegalStateException("Failed to load plugin libraries.", exception);
         }
     }
