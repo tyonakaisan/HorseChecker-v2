@@ -35,7 +35,7 @@ public final class ShareCommand implements HorseCheckerCommand {
                         final Selector<Player> target = handler.get("player");
                         this.share.broadcastShareMessage(player, target.values());
                     } else {
-                        //TODO: Error message
+                        handler.sender().sendRichMessage("This command can only be used by the player.");
                     }
                 }).build();
 

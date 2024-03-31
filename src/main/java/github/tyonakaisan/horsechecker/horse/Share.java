@@ -11,7 +11,6 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -34,20 +33,17 @@ public final class Share {
 
     private final Converter converter;
     private final ConfigFactory configFactory;
-    private final Server server;
     private final Messages messages;
 
     @Inject
     public Share(
             final Converter converter,
             final ConfigFactory configFactory,
-            final Messages messages,
-            final Server server
+            final Messages messages
     ) {
         this.converter = converter;
         this.configFactory = configFactory;
         this.messages = messages;
-        this.server = server;
     }
 
     private final HashMap<UUID, Instant> intervalMap = new HashMap<>();
@@ -126,15 +122,9 @@ public final class Share {
         final @Nullable Entity targetEntity = sender.getTargetEntity(this.configFactory.primaryConfig().horse().targetRange(), false);
 
         if (targetEntity instanceof final AbstractHorse horse) {
-            //もしものため
-            if (targets.isEmpty()) {
-                this.server.getOnlinePlayers().forEach(receiver -> this.sendBroadCastMessage(sender, receiver, horse));
-            } else {
-                targets.forEach(receiver -> this.sendBroadCastMessage(sender, receiver, horse));
-            }
+            targets.forEach(receiver -> this.sendBroadCastMessage(sender, receiver, horse));
 
             final var icon = new ItemStack(Material.PLAYER_HEAD);
-
             icon.editMeta(meta -> {
                 if (meta instanceof final SkullMeta skullMeta) {
                     final var playerProfile = Bukkit.createProfile(UUID.randomUUID(), "horsechecker");
