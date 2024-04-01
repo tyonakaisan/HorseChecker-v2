@@ -49,7 +49,7 @@ public record WrappedHorse(
     }
 
     public Component getName() {
-        return this.horse.getName().equals("Horse")
+        return this.horse.getName().toUpperCase().equals(this.horse.getType().toString())
                 ? MiniMessage.miniMessage().deserialize("<lang:" + this.horse.getType().translationKey() + ">")
                 : Component.text(this.horse.getName());
     }
