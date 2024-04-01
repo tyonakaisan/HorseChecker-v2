@@ -41,7 +41,7 @@ paper {
     val mainPackage = "github.tyonakaisan.horsechecker"
     generateLibrariesJson = true
     name = rootProject.name
-    version = "1.5.1-SNAPSHOT"
+    version = "1.5.2-SNAPSHOT"
     main = "$mainPackage.HorseChecker"
     loader = "$mainPackage.HorseCheckerLoader"
     bootstrapper = "$mainPackage.HorseCheckerBootstrap"
