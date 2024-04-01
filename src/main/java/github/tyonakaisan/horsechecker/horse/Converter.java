@@ -66,8 +66,14 @@ public final class Converter {
         final var jump = this.jumpMessageResolver(childrenHorse, motherHorse, fatherHorse);
         final var health = this.healthMessageResolver(childrenHorse, motherHorse, fatherHorse);
         final var owner = this.ownerMessageResolver(childrenHorse);
+        var resultText = this.configFactory.primaryConfig().stats().resultText();
 
-        return MiniMessage.miniMessage().deserialize(this.configFactory.primaryConfig().stats().resultText(),
+        if (childrenHorse.horse().getName().toUpperCase().equals(childrenHorse.horse().getType().toString())) {
+            resultText = resultText.replace("<name><newline>", "");
+            resultText = resultText.replace("<name>", "");
+        }
+
+        return MiniMessage.miniMessage().deserialize(resultText,
                 TagResolver.builder()
                         .tag(NAME, Tag.selfClosingInserting(name))
                         .tag(RANK_SCORE, Tag.selfClosingInserting(rank))
