@@ -25,7 +25,7 @@ public final class HologramHandler {
     private final HologramManager hologramManager;
     private final StateManager stateManager;
 
-    private final Map<UUID, HologramTask> hologramTask = new HashMap<>();
+    private final Map<UUID, HologramTask> hologramTaskMap = new HashMap<>();
 
     @Inject
     public HologramHandler(
@@ -41,16 +41,20 @@ public final class HologramHandler {
     }
 
     public void show(final Player player) {
+        final var playerUUID = player.getUniqueId();
+
         if (this.stateManager.state(player, "stats") && !player.isInsideVehicle()) {
-            this.hologramTask.putIfAbsent(player.getUniqueId(), new HologramTask(player, this.configFactory.primaryConfig().horse().targetRange(), this.hologramManager));
-            this.hologramTask.get(player.getUniqueId()).runTask(this.horseChecker, 0, this.configFactory.primaryConfig().hologram().taskInterval());
+            this.hologramTaskMap.putIfAbsent(playerUUID, new HologramTask(player, this.configFactory.primaryConfig().horse().targetRange(), this.hologramManager));
+            this.hologramTaskMap.get(playerUUID).runTask(this.horseChecker, 0, this.configFactory.primaryConfig().hologram().taskInterval());
         }
     }
 
     public void cancel(final Player player) {
-        Optional.ofNullable(this.hologramTask.get(player.getUniqueId())).ifPresent(task -> {
+        final var playerUUID = player.getUniqueId();
+
+        Optional.ofNullable(this.hologramTaskMap.get(playerUUID)).ifPresent(task -> {
             task.cancelTask();
-            this.hologramTask.remove(player.getUniqueId());
+            this.hologramTaskMap.remove(playerUUID);
         });
     }
 
