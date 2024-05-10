@@ -25,6 +25,8 @@ public final class Converter {
     private static final String OWNER = "owner";
     private static final String MOTHER = "mother";
     private static final String FATHER = "father";
+    private static final String MOTHER_COMPARISON = "mother_comparison";
+    private static final String FATHER_COMPARISON = "father_comparison";
 
     @Inject
     public Converter(
@@ -97,7 +99,9 @@ public final class Converter {
         final var parentMessage = MiniMessage.miniMessage().deserialize(this.configFactory.primaryConfig().stats().parentText(),
                 TagResolver.builder()
                         .tag(MOTHER, Tag.selfClosingInserting(Component.text(motherHorse.getRank().rank(), motherHorse.getRank().textColor())))
+                        .tag(MOTHER_COMPARISON, Tag.selfClosingInserting(this.comparisonStats(childrenHorse.getRank().point(), motherHorse.getRank().point())))
                         .tag(FATHER, Tag.selfClosingInserting(Component.text(fatherHorse.getRank().rank(), fatherHorse.getRank().textColor())))
+                        .tag(FATHER_COMPARISON, Tag.selfClosingInserting(this.comparisonStats(childrenHorse.getRank().point(), fatherHorse.getRank().point())))
                         .build());
 
         return this.rankMessageResolver(childrenHorse).appendSpace().append(parentMessage);
@@ -113,12 +117,10 @@ public final class Converter {
     private Component speedMessageResolver(final WrappedHorse childrenHorse, final WrappedHorse motherHorse, final WrappedHorse fatherHorse) {
         var parentMessage = MiniMessage.miniMessage().deserialize(this.configFactory.primaryConfig().stats().parentText(),
                 TagResolver.builder()
-                        .tag(MOTHER, Tag.selfClosingInserting(
-                                Component.text(motherHorse.genericSpeedToBlocPerSec())
-                                        .append(this.comparisonStats(childrenHorse.genericSpeedToBlocPerSec(), motherHorse.genericSpeedToBlocPerSec()))))
-                        .tag(FATHER, Tag.selfClosingInserting(
-                                Component.text(fatherHorse.genericSpeedToBlocPerSec())
-                                        .append(this.comparisonStats(childrenHorse.genericSpeedToBlocPerSec(), fatherHorse.genericSpeedToBlocPerSec()))))
+                        .tag(MOTHER, Tag.selfClosingInserting(Component.text(motherHorse.genericSpeedToBlocPerSec())))
+                        .tag(MOTHER_COMPARISON, Tag.selfClosingInserting(this.comparisonStats(childrenHorse.genericSpeedToBlocPerSec(), motherHorse.genericSpeedToBlocPerSec())))
+                        .tag(FATHER, Tag.selfClosingInserting(Component.text(fatherHorse.genericSpeedToBlocPerSec())))
+                        .tag(FATHER_COMPARISON, Tag.selfClosingInserting(this.comparisonStats(childrenHorse.genericSpeedToBlocPerSec(), fatherHorse.genericSpeedToBlocPerSec())))
                         .build());
 
         return this.speedMessageResolver(childrenHorse).appendSpace().append(parentMessage);
@@ -134,12 +136,10 @@ public final class Converter {
     private Component jumpMessageResolver(final WrappedHorse childrenHorse, final WrappedHorse motherHorse, final WrappedHorse fatherHorse) {
         final var parentMessage = MiniMessage.miniMessage().deserialize(this.configFactory.primaryConfig().stats().parentText(),
                 TagResolver.builder()
-                        .tag(MOTHER, Tag.selfClosingInserting(
-                                Component.text(motherHorse.jumpStrengthToJumpHeight())
-                                        .append(this.comparisonStats(childrenHorse.jumpStrengthToJumpHeight(), motherHorse.jumpStrengthToJumpHeight()))))
-                        .tag(FATHER, Tag.selfClosingInserting(
-                                Component.text(fatherHorse.jumpStrengthToJumpHeight())
-                                        .append(this.comparisonStats(childrenHorse.jumpStrengthToJumpHeight(), fatherHorse.jumpStrengthToJumpHeight()))))
+                        .tag(MOTHER, Tag.selfClosingInserting(Component.text(motherHorse.jumpStrengthToJumpHeight())))
+                        .tag(MOTHER_COMPARISON, Tag.selfClosingInserting(this.comparisonStats(childrenHorse.jumpStrengthToJumpHeight(), motherHorse.jumpStrengthToJumpHeight())))
+                        .tag(FATHER, Tag.selfClosingInserting(Component.text(fatherHorse.jumpStrengthToJumpHeight())))
+                        .tag(FATHER_COMPARISON, Tag.selfClosingInserting(this.comparisonStats(childrenHorse.jumpStrengthToJumpHeight(), fatherHorse.jumpStrengthToJumpHeight())))
                         .build());
 
         return jumpMessageResolver(childrenHorse).appendSpace().append(parentMessage);
@@ -156,12 +156,10 @@ public final class Converter {
     private Component healthMessageResolver(final WrappedHorse childrenHorse, final WrappedHorse motherHorse, final WrappedHorse fatherHorse) {
         final var parentMessage = MiniMessage.miniMessage().deserialize(this.configFactory.primaryConfig().stats().parentText(),
                 TagResolver.builder()
-                        .tag(MOTHER, Tag.selfClosingInserting(
-                                Component.text(motherHorse.getMaxHealth())
-                                        .append(this.comparisonStats(childrenHorse.getMaxHealth(), motherHorse.getMaxHealth()))))
-                        .tag(FATHER, Tag.selfClosingInserting(
-                                Component.text(fatherHorse.getMaxHealth())
-                                        .append(this.comparisonStats(childrenHorse.getMaxHealth(), fatherHorse.getMaxHealth()))))
+                        .tag(MOTHER, Tag.selfClosingInserting(Component.text(motherHorse.getMaxHealth())))
+                        .tag(MOTHER_COMPARISON, Tag.selfClosingInserting(this.comparisonStats(childrenHorse.getMaxHealth(), motherHorse.getMaxHealth())))
+                        .tag(FATHER, Tag.selfClosingInserting(Component.text(fatherHorse.getMaxHealth())))
+                        .tag(FATHER_COMPARISON, Tag.selfClosingInserting(this.comparisonStats(childrenHorse.getMaxHealth(), fatherHorse.getMaxHealth())))
                         .build());
 
         return this.healthMessageResolver(childrenHorse).appendSpace().append(parentMessage);

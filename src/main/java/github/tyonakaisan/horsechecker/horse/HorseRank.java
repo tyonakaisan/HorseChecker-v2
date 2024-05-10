@@ -51,13 +51,13 @@ public final class HorseRank {
             rank = ratingStage[ratingStage.length - 1];
             textColor = TextColor.color(255, 204, 255);
 
-            return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB(), Glow.Color.LIGHT_PURPLE);
+            return new HorseRankData(rank, pt, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB(), Glow.Color.LIGHT_PURPLE);
         }
         if (pt < 0) {
             rank = ratingStage[0];
             textColor = TextColor.color(85, 85, 85);
 
-            return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB(), Glow.Color.GRAY);
+            return new HorseRankData(rank, pt, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB(), Glow.Color.GRAY);
         }
 
         rank = ratingStage[pt];
@@ -104,11 +104,12 @@ public final class HorseRank {
             }
         }
 
-        return new HorseRankData(rank, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB(), glowColor);
+        return new HorseRankData(rank, pt, textColor, new Color(textColor.red(), textColor.green(), textColor.blue(), alpha).getRGB(), glowColor);
     }
 
     public record HorseRankData(
             String rank,
+            int point,
             TextColor textColor,
             int backgroundColor,
             Glow.Color glowColor
