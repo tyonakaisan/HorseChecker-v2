@@ -1,44 +1,48 @@
 package github.tyonakaisan.horsechecker.command.commands;
 
 import com.google.inject.Inject;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.horse.Share;
-import org.bukkit.command.CommandSender;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
+import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
-import org.incendo.cloud.CommandManager;
-import org.incendo.cloud.bukkit.data.Selector;
-import org.incendo.cloud.bukkit.parser.selector.MultiplePlayerSelectorParser;
+
+import java.util.List;
 
 @DefaultQualifier(NonNull.class)
+@SuppressWarnings("UnstableApiUsage")
 public final class ShareCommand implements HorseCheckerCommand {
 
-    private final CommandManager<CommandSender> commandManager;
     private final Share share;
 
     @Inject
-    public ShareCommand(final CommandManager<CommandSender> commandManager, final Share share) {
-        this.commandManager = commandManager;
+    public ShareCommand(
+            final Share share
+    ) {
         this.share = share;
     }
 
     @Override
-    public void init() {
-        final var command = this.commandManager.commandBuilder("horsechecker", "hc")
-                .literal("share")
-                .required("player", MultiplePlayerSelectorParser.multiplePlayerSelectorParser())
-                .permission("horsechecker.command.share")
-                .senderType(CommandSender.class)
-                .handler(handler -> {
-                    if (handler.sender() instanceof final Player player) {
-                        final Selector<Player> target = handler.get("player");
-                        this.share.broadcastShareMessage(player, target.values());
-                    } else {
-                        handler.sender().sendRichMessage("This command can only be used by the player.");
-                    }
-                }).build();
+    public ArgumentBuilder<CommandSourceStack, ?> init() {
+        return Commands.literal("share")
+                .requires(source -> source.getSender().hasPermission("horsechecker.command.share"))
+                .then(Commands.argument("player", ArgumentTypes.players())
+                        .executes(source -> {
+                            final List<Player> targets = source.getArgument("player", PlayerSelectorArgumentResolver.class).resolve(source.getSource());
 
-        this.commandManager.command(command);
+                            if (source.getSource().getSender() instanceof final Player player) {
+                                this.share.broadcastShareMessage(player, targets);
+                                return Command.SINGLE_SUCCESS;
+                            } else {
+                                source.getSource().getSender().sendRichMessage("This command can only be used by the player.");
+                                return 0;
+                            }
+                        }));
     }
 }

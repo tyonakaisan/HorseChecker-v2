@@ -59,20 +59,21 @@ public final class HologramManager {
 
     public void deleteHologram(final WrappedHorse wrappedHorse) {
         this.server.getOnlinePlayers()
-                .forEach(player -> this.hideHologram(wrappedHorse, player));
+                .forEach(player ->
+                        this.hideHologram(wrappedHorse, player));
         final var horseUuid = wrappedHorse.horse().getUniqueId().toString();
         this.hologramMap.remove(horseUuid);
     }
 
     public void destroyAllHologram() {
         this.logger.info("Destroy all holograms...");
-        this.hologramMap.values().forEach(hologramData ->
-                this.server.forEachAudience(audience -> {
-                    if (audience instanceof Player player) {
-                        hologramData.hideFrom(player);
-                    }
-                }));
+
+        this.hologramMap.values()
+                .forEach(hologramData ->
+                        this.server.getOnlinePlayers()
+                                .forEach(hologramData::hideFrom));
         this.hologramMap.clear();
+
         this.logger.info("All holograms were destroyed!");
     }
 

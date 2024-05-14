@@ -1,6 +1,5 @@
 package github.tyonakaisan.horsechecker.packet.util.entity;
 
-import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.google.inject.Singleton;
@@ -24,7 +23,8 @@ public abstract class WrappedDataManager {
     private final WrappedDataWatcher.Serializer booleanSerializer = WrappedDataWatcher.Registry.get(Boolean.class);
     private final WrappedDataWatcher.Serializer vectorSerializer = WrappedDataWatcher.Registry.get(Vector3f.class);
     private final WrappedDataWatcher.Serializer quaternionSerializer = WrappedDataWatcher.Registry.getVectorSerializer();
-    private final WrappedDataWatcher.Serializer poseSerializer = WrappedDataWatcher.Registry.get(EnumWrappers.getEntityPoseClass());
+    // EnumChatVisibility
+    // private final WrappedDataWatcher.Serializer poseSerializer = WrappedDataWatcher.Registry.get(EnumWrappers.getEntityPoseClass());
     private final WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer();
 
     protected void addByteData(final int index, final Object object) {
@@ -55,7 +55,8 @@ public abstract class WrappedDataManager {
     }
 
     protected void addPoseData(final int index, final Object object) {
-        this.dataValues.add(new WrappedDataValue(index, this.poseSerializer, object));
+        // EnumChatVisibility
+        // this.dataValues.add(new WrappedDataValue(index, this.poseSerializer, object));
     }
 
     protected void addChatData(final int index, final Object object) {
