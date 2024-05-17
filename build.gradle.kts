@@ -31,6 +31,9 @@ dependencies {
     paperLibrary("org.spongepowered", "configurate-hocon", "4.2.0-SNAPSHOT")
     paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.17.0")
 
+    // Command
+    paperLibrary("org.incendo", "cloud-paper", "2.0.0-beta.7")
+
     // Utils
     paperLibrary("com.google.inject", "guice", "7.0.0")
     // ↓ 動くか知らない。多分動かない
