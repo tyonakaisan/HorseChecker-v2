@@ -1,10 +1,12 @@
 package github.tyonakaisan.horsechecker.horse;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.tyonakaisan.glowlib.glow.Glow;
 import github.tyonakaisan.horsechecker.HorseChecker;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.message.Messages;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
@@ -16,21 +18,25 @@ import java.util.List;
 import java.util.UUID;
 
 @DefaultQualifier(NonNull.class)
+@Singleton
 public final class HorseFinder {
 
     private final HorseChecker horseChecker;
     private final ConfigFactory configFactory;
     private final Messages messages;
+    private final ComponentLogger logger;
 
     @Inject
     public HorseFinder(
             final HorseChecker horseChecker,
             final ConfigFactory configFactory,
-            final Messages messages
-    ) {
+            final Messages messages,
+            final ComponentLogger logger
+            ) {
         this.horseChecker = horseChecker;
         this.configFactory = configFactory;
         this.messages = messages;
+        this.logger = logger;
     }
 
     public void fromUuid(final UUID uuid, final Player showPlayer) {

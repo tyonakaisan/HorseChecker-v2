@@ -2,7 +2,7 @@ package github.tyonakaisan.horsechecker.packet.hologram;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import github.tyonakaisan.horsechecker.HorseChecker;
+import github.tyonakaisan.horsechecker.HorseCheckerProvider;
 import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.WrappedHorse;
 import github.tyonakaisan.horsechecker.manager.StateManager;
@@ -20,7 +20,6 @@ import java.util.UUID;
 @DefaultQualifier(NonNull.class)
 public final class HologramHandler {
 
-    private final HorseChecker horseChecker;
     private final ConfigFactory configFactory;
     private final HologramManager hologramManager;
     private final StateManager stateManager;
@@ -29,12 +28,10 @@ public final class HologramHandler {
 
     @Inject
     public HologramHandler(
-            final HorseChecker horseChecker,
             final ConfigFactory configFactory,
             final HologramManager hologramManager,
             final StateManager stateManager
     ) {
-        this.horseChecker = horseChecker;
         this.configFactory = configFactory;
         this.hologramManager = hologramManager;
         this.stateManager = stateManager;
@@ -45,7 +42,7 @@ public final class HologramHandler {
 
         if (this.stateManager.state(player, "stats") && !player.isInsideVehicle()) {
             this.hologramTaskMap.putIfAbsent(playerUUID, new HologramTask(player, this.configFactory.primaryConfig().horse().targetRange(), this.hologramManager));
-            this.hologramTaskMap.get(playerUUID).runTask(this.horseChecker, 0, this.configFactory.primaryConfig().hologram().taskInterval());
+            this.hologramTaskMap.get(playerUUID).runTask(HorseCheckerProvider.instance(), 0, this.configFactory.primaryConfig().hologram().taskInterval());
         }
     }
 

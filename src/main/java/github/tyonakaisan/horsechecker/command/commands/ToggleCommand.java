@@ -5,24 +5,25 @@ import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
 import github.tyonakaisan.horsechecker.manager.StateManager;
 import github.tyonakaisan.horsechecker.message.Messages;
 import github.tyonakaisan.horsechecker.packet.hologram.HologramHandler;
-import org.bukkit.command.CommandSender;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
-import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.paper.PaperCommandManager;
 
+@SuppressWarnings("UnstableApiUsage")
 @DefaultQualifier(NonNull.class)
 public final class ToggleCommand implements HorseCheckerCommand {
 
-    private final CommandManager<CommandSender> commandManager;
+    private final PaperCommandManager.Bootstrapped<CommandSourceStack> commandManager;
     private final Messages messages;
     private final StateManager stateManager;
     private final HologramHandler hologramHandler;
 
     @Inject
     public ToggleCommand(
-            final CommandManager<CommandSender> commandManager,
+            final PaperCommandManager.Bootstrapped<CommandSourceStack> commandManager,
             final Messages messages,
             final StateManager stateManager,
             final HologramHandler hologramHandler
@@ -41,52 +42,55 @@ public final class ToggleCommand implements HorseCheckerCommand {
 
         this.commandManager.command(toggle.literal("stats")
                 .permission("horsechecker.command.toggle.stats")
-                .senderType(CommandSender.class)
                 .handler(this::toggleStats)
         );
 
         this.commandManager.command(toggle.literal("breed")
                 .permission("horsechecker.command.toggle.breed")
-                .senderType(CommandSender.class)
                 .handler(this::toggleBreed)
         );
 
         this.commandManager.command(toggle.literal("notification")
                 .permission("horsechecker.command.toggle.notification")
-                .senderType(CommandSender.class)
                 .handler(this::toggleBreedNotification)
         );
     }
 
-    private void toggleStats(final @NonNull CommandContext<CommandSender> context) {
-        final var sender = (Player) context.sender();
+    private void toggleStats(final @NonNull CommandContext<CommandSourceStack> context) {
+        final var sender = context.sender().getSender();
 
-        if (this.stateManager.toggleState(sender, "stats")) {
-            sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.toggle.success.show_stats_enable"));
-            this.hologramHandler.show(sender);
-        } else {
-            sender.sendMessage(this.messages.translatable(Messages.Style.ERROR, sender, "command.toggle.success.show_stats_disable"));
-            this.hologramHandler.cancel(sender);
+        if (sender instanceof final Player player) {
+            if (this.stateManager.toggleState(player, "stats")) {
+                player.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, player, "command.toggle.success.show_stats_enable"));
+                this.hologramHandler.show(player);
+            } else {
+                player.sendMessage(this.messages.translatable(Messages.Style.ERROR, player, "command.toggle.success.show_stats_disable"));
+                this.hologramHandler.cancel(player);
+            }
         }
     }
 
-    private void toggleBreed(final @NonNull CommandContext<CommandSender> context) {
-        final var sender = (Player) context.sender();
+    private void toggleBreed(final @NonNull CommandContext<CommandSourceStack> context) {
+        final var sender = context.sender().getSender();
 
-        if (this.stateManager.toggleState(sender, "breed")) {
-            sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.toggle.success.cancel_breed_enable"));
-        } else {
-            sender.sendMessage(this.messages.translatable(Messages.Style.ERROR, sender, "command.toggle.success.cancel_breed_disable"));
+        if (sender instanceof final Player player) {
+            if (this.stateManager.toggleState(player, "breed")) {
+                player.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, player, "command.toggle.success.cancel_breed_enable"));
+            } else {
+                player.sendMessage(this.messages.translatable(Messages.Style.ERROR, player, "command.toggle.success.cancel_breed_disable"));
+            }
         }
     }
 
-    private void toggleBreedNotification(final @NonNull CommandContext<CommandSender> context) {
-        final var sender = (Player) context.sender();
+    private void toggleBreedNotification(final @NonNull CommandContext<CommandSourceStack> context) {
+        final var sender = context.sender().getSender();
 
-        if (this.stateManager.toggleState(sender, "breed_notification")) {
-            sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.notification.success.breed_notification_enable"));
-        } else {
-            sender.sendMessage(this.messages.translatable(Messages.Style.ERROR, sender, "command.notification.success.breed_notification_disable"));
+        if (sender instanceof final Player player) {
+            if (this.stateManager.toggleState(player, "breed_notification")) {
+                player.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, player, "command.notification.success.breed_notification_enable"));
+            } else {
+                player.sendMessage(this.messages.translatable(Messages.Style.ERROR, player, "command.notification.success.breed_notification_disable"));
+            }
         }
     }
 }

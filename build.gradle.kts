@@ -32,13 +32,14 @@ dependencies {
     paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.17.0")
 
     // Command
-    paperLibrary("org.incendo", "cloud-paper", "2.0.0-beta.7")
+    paperLibrary("org.incendo", "cloud-paper", "2.0.0-beta.8")
 
     // Utils
     paperLibrary("com.google.inject", "guice", "7.0.0")
     // ↓ 動くか知らない。多分動かない
-    implementation("com.github.tyonakaisan", "GlowLib", "0.2.1")
-    implementation("com.github.tyonakaisan", "Toast", "0.1.1")
+    // implementation("com.github.tyonakaisan", "GlowLib", "0.2.1")
+    // implementation("com.github.tyonakaisan", "Toast", "0.1.1")
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }
 
 paper {
@@ -92,7 +93,7 @@ tasks {
         // spark
         url("https://ci.lucko.me/job/spark/409/artifact/spark-bukkit/build/libs/spark-1.10.64-bukkit.jar")
         // ProtocolLib
-        url("https://ci.dmulloy2.net/job/ProtocolLib/689/artifact/build/libs/ProtocolLib.jar")
+        url("https://ci.dmulloy2.net/job/ProtocolLib/694/artifact/build/libs/ProtocolLib.jar")
         // LuckPerms
         url("https://download.luckperms.net/1541/bukkit/loader/LuckPerms-Bukkit-5.4.128.jar")
     }
@@ -105,6 +106,7 @@ tasks {
     shadowJar {
         archiveClassifier.set(null as String?)
         archiveVersion.set(paper.version)
+        mergeServiceFiles()
     }
 
     runServer {
