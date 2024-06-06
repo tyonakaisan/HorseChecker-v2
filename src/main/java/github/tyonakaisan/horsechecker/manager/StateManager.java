@@ -1,7 +1,7 @@
 package github.tyonakaisan.horsechecker.manager;
 
 import com.google.inject.Inject;
-import github.tyonakaisan.horsechecker.LegacyUpdater;
+import github.tyonakaisan.horsechecker.utils.LegacyUpdater;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;

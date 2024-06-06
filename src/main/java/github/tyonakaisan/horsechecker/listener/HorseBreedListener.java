@@ -113,7 +113,7 @@ public final class HorseBreedListener implements Listener {
                                         .tag("call", Tag.styling(style ->
                                                 style.clickEvent(ClickEvent.callback(audience -> {
                                                     if (audience instanceof Player callPlayer) {
-                                                        this.horseFinder.fromUuid(childrenHorse.getUniqueId(), callPlayer);
+                                                        this.horseFinder.showing(childrenHorse, callPlayer, wrappedChildren.getRank().glowColor());
                                                         this.horseFinder.showing(motherHorse, callPlayer, Glow.Color.RED);
                                                         this.horseFinder.showing(fatherHorse, callPlayer, Glow.Color.BLUE);
                                                     }

@@ -1,4 +1,4 @@
-package github.tyonakaisan.horsechecker;
+package github.tyonakaisan.horsechecker.utils;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

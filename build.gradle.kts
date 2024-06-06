@@ -36,7 +36,7 @@ dependencies {
 
     // Utils
     paperLibrary("com.google.inject", "guice", "7.0.0")
-    // ↓ 動くか知らない。多分動かない
+    implementation("io.github.skytasul", "glowingentities", "1.3.4")
     // implementation("com.github.tyonakaisan", "GlowLib", "0.2.1")
     // implementation("com.github.tyonakaisan", "Toast", "0.1.1")
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
@@ -45,7 +45,7 @@ dependencies {
 paper {
     generateLibrariesJson = true
     name = rootProject.name
-    version = "1.5.2-SNAPSHOT"
+    version = "1.6.0-SNAPSHOT"
     apiVersion = "1.20"
     author = "tyonakaisan"
     website = "https://github.com/tyonakaisan"
@@ -93,7 +93,7 @@ tasks {
         // spark
         url("https://ci.lucko.me/job/spark/409/artifact/spark-bukkit/build/libs/spark-1.10.64-bukkit.jar")
         // ProtocolLib
-        url("https://ci.dmulloy2.net/job/ProtocolLib/694/artifact/build/libs/ProtocolLib.jar")
+        url("https://ci.dmulloy2.net/job/ProtocolLib/702/artifact/build/libs/ProtocolLib.jar")
         // LuckPerms
         url("https://download.luckperms.net/1541/bukkit/loader/LuckPerms-Bukkit-5.4.128.jar")
     }
