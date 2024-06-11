@@ -26,7 +26,7 @@ public final class HorseRank {
 
     public static HorseRankData calcEvaluateRankData(final double paramSpeed, final double jumpHeight) {
         final double horseEvaluate = calcEvaluateValue(paramSpeed, jumpHeight);
-        int alpha = 32;
+        int alpha = 64;
 
         String rank;
         TextColor textColor;

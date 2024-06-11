@@ -2,6 +2,7 @@ package github.tyonakaisan.horsechecker;
 
 import com.google.inject.*;
 import com.tyonakaisan.glowlib.GlowLib;
+import github.tyonakaisan.horsechecker.command.CommandFactory;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -33,9 +34,7 @@ public final class HorseChecker extends JavaPlugin {
         final Set<Listener> listeners = this.injector.getInstance(Key.get(new TypeLiteral<>() {}));
         listeners.forEach(listener -> this.getServer().getPluginManager().registerEvents(listener, this));
 
-        // Commands
-        // final Set<HorseCheckerCommand> commands = this.injector.getInstance(Key.get(new TypeLiteral<>() {}));
-        // commands.forEach(HorseCheckerCommand::init);
+        this.injector.getInstance(CommandFactory.class).registerViaEnable(this);
     }
 
     @Override

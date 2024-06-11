@@ -2,13 +2,7 @@ package github.tyonakaisan.horsechecker;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.Scopes;
 import com.google.inject.Singleton;
-import com.google.inject.multibindings.Multibinder;
-import github.tyonakaisan.horsechecker.command.HorseCheckerCommand;
-import github.tyonakaisan.horsechecker.command.commands.ReloadCommand;
-import github.tyonakaisan.horsechecker.command.commands.ShareCommand;
-import github.tyonakaisan.horsechecker.command.commands.ToggleCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -43,13 +37,16 @@ public final class BootstrapModule extends AbstractModule {
     public void configure() {
         this.bind(ComponentLogger.class).toInstance(this.context.getLogger());
         this.bind(Path.class).toInstance(this.context.getDataDirectory());
-        this.configureCommands();
+        // this.configureCommands();
     }
 
+    /*
     private void configureCommands() {
         final Multibinder<HorseCheckerCommand> commands = Multibinder.newSetBinder(this.binder(), HorseCheckerCommand.class);
         commands.addBinding().to(ReloadCommand.class).in(Scopes.SINGLETON);
         commands.addBinding().to(ShareCommand.class).in(Scopes.SINGLETON);
         commands.addBinding().to(ToggleCommand.class).in(Scopes.SINGLETON);
     }
+
+     */
 }

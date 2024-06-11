@@ -25,7 +25,7 @@ dependencies {
     // Paper
     compileOnly("io.papermc.paper", "paper-api", "1.20.6-R0.1-SNAPSHOT")
     // ProtocolLib
-    compileOnly("com.comphenix.protocol", "ProtocolLib", "5.2.0-SNAPSHOT")
+    compileOnly("com.comphenix.protocol", "ProtocolLib", "5.3.0-SNAPSHOT")
 
     // Config
     paperLibrary("org.spongepowered", "configurate-hocon", "4.2.0-SNAPSHOT")
@@ -93,7 +93,7 @@ tasks {
         // spark
         url("https://ci.lucko.me/job/spark/409/artifact/spark-bukkit/build/libs/spark-1.10.64-bukkit.jar")
         // ProtocolLib
-        url("https://ci.dmulloy2.net/job/ProtocolLib/702/artifact/build/libs/ProtocolLib.jar")
+        url("https://ci.dmulloy2.net/job/ProtocolLib/lastStableBuild/artifact/build/libs/ProtocolLib.jar")
         // LuckPerms
         url("https://download.luckperms.net/1541/bukkit/loader/LuckPerms-Bukkit-5.4.128.jar")
     }
