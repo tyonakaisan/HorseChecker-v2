@@ -15,8 +15,8 @@ public record WrappedHorse(
 
     public HorseRank.HorseRankData getRank() {
         return HorseRank.calcEvaluateRankData(
-                Objects.requireNonNull(horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
-                Objects.requireNonNull(horse.getAttribute(Attribute.HORSE_JUMP_STRENGTH)).getValue());
+                Objects.requireNonNull(this.horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
+                this.horse.getJumpStrength());
     }
 
     public double genericSpeedToBlocPerSec() {

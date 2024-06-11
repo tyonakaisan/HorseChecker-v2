@@ -6,7 +6,7 @@ import github.tyonakaisan.horsechecker.config.ConfigFactory;
 import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.horse.WrappedHorse;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import org.bukkit.Server;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -21,19 +21,16 @@ public final class HologramManager {
     private final Map<String, HologramData> hologramMap = new HashMap<>();
 
     private final Converter converter;
-    private final Server server;
     private final ComponentLogger logger;
     private final ConfigFactory configFactory;
 
     @Inject
     public HologramManager(
             final Converter converter,
-            final Server server,
             final ComponentLogger logger,
             final ConfigFactory configFactory
     ) {
         this.converter = converter;
-        this.server = server;
         this.logger = logger;
         this.configFactory = configFactory;
     }
@@ -58,21 +55,22 @@ public final class HologramManager {
     }
 
     public void deleteHologram(final WrappedHorse wrappedHorse) {
-        this.server.getOnlinePlayers()
-                .forEach(player -> this.hideHologram(wrappedHorse, player));
+        Bukkit.getServer().getOnlinePlayers().forEach(player ->
+                this.hideHologram(wrappedHorse, player));
+
         final var horseUuid = wrappedHorse.horse().getUniqueId().toString();
         this.hologramMap.remove(horseUuid);
     }
 
     public void destroyAllHologram() {
         this.logger.info("Destroy all holograms...");
-        this.hologramMap.values().forEach(hologramData ->
-                this.server.forEachAudience(audience -> {
-                    if (audience instanceof Player player) {
-                        hologramData.hideFrom(player);
-                    }
-                }));
+
+        this.hologramMap.values()
+                .forEach(hologramData ->
+                        Bukkit.getServer().getOnlinePlayers()
+                                .forEach(hologramData::hideFrom));
         this.hologramMap.clear();
+
         this.logger.info("All holograms were destroyed!");
     }
 

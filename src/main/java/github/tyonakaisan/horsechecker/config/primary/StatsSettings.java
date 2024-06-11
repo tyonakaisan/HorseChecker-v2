@@ -28,7 +28,7 @@ public final class StatsSettings {
     private String resultText = "<rank_score><newline><speed><newline><jump><newline><health><newline><name><newline><owner>";
 
     @Comment("馬のステータスを比較する際の表示順")
-    private String parentText = "<dark_gray>(<#ff85f1><mother><comparison></#ff85f1> / <#47b9ff><father><comparison></#47b9ff>)";
+    private String parentText = "<dark_gray>(<#ff85f1><mother><mother_comparison></#ff85f1> / <#47b9ff><father><father_comparison></#47b9ff>)";
 
     private String higherText = "<red><b>↑</b></red>";
 
