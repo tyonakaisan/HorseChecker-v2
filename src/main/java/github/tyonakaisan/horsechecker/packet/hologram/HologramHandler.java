@@ -58,6 +58,6 @@ public final class HologramHandler {
     public void update(final AbstractHorse horse) {
         final var wrappedHorse = new WrappedHorse(horse);
 
-        this.hologramManager.updateHologram(wrappedHorse.horse().getUniqueId().toString(), wrappedHorse);
+        this.hologramManager.update(wrappedHorse.horse().getUniqueId().toString(), wrappedHorse);
     }
 }

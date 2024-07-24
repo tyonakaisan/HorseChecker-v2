@@ -1,11 +1,13 @@
 package github.tyonakaisan.horsechecker.packet.util.entity;
 
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.google.inject.Singleton;
 import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -22,9 +24,8 @@ public abstract class WrappedDataManager {
     private final WrappedDataWatcher.Serializer floatSerializer = WrappedDataWatcher.Registry.get(Float.class);
     private final WrappedDataWatcher.Serializer booleanSerializer = WrappedDataWatcher.Registry.get(Boolean.class);
     private final WrappedDataWatcher.Serializer vectorSerializer = WrappedDataWatcher.Registry.get(Vector3f.class);
-    private final WrappedDataWatcher.Serializer quaternionSerializer = WrappedDataWatcher.Registry.getVectorSerializer();
-    // EnumChatVisibility
-    // private final WrappedDataWatcher.Serializer poseSerializer = WrappedDataWatcher.Registry.get(EnumWrappers.getEntityPoseClass());
+    private final WrappedDataWatcher.Serializer quaternionSerializer = WrappedDataWatcher.Registry.get(Quaternionf.class);
+    private final WrappedDataWatcher.Serializer poseSerializer = WrappedDataWatcher.Registry.get(EnumWrappers.getEntityPoseClass());
     private final WrappedDataWatcher.Serializer chatSerializer = WrappedDataWatcher.Registry.getChatComponentSerializer();
 
     protected void addByteData(final int index, final Object object) {
@@ -55,8 +56,7 @@ public abstract class WrappedDataManager {
     }
 
     protected void addPoseData(final int index, final Object object) {
-        // EnumChatVisibility
-        // this.dataValues.add(new WrappedDataValue(index, this.poseSerializer, object));
+        this.dataValues.add(new WrappedDataValue(index, this.poseSerializer, object));
     }
 
     protected void addChatData(final int index, final Object object) {

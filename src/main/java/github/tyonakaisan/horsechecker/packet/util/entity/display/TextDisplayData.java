@@ -14,7 +14,7 @@ public abstract class TextDisplayData<B> extends DisplayData<B> {
     private byte bitmask = 0x00;
 
     public B text(final Component text) {
-        final WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(text));
+        final var wrappedChatComponent = WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(text));
         this.addChatData(23, wrappedChatComponent.getHandle());
         return (B) this;
     }

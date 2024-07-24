@@ -10,7 +10,7 @@ import org.spongepowered.configurate.objectmapping.meta.Comment;
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public final class StatsSettings {
 
-    private String nameText = "Name: <name>";
+    private String nameText = "<name>";
 
     private String rankScoreText = "Score: <rank_color><rank></rank_color>";
 
@@ -25,8 +25,9 @@ public final class StatsSettings {
     private String ownerNotFoundText = "no owner";
 
     @Comment("ホログラムのステータス表示順")
-    private String resultText = "<rank_score><newline><speed><newline><jump><newline><health><newline><name><newline><owner>";
-
+    private String resultText = "<name><newline><rank_score><newline><speed><newline><jump><newline><health><newline><owner>";
+    @Comment("飼いならせるエンティティのステータス表示順")
+    private String tamableText = "<name><newline><owner>";
     @Comment("馬のステータスを比較する際の表示順")
     private String parentText = "<dark_gray>(<#ff85f1><mother><mother_comparison></#ff85f1> / <#47b9ff><father><father_comparison></#47b9ff>)";
 
@@ -59,12 +60,17 @@ public final class StatsSettings {
     public String ownerFoundText() {
         return this.ownerFoundText;
     }
+
     public String ownerNotFoundText() {
         return this.ownerNotFoundText;
     }
 
     public String parentText() {
         return this.parentText;
+    }
+
+    public String tamableText() {
+        return this.tamableText;
     }
 
     public String resultText() {

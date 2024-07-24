@@ -5,7 +5,7 @@ import org.bukkit.entity.Display;
 import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
-import org.joml.Quaterniond;
+import org.joml.Quaternionf;
 
 @SuppressWarnings({"unchecked","unused"})
 @DefaultQualifier(NonNull.class)
@@ -37,13 +37,13 @@ public abstract class DisplayData<B> extends EntityData<B> {
         return (B) this;
     }
 
-    public B rotationLeft(final Quaterniond quaterniond) {
-        this.addQuaternionData(13, quaterniond);
+    public B rotationLeft(final Quaternionf quaternionf) {
+        this.addQuaternionData(13, quaternionf);
         return (B) this;
     }
 
-    public B rotationRight(final Quaterniond quaterniond) {
-        this.addQuaternionData(14, quaterniond);
+    public B rotationRight(final Quaternionf quaternionf) {
+        this.addQuaternionData(14, quaternionf);
         return (B) this;
     }
 

@@ -7,7 +7,9 @@ import github.tyonakaisan.horsechecker.horse.Converter;
 import github.tyonakaisan.horsechecker.horse.WrappedHorse;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -43,26 +45,39 @@ public final class HologramManager {
         return this.hologramMap.get(hologramId);
     }
 
-    public void createHologram(final WrappedHorse wrappedHorse) {
+    public void create(final Tameable tameable) {
+        final var hologramId = tameable.getUniqueId().toString();
+        final var text = this.converter.tamableMessageResolver(tameable);
+        final var hologramData = new HologramData(hologramId, text, tameable.getLocation(), 0, this.configFactory.primaryConfig().hologram());
+
+        this.create(hologramId, hologramData);
+    }
+
+    public void create(final WrappedHorse wrappedHorse) {
         final var hologramId = wrappedHorse.horse().getUniqueId().toString();
+        final var text = this.converter.statsMessageResolver(wrappedHorse);
+        final var hologramData = new HologramData(hologramId, text, wrappedHorse.getLocation(), wrappedHorse.getRank().backgroundColor(), this.configFactory.primaryConfig().hologram());
+
+        this.create(hologramId, hologramData);
+    }
+
+    public void create(final String hologramId, final HologramData hologramData) {
         if (this.hologramMap.containsKey(hologramId)) {
             return;
         }
-        final var text = this.converter.statsMessageResolver(wrappedHorse);
-        final var hologramData = new HologramData(hologramId, text, wrappedHorse.getLocation(), wrappedHorse.getRank().backgroundColor(), this.configFactory.primaryConfig().hologram());
 
         this.hologramMap.put(hologramId, hologramData);
     }
 
-    public void deleteHologram(final WrappedHorse wrappedHorse) {
+    public void remove(final WrappedHorse wrappedHorse) {
         Bukkit.getServer().getOnlinePlayers().forEach(player ->
-                this.hideHologram(wrappedHorse, player));
+                this.hide(wrappedHorse, player));
 
         final var horseUuid = wrappedHorse.horse().getUniqueId().toString();
         this.hologramMap.remove(horseUuid);
     }
 
-    public void destroyAllHologram() {
+    public void destroyAll() {
         this.logger.info("Destroy all holograms...");
 
         this.hologramMap.values()
@@ -74,23 +89,41 @@ public final class HologramManager {
         this.logger.info("All holograms were destroyed!");
     }
 
-    public void hideHologram(final WrappedHorse wrappedHorse, final Player player) {
+    public void hide(final Tameable tameable, final Player player) {
+        final var hologramId = tameable.getUniqueId().toString();
+        this.hide(hologramId, tameable.getLocation(), player);
+    }
+
+    public void hide(final WrappedHorse wrappedHorse, final Player player) {
         final var hologramId = wrappedHorse.horse().getUniqueId().toString();
+        this.hide(hologramId, wrappedHorse.getLocation(), player);
+    }
+
+    public void hide(final String hologramId, final Location location, final Player player) {
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            hologramData.updateLocation(wrappedHorse.getLocation());
+            hologramData.updateLocation(location);
             hologramData.hideFrom(player);
         });
     }
 
-    public void showHologram(final WrappedHorse wrappedHorse, Player player, int vehicleId) {
-        var hologramId = wrappedHorse.horse().getUniqueId().toString();
+    public void show(final Tameable tameable, final Player player, final int vehicleId) {
+        final var hologramId = tameable.getUniqueId().toString();
+        this.show(hologramId, tameable.getLocation(), player, vehicleId);
+    }
+
+    public void show(final WrappedHorse wrappedHorse, final Player player, final int vehicleId) {
+        final var hologramId = wrappedHorse.horse().getUniqueId().toString();
+        this.show(hologramId, wrappedHorse.getLocation(), player, vehicleId);
+    }
+
+    public void show(final String hologramId, final Location location, final Player player, final int vehicleId) {
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
-            hologramData.updateLocation(wrappedHorse.getLocation());
+            hologramData.updateLocation(location);
             hologramData.showFrom(player, vehicleId);
         });
     }
 
-    public void updateHologram(final String hologramId, final WrappedHorse wrappedHorse) {
+    public void update(final String hologramId, final WrappedHorse wrappedHorse) {
         Optional.ofNullable(this.hologramMap.get(hologramId)).ifPresent(hologramData -> {
             var text = this.converter.statsMessageResolver(wrappedHorse);
             hologramData.updateBackgroundColor(wrappedHorse.getRank().backgroundColor());

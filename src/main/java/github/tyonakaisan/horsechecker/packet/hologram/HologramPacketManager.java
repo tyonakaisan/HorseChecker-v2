@@ -2,17 +2,13 @@ package github.tyonakaisan.horsechecker.packet.hologram;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.reflect.StructureModifier;
 import github.tyonakaisan.horsechecker.packet.util.PacketDataBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
-
-import java.util.UUID;
 
 @DefaultQualifier(NonNull.class)
 public final class HologramPacketManager {
@@ -28,7 +24,7 @@ public final class HologramPacketManager {
     }
 
     public void show(final Player player, final int vehicleId, final PacketContainer entityMetadataPacket) {
-        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+        final var protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.sendServerPacket(player, this.createAddPacket());
         protocolManager.sendServerPacket(player, this.createSetPassengerPacket(vehicleId));
         protocolManager.sendServerPacket(player, entityMetadataPacket);
@@ -43,13 +39,13 @@ public final class HologramPacketManager {
     }
 
     private PacketContainer createAddPacket() {
-        PacketType type = PacketType.Play.Server.SPAWN_ENTITY;
-        PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
+        final var type = PacketType.Play.Server.SPAWN_ENTITY;
+        final var packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
-        StructureModifier<Integer> intMod = packet.getIntegers();
-        StructureModifier<EntityType> typeMod = packet.getEntityTypeModifier();
-        StructureModifier<UUID> uuidMod = packet.getUUIDs();
-        StructureModifier<Double> doubleMod = packet.getDoubles();
+        final var intMod = packet.getIntegers();
+        final var typeMod = packet.getEntityTypeModifier();
+        final var uuidMod = packet.getUUIDs();
+        final var doubleMod = packet.getDoubles();
 
         // Write id of entity
         intMod.write(0, this.hologramData.entityId());
@@ -69,8 +65,8 @@ public final class HologramPacketManager {
     }
 
     private PacketContainer createDataPacket() {
-        final PacketType type = PacketType.Play.Server.ENTITY_METADATA;
-        final PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
+        final var type = PacketType.Play.Server.ENTITY_METADATA;
+        final var packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
         packet.getIntegers().write(0, this.hologramData.entityId());
         packet.getDataValueCollectionModifier().write(0, PacketDataBuilder.textDisplay()
@@ -81,6 +77,7 @@ public final class HologramPacketManager {
                 .viewRange(this.hologramData.hologramSettings().viewRange())
                 .shadowRadius(0f)
                 .text(this.hologramData.text())
+                .textShadow()
                 .backgroundColor(this.hologramData.backgroundColor())
                 .seeThrough()
                 .alignment(this.hologramData.hologramSettings().alignment())
@@ -90,8 +87,8 @@ public final class HologramPacketManager {
     }
 
     private PacketContainer createSetPassengerPacket(final int vehicleId) {
-        final PacketType type = PacketType.Play.Server.MOUNT;
-        final PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
+        final var type = PacketType.Play.Server.MOUNT;
+        final var packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
         packet.getIntegers().write(0, vehicleId);
         packet.getIntegerArrays().write(0, new int[]{this.hologramData.entityId()});
@@ -100,8 +97,8 @@ public final class HologramPacketManager {
     }
 
     private PacketContainer createRemovePacket() {
-        final PacketType type = PacketType.Play.Server.ENTITY_DESTROY;
-        final PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(type);
+        final var type = PacketType.Play.Server.ENTITY_DESTROY;
+        final var packet = ProtocolLibrary.getProtocolManager().createPacket(type);
 
         packet.getIntLists().write(0, IntList.of(this.hologramData.entityId()));
 

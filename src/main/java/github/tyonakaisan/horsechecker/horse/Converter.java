@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.entity.Tameable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
 
@@ -36,17 +37,16 @@ public final class Converter {
     }
 
     public Component statsMessageResolver(final WrappedHorse wrappedHorse) {
-        final var name = this.nameMessageResolver(wrappedHorse);
+        final var name = this.nameMessageResolver(wrappedHorse.horse());
         final var rank = this.rankMessageResolver(wrappedHorse);
         final var speed = this.speedMessageResolver(wrappedHorse);
         final var jump = this.jumpMessageResolver(wrappedHorse);
         final var health = this.healthMessageResolver(wrappedHorse);
-        final var owner = this.ownerMessageResolver(wrappedHorse);
+        final var owner = this.ownerMessageResolver(wrappedHorse.horse());
         var resultText = this.configFactory.primaryConfig().stats().resultText();
 
         if (wrappedHorse.horse().getName().toUpperCase().equals(wrappedHorse.horse().getType().toString())) {
-            resultText = resultText.replace("<name><newline>", "");
-            resultText = resultText.replace("<name>", "");
+            resultText = resultText.replace("<name><newline>", "").replace("<name>", "");
         }
 
         return MiniMessage.miniMessage().deserialize(resultText,
@@ -62,17 +62,16 @@ public final class Converter {
     }
 
     public Component withParentsStatsMessageResolver(final WrappedHorse childrenHorse, final WrappedHorse motherHorse, final WrappedHorse fatherHorse) {
-        final var name = this.nameMessageResolver(childrenHorse);
+        final var name = this.nameMessageResolver(childrenHorse.horse());
         final var rank = this.rankMessageResolver(childrenHorse, motherHorse, fatherHorse);
         final var speed = this.speedMessageResolver(childrenHorse, motherHorse, fatherHorse);
         final var jump = this.jumpMessageResolver(childrenHorse, motherHorse, fatherHorse);
         final var health = this.healthMessageResolver(childrenHorse, motherHorse, fatherHorse);
-        final var owner = this.ownerMessageResolver(childrenHorse);
+        final var owner = this.ownerMessageResolver(childrenHorse.horse());
         var resultText = this.configFactory.primaryConfig().stats().resultText();
 
         if (childrenHorse.horse().getName().toUpperCase().equals(childrenHorse.horse().getType().toString())) {
-            resultText = resultText.replace("<name><newline>", "");
-            resultText = resultText.replace("<name>", "");
+            resultText = resultText.replace("<name><newline>", "").replace("<name>", "");
         }
 
         return MiniMessage.miniMessage().deserialize(resultText,
@@ -82,6 +81,23 @@ public final class Converter {
                         .tag(SPEED, Tag.selfClosingInserting(speed))
                         .tag(JUMP, Tag.selfClosingInserting(jump))
                         .tag(HEALTH, Tag.selfClosingInserting(health))
+                        .tag(OWNER, Tag.selfClosingInserting(owner))
+                        .build()
+        );
+    }
+
+    public Component tamableMessageResolver(final Tameable tameable) {
+        final var name = this.nameMessageResolver(tameable);
+        final var owner = this.ownerMessageResolver(tameable);
+        var tamableText = this.configFactory.primaryConfig().stats().tamableText();
+
+        if (tameable.getName().toUpperCase().equals(tameable.getType().toString())) {
+            tamableText = tamableText.replace("<name><newline>", "").replace("<name>", "");
+        }
+
+        return MiniMessage.miniMessage().deserialize(tamableText,
+                TagResolver.builder()
+                        .tag(NAME, Tag.selfClosingInserting(name))
                         .tag(OWNER, Tag.selfClosingInserting(owner))
                         .build()
         );
@@ -165,21 +181,29 @@ public final class Converter {
         return this.healthMessageResolver(childrenHorse).appendSpace().append(parentMessage);
     }
 
-    private Component nameMessageResolver(final WrappedHorse wrappedHorse) {
+    private Component nameMessageResolver(final Tameable tameable) {
+        final var name = tameable.getName().toUpperCase().equals(tameable.getType().toString())
+                ? Component.translatable(tameable.getType().translationKey())
+                : Component.text(tameable.getName());
+
         return MiniMessage.miniMessage().deserialize(this.configFactory.primaryConfig().stats().nameText(),
                 TagResolver.builder()
-                        .tag(NAME, Tag.selfClosingInserting(wrappedHorse.getName()))
+                        .tag(NAME, Tag.selfClosingInserting(name))
                         .build());
     }
 
-    private Component ownerMessageResolver(final WrappedHorse wrappedHorse) {
-        if (wrappedHorse.horse().getOwner() == null) {
+    public Component ownerMessageResolver(final Tameable tameable) {
+        if (tameable.getOwner() == null) {
             return MiniMessage.miniMessage().deserialize(this.configFactory.primaryConfig().stats().ownerNotFoundText());
         }
 
+        final var ownerName = tameable.getOwner().getName() != null
+                ? Component.text(tameable.getOwner().getName())
+                : Component.text("unknown");
+
         return MiniMessage.miniMessage().deserialize(this.configFactory.primaryConfig().stats().ownerFoundText(),
                 TagResolver.builder()
-                        .tag(OWNER, Tag.selfClosingInserting(wrappedHorse.getOwnerName()))
+                        .tag(OWNER, Tag.selfClosingInserting(ownerName))
                         .build());
     }
 

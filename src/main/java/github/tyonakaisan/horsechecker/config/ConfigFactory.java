@@ -29,23 +29,23 @@ public final class ConfigFactory {
     private static final String PRIMARY_CONFIG_FILE_NAME = "config.conf";
 
     private final Path dataDirectory;
+    private final ComponentLogger logger;
     private final LocaleSerializer localeSerializer;
     private final VectorSerializer vectorSerializer;
-    private final ComponentLogger logger;
 
     private @MonotonicNonNull PrimaryConfig primaryConfig;
 
     @Inject
     public ConfigFactory(
             final Path dataDirectory,
+            final ComponentLogger logger,
             final LocaleSerializer localeSerializer,
-            final VectorSerializer vectorSerializer,
-            final ComponentLogger logger
+            final VectorSerializer vectorSerializer
     ) {
         this.dataDirectory = dataDirectory;
+        this.logger = logger;
         this.localeSerializer = localeSerializer;
         this.vectorSerializer = vectorSerializer;
-        this.logger = logger;
 
         this.reloadPrimaryConfig();
     }

@@ -90,8 +90,6 @@ tasks {
     val paperPlugins = runPaper.downloadPluginsSpec {
         // tabTps
         url("https://cdn.modrinth.com/data/cUhi3iB2/versions/QmxLremu/tabtps-spigot-1.3.21.jar")
-        // spark
-        url("https://ci.lucko.me/job/spark/409/artifact/spark-bukkit/build/libs/spark-1.10.64-bukkit.jar")
         // ProtocolLib
         url("https://ci.dmulloy2.net/job/ProtocolLib/lastStableBuild/artifact/build/libs/ProtocolLib.jar")
         // LuckPerms

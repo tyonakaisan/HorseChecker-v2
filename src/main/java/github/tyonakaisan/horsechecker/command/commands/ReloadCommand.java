@@ -40,7 +40,7 @@ public final class ReloadCommand implements HorseCheckerCommand {
                     final CommandSender sender = context.getSource().getSender();
                     this.configFactory.reloadPrimaryConfig();
                     this.messages.reloadMessage();
-                    this.hologramManager.destroyAllHologram();
+                    this.hologramManager.destroyAll();
 
                     sender.sendMessage(this.messages.translatable(Messages.Style.SUCCESS, sender, "command.reload.success"));
                     return Command.SINGLE_SUCCESS;

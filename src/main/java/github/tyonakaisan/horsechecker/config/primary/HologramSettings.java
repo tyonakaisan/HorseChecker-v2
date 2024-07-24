@@ -16,9 +16,8 @@ public final class HologramSettings {
             ホログラムを表示するタスクの処理頻度
             数字を大きくするほど処理は軽くなります""")
     private int taskInterval = 2;
-
     @Comment("ホログラムの大きさ")
-    private Vector scale = new Vector(1, 1, 1);
+    private Vector scale = new Vector(1.2, 1.2, 1.2);
     @Comment("ホログラムの位置")
     private Vector translation = new Vector(0, 0.7, 0);
     @Comment("ホログラムの表示範囲")

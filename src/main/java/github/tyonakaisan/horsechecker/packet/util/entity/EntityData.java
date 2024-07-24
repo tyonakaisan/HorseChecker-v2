@@ -1,6 +1,8 @@
 package github.tyonakaisan.horsechecker.packet.util.entity;
 
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.entity.Pose;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -11,13 +13,15 @@ public abstract class EntityData<B> extends WrappedDataManager {
 
     private byte bitmask = 0x00;
 
-    public B fire() {
-        this.bitmask |= 0x01;
-        this.addByteData(0, this.bitmask);
+    public B fire(final boolean fire) {
+        if (fire) {
+            this.bitmask |= 0x01;
+            this.addByteData(0, this.bitmask);
+        }
         return (B) this;
     }
 
-    public B crouching() {
+    public B crouching(final boolean crouching) {
         this.bitmask |= 0x02;
         this.addByteData(0, this.bitmask);
         return (B) this;
@@ -59,12 +63,14 @@ public abstract class EntityData<B> extends WrappedDataManager {
     }
 
     public B name(final Component name) {
-        this.addChatData(2, name);
+        final var wrappedChatComponent = WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(name));
+        this.addChatData(2, wrappedChatComponent.getHandle());
         return (B) this;
     }
 
     public B name(final Component name, final boolean visible) {
-        this.addChatData(2, name);
+        final var wrappedChatComponent = WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(name));
+        this.addChatData(2, wrappedChatComponent.getHandle());
         this.addBooleanData(3, visible);
         return (B) this;
     }
