@@ -28,15 +28,12 @@ dependencies {
     compileOnly("com.comphenix.protocol", "ProtocolLib", "5.3.0")
 
     // Config
-    paperLibrary("org.spongepowered", "configurate-hocon", "4.2.0-SNAPSHOT")
-    paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.17.0")
-
-    // Command
-    paperLibrary("org.incendo", "cloud-paper", "2.0.0-beta.8")
+    paperLibrary("org.spongepowered", "configurate-hocon", "4.2.0")
+    paperLibrary("net.kyori", "adventure-serializer-configurate4", "4.19.0")
 
     // Utils
     paperLibrary("com.google.inject", "guice", "7.0.0")
-    implementation("io.github.skytasul", "glowingentities", "1.3.4")
+    paperLibrary("io.github.skytasul", "glowingentities", "1.3.4")
     // implementation("com.github.tyonakaisan", "GlowLib", "0.2.1")
     // implementation("com.github.tyonakaisan", "Toast", "0.1.1")
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
