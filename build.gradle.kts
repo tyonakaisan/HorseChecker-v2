@@ -23,9 +23,9 @@ repositories {
 
 dependencies {
     // Paper
-    compileOnly("io.papermc.paper", "paper-api", "1.20.6-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper", "paper-api", "1.21.4-R0.1-SNAPSHOT")
     // ProtocolLib
-    compileOnly("com.comphenix.protocol", "ProtocolLib", "5.3.0-SNAPSHOT")
+    compileOnly("com.comphenix.protocol", "ProtocolLib", "5.3.0")
 
     // Config
     paperLibrary("org.spongepowered", "configurate-hocon", "4.2.0-SNAPSHOT")
@@ -45,8 +45,8 @@ dependencies {
 paper {
     generateLibrariesJson = true
     name = rootProject.name
-    version = "1.6.0-SNAPSHOT"
-    apiVersion = "1.20"
+    version = "1.7.0"
+    apiVersion = "1.21"
     author = "tyonakaisan"
     website = "https://github.com/tyonakaisan"
 
@@ -88,12 +88,10 @@ paper {
 
 tasks {
     val paperPlugins = runPaper.downloadPluginsSpec {
-        // tabTps
-        url("https://cdn.modrinth.com/data/cUhi3iB2/versions/QmxLremu/tabtps-spigot-1.3.21.jar")
         // ProtocolLib
         url("https://ci.dmulloy2.net/job/ProtocolLib/lastStableBuild/artifact/build/libs/ProtocolLib.jar")
         // LuckPerms
-        url("https://download.luckperms.net/1541/bukkit/loader/LuckPerms-Bukkit-5.4.128.jar")
+        modrinth("LuckPerms", "cfNN7sys")
     }
 
     compileJava {
@@ -108,7 +106,7 @@ tasks {
     }
 
     runServer {
-        minecraftVersion("1.20.6")
+        minecraftVersion("1.21.4")
 
         downloadPlugins {
             downloadPlugins.from(paperPlugins)

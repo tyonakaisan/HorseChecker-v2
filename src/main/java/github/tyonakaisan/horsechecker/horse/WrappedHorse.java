@@ -15,12 +15,12 @@ public record WrappedHorse(
 
     public HorseRank.HorseRankData getRank() {
         return HorseRank.calcEvaluateRankData(
-                Objects.requireNonNull(this.horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue(),
+                Objects.requireNonNull(this.horse.getAttribute(Attribute.MOVEMENT_SPEED)).getValue(),
                 this.horse.getJumpStrength());
     }
 
     public double genericSpeedToBlocPerSec() {
-        var speed = 42.162962963 * Objects.requireNonNull(this.horse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue();
+        var speed = 42.162962963 * Objects.requireNonNull(this.horse.getAttribute(Attribute.MOVEMENT_SPEED)).getValue();
         return Double.parseDouble(new DecimalFormat("#.###").format(speed));
     }
 
@@ -31,7 +31,7 @@ public record WrappedHorse(
     }
 
     public int getMaxHealth() {
-        return (int) Objects.requireNonNull(this.horse.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+        return (int) Objects.requireNonNull(this.horse.getAttribute(Attribute.MAX_HEALTH)).getValue();
     }
 
     public Location getLocation() {
