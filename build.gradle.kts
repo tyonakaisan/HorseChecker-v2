@@ -42,7 +42,7 @@ dependencies {
 paper {
     generateLibrariesJson = true
     name = rootProject.name
-    version = "1.7.0"
+    version = "1.7.1"
     apiVersion = "1.21"
     author = "tyonakaisan"
     website = "https://github.com/tyonakaisan"

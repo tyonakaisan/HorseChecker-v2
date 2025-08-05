@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @SuppressWarnings({"UnstableApiUsage", "unused"})
@@ -46,8 +47,21 @@ public final class HorseCheckerLoader implements PluginLoader {
         }
 
         public Stream<RemoteRepository> asRepositories() {
+            final var mirror = this.getMavenCentralMirror();
             return repositories.entrySet().stream()
-                    .map(e -> new RemoteRepository.Builder(e.getKey(), "default", e.getValue()).build());
+                    .map(entry -> {
+                        final var url = entry.getValue().contains(".maven.org") || entry.getValue().contains(".maven.apache.org")
+                                ? mirror
+                                : entry.getValue();
+
+                        return new RemoteRepository.Builder(entry.getKey(), "default", url).build();
+                    });
+        }
+
+        private String getMavenCentralMirror() {
+            return Optional.ofNullable(System.getenv("PAPER_DEFAULT_CENTRAL_REPOSITORY"))
+                    .or(() -> Optional.ofNullable(System.getProperty("org.bukkit.plugin.java.LibraryLoader.centralURL")))
+                    .orElse("https://maven-central.storage-download.googleapis.com/maven2");
         }
     }
 }
